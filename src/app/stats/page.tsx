@@ -2,7 +2,7 @@
 
 import React from "react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
-import { BarChart3, TrendingUp, Users, GraduationCap } from "lucide-react";
+import { BarChart3, TrendingUp, Users } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { 
   ChartContainer, 
@@ -14,8 +14,7 @@ import {
   BarChart, 
   XAxis, 
   YAxis, 
-  CartesianGrid,
-  ResponsiveContainer 
+  CartesianGrid
 } from "recharts";
 
 export default function StatisticsPage() {

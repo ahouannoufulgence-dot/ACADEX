@@ -55,7 +55,10 @@
   @apply bg-card/40 backdrop-blur-xl border border-white/5 shadow-2xl;
 }
 
-/* Custom Scrollbar for Sidebar */
+.sidebar-scroll {
+  @apply overflow-y-auto overflow-x-hidden;
+}
+
 .sidebar-scroll::-webkit-scrollbar {
   width: 4px;
 }

@@ -1,30 +1,26 @@
-
 "use client";
 
 import React, { useState, useMemo } from "react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
-import { KeyRound, UserPlus, Search, ShieldCheck, RefreshCw, Trash2, Users, Copy, CheckCircle } from "lucide-react";
+import { KeyRound, ShieldCheck, Users, Copy } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { useFirestore, useCollection } from "@/firebase";
-import { collection, setDoc, doc, serverTimestamp, writeBatch } from "firebase/firestore";
+import { collection, doc, serverTimestamp, writeBatch } from "firebase/firestore";
 import { errorEmitter } from "@/firebase/error-emitter";
 import { FirestorePermissionError } from "@/firebase/errors";
-import { cn } from "@/lib/utils";
 
 export default function AccessManagementPage() {
   const { toast } = useToast();
   const db = useFirestore();
   const [isGenerating, setIsGenerating] = useState(false);
   
-  // Bulk generation state
   const [bulkData, setBulkData] = useState({
     gradeLevel: "",
     count: 1
@@ -51,36 +47,37 @@ export default function AccessManagementPage() {
     const batch = writeBatch(db);
     const classCode = bulkData.gradeLevel.replace(/\s+/g, '').toUpperCase();
     
-    try {
-      for (let i = 1; i <= bulkData.count; i++) {
-        const studentNumber = i.toString().padStart(3, '0');
-        const studentId = `ELV-${classCode}-${studentNumber}`;
-        const studentRef = doc(db, "students", studentId);
-        
-        batch.set(studentRef, {
-          id: studentId,
-          gradeLevel: bulkData.gradeLevel,
-          status: "En attente",
-          createdAt: serverTimestamp()
-        });
-      }
-
-      await batch.commit();
+    for (let i = 1; i <= bulkData.count; i++) {
+      const studentNumber = i.toString().padStart(3, '0');
+      const studentId = `ELV-${classCode}-${studentNumber}`;
+      const studentRef = doc(db, "students", studentId);
       
-      toast({
-        title: "Identifiants générés",
-        description: `${bulkData.count} accès créés pour la classe ${bulkData.gradeLevel}.`
+      batch.set(studentRef, {
+        id: studentId,
+        gradeLevel: bulkData.gradeLevel,
+        status: "En attente",
+        createdAt: serverTimestamp()
       });
-      setBulkData({ gradeLevel: "", count: 1 });
-    } catch (err: any) {
-      const permissionError = new FirestorePermissionError({
-        path: 'students/bulk',
-        operation: 'create',
-      });
-      errorEmitter.emit('permission-error', permissionError);
-    } finally {
-      setIsGenerating(false);
     }
+
+    batch.commit()
+      .then(() => {
+        toast({
+          title: "Identifiants générés",
+          description: `${bulkData.count} accès créés pour la classe ${bulkData.gradeLevel}.`
+        });
+        setBulkData({ gradeLevel: "", count: 1 });
+      })
+      .catch(async () => {
+        const permissionError = new FirestorePermissionError({
+          path: 'students/bulk',
+          operation: 'write',
+        });
+        errorEmitter.emit('permission-error', permissionError);
+      })
+      .finally(() => {
+        setIsGenerating(false);
+      });
   };
 
   const copyToClipboard = (text: string) => {
@@ -105,10 +102,10 @@ export default function AccessManagementPage() {
             </DialogTrigger>
             <DialogContent className="glass-card border-white/10 text-white sm:max-w-[425px]">
               <DialogHeader>
-                <CardTitle className="flex items-center gap-2">
+                <DialogTitle className="flex items-center gap-2">
                   <ShieldCheck className="w-5 h-5 text-accent" />
                   Génération par Lot
-                </CardTitle>
+                </DialogTitle>
                 <CardDescription className="text-white/60">
                   Créez plusieurs identifiants d'activation pour une classe spécifique.
                 </CardDescription>

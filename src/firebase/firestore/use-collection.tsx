@@ -7,6 +7,8 @@ import {
   DocumentData, 
   QuerySnapshot 
 } from 'firebase/firestore';
+import { errorEmitter } from '@/firebase/error-emitter';
+import { FirestorePermissionError } from '@/firebase/errors';
 
 export function useCollection<T = DocumentData>(query: Query<T> | null) {
   const [data, setData] = useState<T[] | null>(null);
@@ -30,8 +32,12 @@ export function useCollection<T = DocumentData>(query: Query<T> | null) {
         setData(items);
         setLoading(false);
       },
-      (err) => {
-        console.error("Firestore useCollection error:", err);
+      async (err) => {
+        const permissionError = new FirestorePermissionError({
+          path: 'unknown', // query usually doesn't have a single path property in a simple way
+          operation: 'list',
+        });
+        errorEmitter.emit('permission-error', permissionError);
         setError(err);
         setLoading(false);
       }

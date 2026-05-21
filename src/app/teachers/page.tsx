@@ -1,10 +1,9 @@
-
 "use client";
 
 import React, { useMemo } from "react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
-import { Users, UserPlus, Search, Mail, Phone, MoreVertical } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { UserPlus, Search, Mail, Phone, MoreVertical } from "lucide-react";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -45,13 +44,14 @@ export default function TeachersPage() {
           </CardHeader>
           <CardContent>
             {loading ? (
-              <div className="flex justify-center p-12 text-muted-foreground">Chargement des enseignants...</div>
+              <div className="flex justify-center p-12 text-muted-foreground">Chargement...</div>
             ) : (
               <div className="rounded-xl border border-white/10 overflow-hidden">
                 <Table>
                   <TableHeader className="bg-white/5">
                     <TableRow>
                       <TableHead className="text-white">Enseignant</TableHead>
+                      <TableHead className="text-white">Matière</TableHead>
                       <TableHead className="text-white">Email</TableHead>
                       <TableHead className="text-white">Statut</TableHead>
                       <TableHead className="text-right text-white">Actions</TableHead>
@@ -72,12 +72,14 @@ export default function TeachersPage() {
                               </div>
                             </div>
                           </TableCell>
-                          <TableCell className="text-white/60">{t.email || "Non renseigné"}</TableCell>
+                          <TableCell className="text-white/80">{t.subject || "-"}</TableCell>
+                          <TableCell className="text-white/60 text-xs">{t.email || "Non renseigné"}</TableCell>
                           <TableCell>
                             <Badge className={cn(
-                              "text-[10px] font-bold bg-accent/20 text-accent"
+                              "text-[10px] font-bold",
+                              t.status === "Inactif" ? "bg-destructive/20 text-destructive" : "bg-accent/20 text-accent"
                             )} variant="outline">
-                              Présent
+                              {t.status || "Actif"}
                             </Badge>
                           </TableCell>
                           <TableCell className="text-right">
@@ -97,8 +99,8 @@ export default function TeachersPage() {
                       ))
                     ) : (
                       <TableRow>
-                        <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">
-                          Aucun enseignant trouvé dans la base de données.
+                        <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
+                          Aucun enseignant trouvé.
                         </TableCell>
                       </TableRow>
                     )}

@@ -72,7 +72,6 @@ export const Sidebar = ({ role, userName }: SidebarProps) => {
         { name: "Saisie Notes", href: "/grades/entry", icon: FileText },
         { name: "Absences", href: "/absences", icon: ShieldAlert },
         { name: "Agenda", href: "/agenda", icon: Calendar },
-        { name: "Messagerie", href: "/messages", icon: MessageSquare },
       ];
     }
 
@@ -102,7 +101,7 @@ export const Sidebar = ({ role, userName }: SidebarProps) => {
         </Link>
       </div>
 
-      <div className="flex-1 overflow-y-auto sidebar-scroll px-4">
+      <div className="flex-1 sidebar-scroll px-4">
         <nav className="space-y-1 pb-6">
           {navItems.map((item) => {
             const isActive = pathname === item.href;
