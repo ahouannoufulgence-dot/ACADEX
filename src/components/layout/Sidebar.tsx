@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { 
   LayoutDashboard, 
   Users, 
@@ -16,10 +16,13 @@ import {
   ShieldAlert,
   LogOut,
   ChevronRight,
-  ClipboardList
+  ClipboardList,
+  BarChart3
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { UserRole } from "@/lib/auth-utils";
+import { useAuth } from "@/firebase";
+import { signOut } from "firebase/auth";
 
 interface SidebarProps {
   role: UserRole;
@@ -28,6 +31,16 @@ interface SidebarProps {
 
 export const Sidebar = ({ role, userName }: SidebarProps) => {
   const pathname = usePathname();
+  const router = useRouter();
+  const auth = useAuth();
+
+  const handleLogout = async () => {
+    if (auth) {
+      await signOut(auth);
+    }
+    localStorage.removeItem("acadex_user");
+    router.push("/login");
+  };
 
   const getNavItems = () => {
     const commonItems = [
@@ -44,6 +57,7 @@ export const Sidebar = ({ role, userName }: SidebarProps) => {
         { name: "Emploi du temps", href: "/schedule", icon: Calendar },
         { name: "Notes & Résultats", href: "/grades", icon: FileText },
         { name: "Paiements", href: "/payments", icon: CreditCard },
+        { name: "Statistiques", href: "/stats", icon: BarChart3 },
         { name: "Sécurité", href: "/security", icon: ShieldAlert },
         { name: "Paramètres", href: "/settings", icon: Settings },
       ];
@@ -75,7 +89,7 @@ export const Sidebar = ({ role, userName }: SidebarProps) => {
   return (
     <aside className="w-64 h-screen bg-sidebar flex flex-col border-r border-sidebar-border fixed left-0 top-0 z-40">
       <div className="p-6">
-        <div className="flex items-center gap-3 mb-8">
+        <Link href="/dashboard" className="flex items-center gap-3 mb-8 hover:opacity-80 transition-opacity">
           <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center shadow-lg shadow-primary/20">
             <span className="text-white font-bold text-xl">A</span>
           </div>
@@ -83,7 +97,7 @@ export const Sidebar = ({ role, userName }: SidebarProps) => {
             <h1 className="text-white font-headline font-bold text-xl tracking-tight">ACADEX</h1>
             <p className="text-accent text-[10px] font-bold uppercase tracking-widest">Premium School</p>
           </div>
-        </div>
+        </Link>
 
         <nav className="space-y-1">
           {navItems.map((item) => {
@@ -120,7 +134,10 @@ export const Sidebar = ({ role, userName }: SidebarProps) => {
             <p className="text-[10px] text-muted-foreground uppercase tracking-tighter">{role}</p>
           </div>
         </div>
-        <button className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-destructive hover:bg-destructive/10 transition-colors">
+        <button 
+          onClick={handleLogout}
+          className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-destructive hover:bg-destructive/10 transition-colors"
+        >
           <LogOut className="w-4 h-4" />
           <span className="text-sm font-medium">Déconnexion</span>
         </button>
