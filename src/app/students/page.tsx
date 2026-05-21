@@ -38,7 +38,6 @@ export default function StudentsPage() {
 
   const { data: students, loading } = useCollection(studentsQuery);
 
-  // Optimisation : Tri et filtrage mémorisés pour la rapidité
   const filteredAndSortedStudents = useMemo(() => {
     if (!students) return [];
     
@@ -46,11 +45,12 @@ export default function StudentsPage() {
     
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
-      result = result.filter(s => 
-        (s.firstName?.toLowerCase().includes(q)) || 
-        (s.lastName?.toLowerCase().includes(q)) || 
-        (s.id?.toLowerCase().includes(q))
-      );
+      result = result.filter(s => {
+        const fname = (s.firstName || "").toLowerCase();
+        const lname = (s.lastName || "").toLowerCase();
+        const sid = (s.id || "").toLowerCase();
+        return fname.includes(q) || lname.includes(q) || sid.includes(q);
+      });
     }
 
     return result.sort((a: any, b: any) => {
@@ -59,7 +59,7 @@ export default function StudentsPage() {
       if (!nameA && !nameB) return a.id.localeCompare(b.id);
       if (!nameA) return 1;
       if (!nameB) return -1;
-      return nameA.localeCompare(nameB);
+      return nameA.compare(nameB, 'fr');
     });
   }, [students, searchQuery]);
 
@@ -108,7 +108,6 @@ export default function StudentsPage() {
       createdAt: serverTimestamp()
     };
 
-    // Mutation non-bloquante pour une réactivité maximale
     setDoc(studentRef, studentData)
       .catch(async (err) => {
         const permissionError = new FirestorePermissionError({
@@ -121,7 +120,7 @@ export default function StudentsPage() {
 
     toast({
       title: "Élève enregistré",
-      description: `${formData.firstName} ${formData.lastName} a été ajouté avec succès.`
+      description: `${formData.firstName} ${formData.lastName} a été ajouté.`
     });
     setAiResult(null);
     setFormData({ firstName: "", lastName: "", gradeLevel: "" });
@@ -205,10 +204,6 @@ export default function StudentsPage() {
                         </Button>
                       </div>
                     </div>
-                    <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-                      <p className="text-[10px] font-bold text-white/60 uppercase mb-2">Message de Bienvenue</p>
-                      <p className="text-sm text-white/80 italic leading-relaxed whitespace-pre-wrap">{aiResult.draftWelcomeMessage}</p>
-                    </div>
                   </div>
                 )}
 
@@ -229,9 +224,6 @@ export default function StudentsPage() {
                 </DialogFooter>
               </DialogContent>
             </Dialog>
-            <Button variant="outline" className="border-white/10 text-white h-10">
-              <Mail className="w-4 h-4 mr-2" /> Message groupé
-            </Button>
           </div>
         </div>
 
@@ -247,9 +239,6 @@ export default function StudentsPage() {
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
-              <Button variant="outline" size="sm" className="border-white/10 text-white h-10">
-                <Filter className="w-4 h-4 mr-2" /> Filtrer
-              </Button>
             </div>
           </CardHeader>
           <CardContent>
@@ -275,23 +264,23 @@ export default function StudentsPage() {
                         <TableCell>
                           <div className="flex items-center gap-3">
                             <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-xs shrink-0">
-                              {(s.firstName?.[0] || "?")}{(s.lastName?.[0] || "?")}
+                              {(s.lastName?.[0] || s.id?.[4] || "?")}
                             </div>
                             <span className="font-medium text-white text-sm">
-                              {s.lastName ? s.lastName.toUpperCase() : ""} {s.firstName || ""}
-                              {!s.lastName && !s.firstName && <span className="text-muted-foreground italic text-xs">Compte non activé</span>}
+                              {s.lastName ? `${s.lastName.toUpperCase()} ${s.firstName || ""}` : (
+                                <span className="text-muted-foreground italic text-xs">Accès généré (en attente)</span>
+                              )}
                             </span>
                           </div>
                         </TableCell>
-                        <TableCell className="font-mono text-[11px] text-muted-foreground">{s.id}</TableCell>
+                        <TableCell className="font-mono text-[11px] text-accent">{s.id}</TableCell>
                         <TableCell className="text-white text-sm">{s.gradeLevel}</TableCell>
                         <TableCell>
                           <Badge className={cn(
                             "text-[10px] font-bold px-2 py-0.5",
-                            s.paymentStatus === "Payé" ? "bg-accent/20 text-accent border-accent/20" : 
-                            "bg-destructive/20 text-destructive border-destructive/20"
+                            s.status === "Actif" ? "bg-accent/20 text-accent border-accent/20" : "bg-amber-400/20 text-amber-400 border-amber-400/20"
                           )} variant="outline">
-                            {s.paymentStatus || "Impayé"}
+                            {s.status === "Actif" ? "Activé" : "En attente"}
                           </Badge>
                         </TableCell>
                         <TableCell className="text-right">
@@ -301,13 +290,6 @@ export default function StudentsPage() {
                         </TableCell>
                       </TableRow>
                     ))}
-                    {filteredAndSortedStudents.length === 0 && !loading && (
-                      <TableRow>
-                        <TableCell colSpan={5} className="text-center py-12 text-muted-foreground text-sm">
-                          Aucun élève trouvé.
-                        </TableCell>
-                      </TableRow>
-                    )}
                   </TableBody>
                 </Table>
               </div>
