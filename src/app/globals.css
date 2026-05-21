@@ -41,18 +41,21 @@
   }
   body {
     @apply bg-background text-foreground font-body;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
   }
   h1, h2, h3, h4, h5, h6 {
     @apply font-headline;
   }
 }
 
+/* Optimisation : Flou réduit pour de meilleures performances GPU */
 .glass {
-  @apply bg-background/60 backdrop-blur-md border border-white/10;
+  @apply bg-background/40 backdrop-blur-sm border border-white/10;
 }
 
 .glass-card {
-  @apply bg-card/40 backdrop-blur-xl border border-white/5 shadow-2xl;
+  @apply bg-card/60 backdrop-blur-md border border-white/5 shadow-xl;
 }
 
 .sidebar-scroll {
@@ -76,7 +79,7 @@
 }
 
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -84,18 +87,23 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-muted rounded-full;
+  @apply bg-muted/50 rounded-full;
 }
 
 ::-webkit-scrollbar-thumb:hover {
   @apply bg-muted-foreground/30;
 }
 
+/* Accélération des transitions */
+.animate-in {
+  animation-duration: 300ms !important;
+}
+
 @keyframes pulse-slow {
   0%, 100% { opacity: 1; }
-  50% { opacity: 0.8; }
+  50% { opacity: 0.85; }
 }
 
 .animate-pulse-slow {
-  animation: pulse-slow 8s ease-in-out infinite;
+  animation: pulse-slow 6s ease-in-out infinite;
 }

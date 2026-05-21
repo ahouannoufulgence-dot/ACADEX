@@ -1,7 +1,6 @@
-
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { Search, Filter, MoreVertical, Mail, UserPlus, Sparkles, Copy, CheckCircle } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -24,6 +23,7 @@ export default function StudentsPage() {
   const db = useFirestore();
   const [isAiLoading, setIsAiLoading] = useState(false);
   const [aiResult, setAiResult] = useState<DirectorAccountProvisioningOutput | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
   
   const [formData, setFormData] = useState({
     firstName: "",
@@ -38,9 +38,22 @@ export default function StudentsPage() {
 
   const { data: students, loading } = useCollection(studentsQuery);
 
-  const sortedStudents = useMemo(() => {
+  // Optimisation : Tri et filtrage mémorisés pour la rapidité
+  const filteredAndSortedStudents = useMemo(() => {
     if (!students) return [];
-    return [...students].sort((a: any, b: any) => {
+    
+    let result = [...students];
+    
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      result = result.filter(s => 
+        (s.firstName?.toLowerCase().includes(q)) || 
+        (s.lastName?.toLowerCase().includes(q)) || 
+        (s.id?.toLowerCase().includes(q))
+      );
+    }
+
+    return result.sort((a: any, b: any) => {
       const nameA = `${a.lastName || ""} ${a.firstName || ""}`.toLowerCase().trim();
       const nameB = `${b.lastName || ""} ${b.firstName || ""}`.toLowerCase().trim();
       if (!nameA && !nameB) return a.id.localeCompare(b.id);
@@ -48,7 +61,7 @@ export default function StudentsPage() {
       if (!nameB) return -1;
       return nameA.localeCompare(nameB);
     });
-  }, [students]);
+  }, [students, searchQuery]);
 
   const handleAiProvision = async () => {
     if (!formData.firstName || !formData.lastName || !formData.gradeLevel) {
@@ -80,7 +93,7 @@ export default function StudentsPage() {
     }
   };
 
-  const saveStudent = () => {
+  const saveStudent = useCallback(() => {
     if (!db || !aiResult) return;
 
     const studentId = aiResult.suggestedId;
@@ -95,7 +108,7 @@ export default function StudentsPage() {
       createdAt: serverTimestamp()
     };
 
-    // Mutation non-bloquante pour rapidité
+    // Mutation non-bloquante pour une réactivité maximale
     setDoc(studentRef, studentData)
       .catch(async (err) => {
         const permissionError = new FirestorePermissionError({
@@ -112,28 +125,28 @@ export default function StudentsPage() {
     });
     setAiResult(null);
     setFormData({ firstName: "", lastName: "", gradeLevel: "" });
-  };
+  }, [db, aiResult, formData, toast]);
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
     toast({
       title: "Copié !",
-      description: "Le texte a été copié dans le presse-papier."
+      description: "L'identifiant a été copié."
     });
   };
 
   return (
     <DashboardLayout>
-      <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+      <div className="space-y-6">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h1 className="text-3xl font-headline font-bold text-white mb-2">Gestion des Élèves</h1>
-            <p className="text-muted-foreground">Effectif actuel: {students?.length || 0} élèves enregistrés.</p>
+            <h1 className="text-3xl font-headline font-bold text-white mb-1">Gestion des Élèves</h1>
+            <p className="text-muted-foreground text-sm">Effectif actuel: {students?.length || 0} enregistrés.</p>
           </div>
-          <div className="flex gap-3">
+          <div className="flex gap-2">
              <Dialog onOpenChange={(open) => !open && setAiResult(null)}>
               <DialogTrigger asChild>
-                <Button className="bg-primary hover:bg-primary/90 text-white font-bold">
+                <Button className="bg-primary hover:bg-primary/90 text-white font-bold h-10 px-6">
                   <UserPlus className="w-4 h-4 mr-2" /> Nouvel Élève
                 </Button>
               </DialogTrigger>
@@ -141,10 +154,10 @@ export default function StudentsPage() {
                 <DialogHeader>
                   <DialogTitle className="flex items-center gap-2">
                     <Sparkles className="w-5 h-5 text-accent" />
-                    Provisionnement de Compte AI
+                    Provisionnement IA
                   </DialogTitle>
                   <DialogDescription className="text-white/60">
-                    Générez automatiquement un compte et un message de bienvenue.
+                    Générez automatiquement un compte élève optimisé.
                   </DialogDescription>
                 </DialogHeader>
                 
@@ -155,7 +168,7 @@ export default function StudentsPage() {
                         <Label htmlFor="fname">Prénom</Label>
                         <Input 
                           id="fname" 
-                          className="bg-white/5 border-white/10" 
+                          className="bg-white/5 border-white/10 h-11" 
                           value={formData.firstName}
                           onChange={(e) => setFormData({...formData, firstName: e.target.value})}
                         />
@@ -164,7 +177,7 @@ export default function StudentsPage() {
                         <Label htmlFor="lname">Nom</Label>
                         <Input 
                           id="lname" 
-                          className="bg-white/5 border-white/10" 
+                          className="bg-white/5 border-white/10 h-11" 
                           value={formData.lastName}
                           onChange={(e) => setFormData({...formData, lastName: e.target.value})}
                         />
@@ -175,25 +188,25 @@ export default function StudentsPage() {
                       <Input 
                         id="class" 
                         placeholder="Ex: 3ème D" 
-                        className="bg-white/5 border-white/10" 
+                        className="bg-white/5 border-white/10 h-11" 
                         value={formData.gradeLevel}
                         onChange={(e) => setFormData({...formData, gradeLevel: e.target.value})}
                       />
                     </div>
                   </div>
                 ) : (
-                  <div className="space-y-4 py-4 animate-in fade-in zoom-in duration-300">
+                  <div className="space-y-4 py-4 animate-in fade-in zoom-in duration-200">
                     <div className="p-4 rounded-xl bg-accent/10 border border-accent/20">
-                      <p className="text-xs font-bold text-accent uppercase mb-1">Identifiant Suggéré</p>
+                      <p className="text-[10px] font-bold text-accent uppercase mb-1">Identifiant Suggéré</p>
                       <div className="flex items-center justify-between">
                         <span className="text-xl font-mono font-bold text-white tracking-wider">{aiResult.suggestedId}</span>
-                        <Button variant="ghost" size="icon" onClick={() => copyToClipboard(aiResult.suggestedId)}>
+                        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => copyToClipboard(aiResult.suggestedId)}>
                           <Copy className="w-4 h-4" />
                         </Button>
                       </div>
                     </div>
                     <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-                      <p className="text-xs font-bold text-white/60 uppercase mb-2">Message de Bienvenue</p>
+                      <p className="text-[10px] font-bold text-white/60 uppercase mb-2">Message de Bienvenue</p>
                       <p className="text-sm text-white/80 italic leading-relaxed whitespace-pre-wrap">{aiResult.draftWelcomeMessage}</p>
                     </div>
                   </div>
@@ -202,21 +215,21 @@ export default function StudentsPage() {
                 <DialogFooter>
                   {!aiResult ? (
                     <Button 
-                      className="bg-accent text-black font-bold w-full" 
+                      className="bg-accent text-black font-bold w-full h-11" 
                       onClick={handleAiProvision}
                       disabled={isAiLoading}
                     >
-                      {isAiLoading ? "Génération en cours..." : "Générer avec ACADEX AI"}
+                      {isAiLoading ? "Génération..." : "Générer avec ACADEX AI"}
                     </Button>
                   ) : (
-                    <Button className="bg-primary text-white font-bold w-full" onClick={saveStudent}>
-                      <CheckCircle className="w-4 h-4 mr-2" /> Valider et Enregistrer
+                    <Button className="bg-primary text-white font-bold w-full h-11" onClick={saveStudent}>
+                      <CheckCircle className="w-4 h-4 mr-2" /> Confirmer l'enregistrement
                     </Button>
                   )}
                 </DialogFooter>
               </DialogContent>
             </Dialog>
-            <Button variant="outline" className="border-white/10 text-white">
+            <Button variant="outline" className="border-white/10 text-white h-10">
               <Mail className="w-4 h-4 mr-2" /> Message groupé
             </Button>
           </div>
@@ -227,47 +240,54 @@ export default function StudentsPage() {
             <div className="flex flex-col md:flex-row justify-between gap-4">
               <div className="relative w-full max-w-sm">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <Input placeholder="Rechercher un nom ou ID..." className="pl-10 bg-white/5 border-white/10" />
+                <Input 
+                  placeholder="Rechercher..." 
+                  className="pl-10 bg-white/5 border-white/10 h-10" 
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
               </div>
-              <Button variant="outline" size="sm" className="border-white/10 text-white">
+              <Button variant="outline" size="sm" className="border-white/10 text-white h-10">
                 <Filter className="w-4 h-4 mr-2" /> Filtrer
               </Button>
             </div>
           </CardHeader>
           <CardContent>
             {loading ? (
-              <div className="flex justify-center p-12 text-muted-foreground">Chargement...</div>
+              <div className="flex justify-center p-12">
+                <div className="w-6 h-6 border-2 border-accent border-t-transparent rounded-full animate-spin" />
+              </div>
             ) : (
               <div className="rounded-xl border border-white/10 overflow-hidden">
                 <Table>
                   <TableHeader className="bg-white/5">
-                    <TableRow>
-                      <TableHead className="text-white">Élève</TableHead>
-                      <TableHead className="text-white">Identifiant</TableHead>
-                      <TableHead className="text-white">Classe</TableHead>
-                      <TableHead className="text-white">Scolarité</TableHead>
-                      <TableHead className="text-right text-white">Actions</TableHead>
+                    <TableRow className="border-white/5">
+                      <TableHead className="text-white text-xs uppercase font-bold">Élève</TableHead>
+                      <TableHead className="text-white text-xs uppercase font-bold">Identifiant</TableHead>
+                      <TableHead className="text-white text-xs uppercase font-bold">Classe</TableHead>
+                      <TableHead className="text-white text-xs uppercase font-bold">Scolarité</TableHead>
+                      <TableHead className="text-right text-white text-xs uppercase font-bold">Actions</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {sortedStudents.map((s: any) => (
-                      <TableRow key={s.id} className="hover:bg-white/5 border-white/5">
+                    {filteredAndSortedStudents.map((s: any) => (
+                      <TableRow key={s.id} className="hover:bg-white/5 border-white/5 group">
                         <TableCell>
                           <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-xs">
+                            <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-xs shrink-0">
                               {(s.firstName?.[0] || "?")}{(s.lastName?.[0] || "?")}
                             </div>
-                            <span className="font-medium text-white">
+                            <span className="font-medium text-white text-sm">
                               {s.lastName ? s.lastName.toUpperCase() : ""} {s.firstName || ""}
                               {!s.lastName && !s.firstName && <span className="text-muted-foreground italic text-xs">Compte non activé</span>}
                             </span>
                           </div>
                         </TableCell>
-                        <TableCell className="font-mono text-xs text-muted-foreground">{s.id}</TableCell>
-                        <TableCell className="text-white">{s.gradeLevel}</TableCell>
+                        <TableCell className="font-mono text-[11px] text-muted-foreground">{s.id}</TableCell>
+                        <TableCell className="text-white text-sm">{s.gradeLevel}</TableCell>
                         <TableCell>
                           <Badge className={cn(
-                            "text-[10px] font-bold",
+                            "text-[10px] font-bold px-2 py-0.5",
                             s.paymentStatus === "Payé" ? "bg-accent/20 text-accent border-accent/20" : 
                             "bg-destructive/20 text-destructive border-destructive/20"
                           )} variant="outline">
@@ -275,15 +295,15 @@ export default function StudentsPage() {
                           </Badge>
                         </TableCell>
                         <TableCell className="text-right">
-                          <Button variant="ghost" size="icon">
+                          <Button variant="ghost" size="icon" className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity">
                             <MoreVertical className="w-4 h-4 text-muted-foreground" />
                           </Button>
                         </TableCell>
                       </TableRow>
                     ))}
-                    {sortedStudents.length === 0 && !loading && (
+                    {filteredAndSortedStudents.length === 0 && !loading && (
                       <TableRow>
-                        <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
+                        <TableCell colSpan={5} className="text-center py-12 text-muted-foreground text-sm">
                           Aucun élève trouvé.
                         </TableCell>
                       </TableRow>
