@@ -27,8 +27,8 @@ export default function StatisticsPage() {
   ];
 
   const chartConfig = {
-    avg: { label: "Moyenne", color: "#84cc16" },
-    success: { label: "Taux de réussite", color: "#3b82f6" },
+    avg: { label: "Moyenne", color: "hsl(var(--accent))" },
+    success: { label: "Taux de réussite", color: "hsl(var(--primary))" },
   };
 
   return (
@@ -36,7 +36,7 @@ export default function StatisticsPage() {
       <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
         <div>
           <h1 className="text-3xl font-headline font-bold text-white mb-2">Statistiques & Analyses</h1>
-          <p className="text-muted-foreground">Analyse visuelle de la performance globale.</p>
+          <p className="text-muted-foreground">Analyse visuelle de la performance globale de l'établissement.</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -44,20 +44,36 @@ export default function StatisticsPage() {
             <CardHeader>
               <CardTitle className="text-white flex items-center gap-2">
                 <TrendingUp className="w-5 h-5 text-accent" />
-                Moyenne Générale par mois
+                Moyenne Générale Mensuelle
               </CardTitle>
+              <CardDescription>Évolution des résultats au cours du trimestre.</CardDescription>
             </CardHeader>
             <CardContent className="h-[300px] pt-4">
-               <ResponsiveContainer width="100%" height="100%">
+              <ChartContainer config={chartConfig} className="h-full w-full">
                 <BarChart data={data}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" vertical={false} />
-                  <XAxis dataKey="month" stroke="#ffffff60" fontSize={12} tickLine={false} axisLine={false} />
-                  <YAxis stroke="#ffffff60" fontSize={12} tickLine={false} axisLine={false} />
+                  <XAxis 
+                    dataKey="month" 
+                    stroke="#ffffff60" 
+                    fontSize={12} 
+                    tickLine={false} 
+                    axisLine={false} 
+                  />
+                  <YAxis 
+                    stroke="#ffffff60" 
+                    fontSize={12} 
+                    tickLine={false} 
+                    axisLine={false} 
+                    domain={[0, 20]}
+                  />
                   <ChartTooltip content={<ChartTooltipContent />} />
-                  <Bar dataKey="avg" fill="var(--color-avg)" radius={[4, 4, 0, 0]} />
+                  <Bar 
+                    dataKey="avg" 
+                    fill="var(--color-avg)" 
+                    radius={[4, 4, 0, 0]} 
+                  />
                 </BarChart>
-              </ResponsiveContainer>
-              <ChartContainer config={chartConfig} className="hidden" children={null} />
+              </ChartContainer>
             </CardContent>
           </Card>
 
@@ -65,15 +81,24 @@ export default function StatisticsPage() {
             <CardHeader>
               <CardTitle className="text-white flex items-center gap-2">
                 <Users className="w-5 h-5 text-blue-400" />
-                Répartition des Élèves
+                Répartition des Élèves par Cycle
               </CardTitle>
+              <CardDescription>Distribution des effectifs totaux.</CardDescription>
             </CardHeader>
             <CardContent className="h-[300px] pt-4">
-              {/* Simulation de graphique */}
               <div className="flex h-full items-end gap-4 px-4 pb-8">
-                <div className="flex-1 bg-primary/20 rounded-t-lg h-[80%] flex items-end justify-center pb-2 text-[10px] font-bold">Lycée</div>
-                <div className="flex-1 bg-accent/20 rounded-t-lg h-[60%] flex items-end justify-center pb-2 text-[10px] font-bold">Collège</div>
-                <div className="flex-1 bg-blue-500/20 rounded-t-lg h-[40%] flex items-end justify-center pb-2 text-[10px] font-bold">Primaire</div>
+                <div className="flex-1 flex flex-col items-center gap-2">
+                  <div className="w-full bg-primary/20 rounded-t-lg h-[80%] flex items-end justify-center pb-2 text-[10px] font-bold">45%</div>
+                  <span className="text-xs font-bold text-muted-foreground">Lycée</span>
+                </div>
+                <div className="flex-1 flex flex-col items-center gap-2">
+                  <div className="w-full bg-accent/20 rounded-t-lg h-[60%] flex items-end justify-center pb-2 text-[10px] font-bold">35%</div>
+                  <span className="text-xs font-bold text-muted-foreground">Collège</span>
+                </div>
+                <div className="flex-1 flex flex-col items-center gap-2">
+                  <div className="w-full bg-blue-500/20 rounded-t-lg h-[40%] flex items-end justify-center pb-2 text-[10px] font-bold">20%</div>
+                  <span className="text-xs font-bold text-muted-foreground">Primaire</span>
+                </div>
               </div>
             </CardContent>
           </Card>
