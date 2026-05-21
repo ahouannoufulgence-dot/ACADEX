@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Bell, Search, Settings, HelpCircle, Calendar as CalendarIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { UserRole, getRoleName } from "@/lib/auth-utils";
@@ -12,12 +12,18 @@ interface TopbarProps {
 }
 
 export const Topbar = ({ role, userName }: TopbarProps) => {
-  const today = new Date().toLocaleDateString('fr-FR', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  });
+  const [mounted, setMounted] = useState(false);
+  const [today, setToday] = useState("");
+
+  useEffect(() => {
+    setMounted(true);
+    setToday(new Date().toLocaleDateString('fr-FR', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    }));
+  }, []);
 
   return (
     <header className="h-20 bg-background/80 backdrop-blur-md sticky top-0 z-30 flex items-center justify-between px-8 border-b border-border">
@@ -32,10 +38,12 @@ export const Topbar = ({ role, userName }: TopbarProps) => {
       </div>
 
       <div className="flex items-center gap-6">
-        <div className="hidden lg:flex items-center gap-2 text-sm text-muted-foreground mr-4">
-          <CalendarIcon className="w-4 h-4 text-accent" />
-          <span className="capitalize">{today}</span>
-        </div>
+        {mounted && (
+          <div className="hidden lg:flex items-center gap-2 text-sm text-muted-foreground mr-4">
+            <CalendarIcon className="w-4 h-4 text-accent" />
+            <span className="capitalize">{today}</span>
+          </div>
+        )}
 
         <div className="flex items-center gap-3">
           <button className="relative w-10 h-10 flex items-center justify-center rounded-xl bg-muted/50 hover:bg-muted transition-colors">

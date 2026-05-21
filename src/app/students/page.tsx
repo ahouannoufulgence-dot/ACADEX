@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
-import { Plus, Search, Filter, GraduationCap, MoreVertical, Mail, UserPlus } from "lucide-react";
+import { Plus, Search, Filter, GraduationCap, MoreVertical, Mail, UserPlus, Sparkles, Copy, CheckCircle } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,14 +11,64 @@ import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
+import { provisionUserAccount, DirectorAccountProvisioningOutput } from "@/ai/flows/director-account-provisioning-assistant";
+import { useToast } from "@/hooks/use-toast";
 
 export default function StudentsPage() {
+  const { toast } = useToast();
+  const [isAiLoading, setIsAiLoading] = useState(false);
+  const [aiResult, setAiResult] = useState<DirectorAccountProvisioningOutput | null>(null);
+  
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    gradeLevel: ""
+  });
+
   const [students] = useState([
     { id: "ELV-3D-001", name: "Amina Kossou", class: "3ème D", status: "Inscrit", payment: "Payé" },
     { id: "ELV-1C-042", name: "David Mensah", class: "1ère C", status: "Inscrit", payment: "Partiel" },
     { id: "ELV-6A-115", name: "Marie Codjo", class: "6ème A", status: "Inscrit", payment: "Payé" },
     { id: "ELV-TD-204", name: "Théo Bah", class: "Tle D", status: "Inscrit", payment: "Impayé" },
   ]);
+
+  const handleAiProvision = async () => {
+    if (!formData.firstName || !formData.lastName || !formData.gradeLevel) {
+      toast({
+        variant: "destructive",
+        title: "Champs manquants",
+        description: "Veuillez remplir toutes les informations de l'élève."
+      });
+      return;
+    }
+
+    setIsAiLoading(true);
+    try {
+      const result = await provisionUserAccount({
+        userType: 'ELEVE',
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        gradeLevel: formData.gradeLevel
+      });
+      setAiResult(result);
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Erreur IA",
+        description: "Impossible de générer les informations pour le moment."
+      });
+    } finally {
+      setIsAiLoading(false);
+    }
+  };
+
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text);
+    toast({
+      title: "Copié !",
+      description: "Le texte a été copié dans le presse-papier."
+    });
+  };
 
   return (
     <DashboardLayout>
@@ -29,37 +79,95 @@ export default function StudentsPage() {
             <p className="text-muted-foreground">Effectif total: 842 élèves inscrits cette année.</p>
           </div>
           <div className="flex gap-3">
-             <Dialog>
+             <Dialog onOpenChange={(open) => !open && setAiResult(null)}>
               <DialogTrigger asChild>
                 <Button className="bg-primary hover:bg-primary/90 text-white font-bold">
                   <UserPlus className="w-4 h-4 mr-2" /> Nouvel Élève
                 </Button>
               </DialogTrigger>
-              <DialogContent className="glass-card border-white/10 text-white">
+              <DialogContent className="glass-card border-white/10 text-white sm:max-w-[500px]">
                 <DialogHeader>
-                  <DialogTitle>Provisionnement de Compte AI</DialogTitle>
-                  <DialogDescription>
+                  <DialogTitle className="flex items-center gap-2">
+                    <Sparkles className="w-5 h-5 text-accent" />
+                    Provisionnement de Compte AI
+                  </DialogTitle>
+                  <DialogDescription className="text-white/60">
                     Saisissez les informations pour générer automatiquement un compte et un message de bienvenue.
                   </DialogDescription>
                 </DialogHeader>
-                <div className="grid gap-4 py-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="fname">Prénom</Label>
-                      <Input id="fname" className="bg-white/5 border-white/10" />
+                
+                {!aiResult ? (
+                  <div className="grid gap-4 py-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="fname">Prénom</Label>
+                        <Input 
+                          id="fname" 
+                          className="bg-white/5 border-white/10" 
+                          value={formData.firstName}
+                          onChange={(e) => setFormData({...formData, firstName: e.target.value})}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="lname">Nom</Label>
+                        <Input 
+                          id="lname" 
+                          className="bg-white/5 border-white/10" 
+                          value={formData.lastName}
+                          onChange={(e) => setFormData({...formData, lastName: e.target.value})}
+                        />
+                      </div>
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="lname">Nom</Label>
-                      <Input id="lname" className="bg-white/5 border-white/10" />
+                      <Label htmlFor="class">Classe / Niveau</Label>
+                      <Input 
+                        id="class" 
+                        placeholder="Ex: 3ème D" 
+                        className="bg-white/5 border-white/10" 
+                        value={formData.gradeLevel}
+                        onChange={(e) => setFormData({...formData, gradeLevel: e.target.value})}
+                      />
                     </div>
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="class">Classe / Niveau</Label>
-                    <Input id="class" placeholder="Ex: 3ème D" className="bg-white/5 border-white/10" />
+                ) : (
+                  <div className="space-y-4 py-4 animate-in fade-in zoom-in duration-300">
+                    <div className="p-4 rounded-xl bg-accent/10 border border-accent/20">
+                      <p className="text-xs font-bold text-accent uppercase mb-1">Identifiant Suggéré</p>
+                      <div className="flex items-center justify-between">
+                        <span className="text-xl font-mono font-bold text-white tracking-wider">{aiResult.suggestedId}</span>
+                        <Button variant="ghost" size="icon" onClick={() => copyToClipboard(aiResult.suggestedId)}>
+                          <Copy className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </div>
+                    <div className="p-4 rounded-xl bg-white/5 border border-white/10">
+                      <p className="text-xs font-bold text-white/60 uppercase mb-2">Message de Bienvenue</p>
+                      <p className="text-sm text-white/80 italic leading-relaxed whitespace-pre-wrap">{aiResult.draftWelcomeMessage}</p>
+                      <Button 
+                        variant="link" 
+                        className="p-0 h-auto mt-2 text-accent" 
+                        onClick={() => copyToClipboard(aiResult.draftWelcomeMessage)}
+                      >
+                        <Copy className="w-3 h-3 mr-1" /> Copier le message
+                      </Button>
+                    </div>
                   </div>
-                </div>
+                )}
+
                 <DialogFooter>
-                  <Button className="bg-accent text-black font-bold">Générer avec ACADEX AI</Button>
+                  {!aiResult ? (
+                    <Button 
+                      className="bg-accent text-black font-bold w-full" 
+                      onClick={handleAiProvision}
+                      disabled={isAiLoading}
+                    >
+                      {isAiLoading ? "Génération en cours..." : "Générer avec ACADEX AI"}
+                    </Button>
+                  ) : (
+                    <Button className="bg-primary text-white font-bold w-full" onClick={() => setAiResult(null)}>
+                      <CheckCircle className="w-4 h-4 mr-2" /> Valider et Enregistrer
+                    </Button>
+                  )}
                 </DialogFooter>
               </DialogContent>
             </Dialog>
