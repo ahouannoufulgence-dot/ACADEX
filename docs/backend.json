@@ -19,9 +19,25 @@
         "secretQuestion": { "type": "string" },
         "secretAnswer": { "type": "string" },
         "status": { "type": "string", "enum": ["Actif", "Inactif", "Suspendu"] },
-        "createdAt": { "type": "string", "format": "date-time" }
+        "createdAt": { "type": "string", "format": "date-time" },
+        "lastLogin": { "type": "string", "format": "date-time" }
       },
       "required": ["id", "role", "password"]
+    },
+    "AuditLog": {
+      "title": "Journal d'Audit",
+      "description": "Enregistrement des événements de sécurité et connexions",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "userName": { "type": "string" },
+        "action": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "ip": { "type": "string" },
+        "details": { "type": "string" }
+      },
+      "required": ["userId", "action", "timestamp"]
     },
     "Student": {
       "title": "Registre Élève",
@@ -32,7 +48,7 @@
         "firstName": { "type": "string" },
         "lastName": { "type": "string" },
         "gradeLevel": { "type": "string" },
-        "status": { "type": "string", "enum": ["En attente", "Actif"] },
+        "status": { "type": "string", "enum": ["En attente", "Actif", "Suspendu"] },
         "paymentStatus": { "type": "string", "enum": ["Payé", "Partiel", "Impayé"] },
         "createdAt": { "type": "string", "format": "date-time" },
         "activatedAt": { "type": "string", "format": "date-time" }
@@ -92,6 +108,10 @@
     "/users/{userId}": {
       "schema": "#/backend/entities/User",
       "description": "Profils des utilisateurs et comptes activés"
+    },
+    "/auditLogs/{logId}": {
+      "schema": "#/backend/entities/AuditLog",
+      "description": "Historique des accès et sécurité"
     },
     "/students/{studentId}": {
       "schema": "#/backend/entities/Student",

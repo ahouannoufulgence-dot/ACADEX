@@ -1,22 +1,31 @@
+
 "use client";
 
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { Sidebar } from "./Sidebar";
 import { Topbar } from "./Topbar";
 import { getRoleFromId } from "@/lib/auth-utils";
+import { useToast } from "@/hooks/use-toast";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
 }
 
+const INACTIVITY_TIMEOUT = 15 * 60 * 1000; // 15 minutes
+
 export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const [user, setUser] = useState<{ id: string, name: string } | null>(null);
   const [isReady, setIsReady] = useState(false);
   const router = useRouter();
+  const { toast } = useToast();
+
+  const handleLogout = useCallback(() => {
+    localStorage.removeItem("acadex_user");
+    router.push("/login");
+  }, [router]);
 
   useEffect(() => {
-    // Vérification rapide de la session
     const savedUser = localStorage.getItem("acadex_user");
     if (!savedUser) {
       router.push("/login");
@@ -30,6 +39,32 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     }
     setIsReady(true);
   }, [router]);
+
+  // Sécurité : Verrouillage après inactivité
+  useEffect(() => {
+    let timeout: NodeJS.Timeout;
+
+    const resetTimer = () => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        toast({
+          title: "Session expirée",
+          description: "Déconnexion automatique pour inactivité (sécurité).",
+          variant: "destructive"
+        });
+        handleLogout();
+      }, INACTIVITY_TIMEOUT);
+    };
+
+    const events = ['mousedown', 'keydown', 'scroll', 'touchstart'];
+    events.forEach(event => window.addEventListener(event, resetTimer));
+    resetTimer();
+
+    return () => {
+      clearTimeout(timeout);
+      events.forEach(event => window.removeEventListener(event, resetTimer));
+    };
+  }, [handleLogout, toast]);
 
   const role = useMemo(() => user ? getRoleFromId(user.id) : null, [user]);
 
