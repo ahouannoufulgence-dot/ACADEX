@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useMemo } from "react";
@@ -36,6 +37,20 @@ export default function StudentsPage() {
   }, [db]);
 
   const { data: students, loading } = useCollection(studentsQuery);
+
+  // Tri alphabétique des élèves par Nom puis Prénom
+  const sortedStudents = useMemo(() => {
+    if (!students) return [];
+    return [...students].sort((a: any, b: any) => {
+      const nameA = `${a.lastName || ""} ${a.firstName || ""}`.toLowerCase().trim();
+      const nameB = `${b.lastName || ""} ${b.firstName || ""}`.toLowerCase().trim();
+      // Si le nom n'est pas encore défini (compte non activé), on utilise l'ID
+      if (!nameA && !nameB) return a.id.localeCompare(b.id);
+      if (!nameA) return 1;
+      if (!nameB) return -1;
+      return nameA.localeCompare(nameB);
+    });
+  }, [students]);
 
   const handleAiProvision = async () => {
     if (!formData.firstName || !formData.lastName || !formData.gradeLevel) {
@@ -94,7 +109,7 @@ export default function StudentsPage() {
       .catch(async (err) => {
         const permissionError = new FirestorePermissionError({
           path: studentRef.path,
-          operation: 'write',
+          operation: 'create',
           requestResourceData: studentData,
         });
         errorEmitter.emit('permission-error', permissionError);
@@ -237,14 +252,17 @@ export default function StudentsPage() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {students?.map((s) => (
+                    {sortedStudents.map((s: any) => (
                       <TableRow key={s.id} className="hover:bg-white/5 border-white/5">
                         <TableCell>
                           <div className="flex items-center gap-3">
                             <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-xs">
-                              {s.firstName[0]}{s.lastName[0]}
+                              {(s.firstName?.[0] || "?")}{(s.lastName?.[0] || "?")}
                             </div>
-                            <span className="font-medium text-white">{s.firstName} {s.lastName}</span>
+                            <span className="font-medium text-white">
+                              {s.lastName ? s.lastName.toUpperCase() : ""} {s.firstName || ""}
+                              {!s.lastName && !s.firstName && <span className="text-muted-foreground italic text-xs">Compte non activé</span>}
+                            </span>
                           </div>
                         </TableCell>
                         <TableCell className="font-mono text-xs text-muted-foreground">{s.id}</TableCell>
@@ -255,7 +273,7 @@ export default function StudentsPage() {
                             s.paymentStatus === "Payé" ? "bg-accent/20 text-accent border-accent/20" : 
                             "bg-destructive/20 text-destructive border-destructive/20"
                           )} variant="outline">
-                            {s.paymentStatus}
+                            {s.paymentStatus || "Impayé"}
                           </Badge>
                         </TableCell>
                         <TableCell className="text-right">
@@ -265,6 +283,13 @@ export default function StudentsPage() {
                         </TableCell>
                       </TableRow>
                     ))}
+                    {sortedStudents.length === 0 && !loading && (
+                      <TableRow>
+                        <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
+                          Aucun élève trouvé.
+                        </TableCell>
+                      </TableRow>
+                    )}
                   </TableBody>
                 </Table>
               </div>

@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useMemo } from "react";
@@ -21,6 +22,16 @@ export default function TeachersPage() {
   }, [db]);
 
   const { data: teachers, loading } = useCollection(teachersQuery);
+
+  // Tri alphabétique des enseignants
+  const sortedTeachers = useMemo(() => {
+    if (!teachers) return [];
+    return [...teachers].sort((a: any, b: any) => {
+      const nameA = `${a.lastName || a.name || ""} ${a.firstName || ""}`.toLowerCase().trim();
+      const nameB = `${b.lastName || b.name || ""} ${b.firstName || ""}`.toLowerCase().trim();
+      return nameA.localeCompare(nameB);
+    });
+  }, [teachers]);
 
   return (
     <DashboardLayout>
@@ -58,16 +69,19 @@ export default function TeachersPage() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {teachers && teachers.length > 0 ? (
-                      teachers.map((t: any) => (
+                    {sortedTeachers.length > 0 ? (
+                      sortedTeachers.map((t: any) => (
                         <TableRow key={t.id} className="hover:bg-white/5 border-white/5">
                           <TableCell>
                             <div className="flex items-center gap-3">
                               <div className="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400 font-bold text-xs">
-                                {t.name?.substring(0, 2).toUpperCase() || "??"}
+                                {(t.lastName?.[0] || t.name?.[0] || "?").toUpperCase()}
+                                {(t.firstName?.[0] || "").toUpperCase()}
                               </div>
                               <div>
-                                <p className="font-medium text-white">{t.name}</p>
+                                <p className="font-medium text-white">
+                                  {t.lastName ? t.lastName.toUpperCase() : t.name} {t.firstName || ""}
+                                </p>
                                 <p className="text-[10px] text-muted-foreground font-mono">{t.id}</p>
                               </div>
                             </div>
