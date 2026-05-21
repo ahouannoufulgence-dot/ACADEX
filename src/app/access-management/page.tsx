@@ -1,9 +1,8 @@
-
 "use client";
 
 import React, { useState, useMemo } from "react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
-import { KeyRound, ShieldCheck, Users, Copy } from "lucide-react";
+import { KeyRound, ShieldCheck, Users, Copy, Trash2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,7 +12,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogT
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { useFirestore, useCollection } from "@/firebase";
-import { collection, doc, serverTimestamp, writeBatch } from "firebase/firestore";
+import { collection, doc, serverTimestamp, writeBatch, deleteDoc } from "firebase/firestore";
 import { errorEmitter } from "@/firebase/error-emitter";
 import { FirestorePermissionError } from "@/firebase/errors";
 
@@ -61,7 +60,6 @@ export default function AccessManagementPage() {
       });
     }
 
-    // Mutation non-bloquante pour une action rapide
     batch.commit()
       .catch(async () => {
         const permissionError = new FirestorePermissionError({
@@ -73,11 +71,29 @@ export default function AccessManagementPage() {
 
     toast({
       title: "Génération lancée",
-      description: `${bulkData.count} accès sont en cours de création pour ${bulkData.gradeLevel}.`
+      description: `${bulkData.count} accès créés pour ${bulkData.gradeLevel}.`
     });
     
     setIsGenerating(false);
     setBulkData({ gradeLevel: "", count: 1 });
+  };
+
+  const handleDelete = (id: string) => {
+    if (!db) return;
+    
+    deleteDoc(doc(db, "students", id))
+      .catch(async () => {
+        const permissionError = new FirestorePermissionError({
+          path: `students/${id}`,
+          operation: 'delete',
+        });
+        errorEmitter.emit('permission-error', permissionError);
+      });
+      
+    toast({ 
+      title: "Identifiant supprimé", 
+      description: "Le code d'accès a été retiré de la base de données." 
+    });
   };
 
   const copyToClipboard = (text: string) => {
@@ -87,7 +103,7 @@ export default function AccessManagementPage() {
 
   return (
     <DashboardLayout>
-      <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+      <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-300">
         <div className="flex justify-between items-center">
           <div>
             <h1 className="text-3xl font-headline font-bold text-white mb-2">Gestion des Accès</h1>
@@ -96,7 +112,7 @@ export default function AccessManagementPage() {
           
           <Dialog>
             <DialogTrigger asChild>
-              <Button className="bg-primary text-white font-bold">
+              <Button className="bg-primary text-white font-bold h-10 px-6">
                 <Users className="w-4 h-4 mr-2" /> Provisionner une classe
               </Button>
             </DialogTrigger>
@@ -116,7 +132,7 @@ export default function AccessManagementPage() {
                   <Label>Niveau / Classe (Ex: 3EME A)</Label>
                   <Input 
                     placeholder="3EME A"
-                    className="bg-white/5 border-white/10" 
+                    className="bg-white/5 border-white/10 h-11" 
                     value={bulkData.gradeLevel}
                     onChange={(e) => setBulkData({...bulkData, gradeLevel: e.target.value.toUpperCase()})}
                   />
@@ -127,7 +143,7 @@ export default function AccessManagementPage() {
                     type="number"
                     min="1"
                     max="100"
-                    className="bg-white/5 border-white/10" 
+                    className="bg-white/5 border-white/10 h-11" 
                     value={bulkData.count}
                     onChange={(e) => setBulkData({...bulkData, count: parseInt(e.target.value) || 0})}
                   />
@@ -136,7 +152,7 @@ export default function AccessManagementPage() {
 
               <DialogFooter>
                 <Button 
-                  className="bg-accent text-black font-bold w-full" 
+                  className="bg-accent text-black font-bold w-full h-11" 
                   onClick={handleBulkGenerate} 
                   disabled={isGenerating}
                 >
@@ -154,44 +170,58 @@ export default function AccessManagementPage() {
           </CardHeader>
           <CardContent>
             {loading ? (
-              <div className="flex justify-center p-12 text-muted-foreground">Chargement...</div>
+              <div className="flex justify-center p-12 text-muted-foreground">
+                 <div className="w-6 h-6 border-2 border-accent border-t-transparent rounded-full animate-spin" />
+              </div>
             ) : (
               <div className="rounded-xl border border-white/10 overflow-hidden">
                 <Table>
                   <TableHeader className="bg-white/5">
-                    <TableRow>
-                      <TableHead className="text-white">Identifiant</TableHead>
-                      <TableHead className="text-white">Classe</TableHead>
-                      <TableHead className="text-white">Statut</TableHead>
-                      <TableHead className="text-right text-white">Actions</TableHead>
+                    <TableRow className="border-white/5">
+                      <TableHead className="text-white text-xs uppercase font-bold">Identifiant</TableHead>
+                      <TableHead className="text-white text-xs uppercase font-bold">Classe</TableHead>
+                      <TableHead className="text-white text-xs uppercase font-bold">Statut</TableHead>
+                      <TableHead className="text-right text-white text-xs uppercase font-bold">Actions</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {students?.filter((s: any) => s.status === "En attente").map((u: any) => (
-                      <TableRow key={u.id} className="hover:bg-white/5 border-white/5">
+                      <TableRow key={u.id} className="hover:bg-white/5 border-white/5 transition-colors group">
                         <TableCell className="font-mono font-bold text-accent">{u.id}</TableCell>
                         <TableCell className="text-white/80">{u.gradeLevel}</TableCell>
                         <TableCell>
-                          <Badge className="bg-amber-400/20 text-amber-400 text-[10px]" variant="outline">
+                          <Badge className="bg-amber-400/20 text-amber-400 text-[10px] border-amber-400/20" variant="outline">
                             {u.status}
                           </Badge>
                         </TableCell>
                         <TableCell className="text-right">
-                          <Button 
-                            variant="ghost" 
-                            size="icon" 
-                            className="h-8 w-8 text-muted-foreground hover:text-accent"
-                            onClick={() => copyToClipboard(u.id)}
-                          >
-                            <Copy className="h-4 w-4" />
-                          </Button>
+                          <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <Button 
+                              variant="ghost" 
+                              size="icon" 
+                              className="h-8 w-8 text-muted-foreground hover:text-accent"
+                              onClick={() => copyToClipboard(u.id)}
+                              title="Copier le code"
+                            >
+                              <Copy className="h-4 w-4" />
+                            </Button>
+                            <Button 
+                              variant="ghost" 
+                              size="icon" 
+                              className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                              onClick={() => handleDelete(u.id)}
+                              title="Supprimer l'accès"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
                         </TableCell>
                       </TableRow>
                     ))}
                     {students?.filter((s: any) => s.status === "En attente").length === 0 && (
                       <TableRow>
-                        <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">
-                          Aucun identifiant en attente.
+                        <TableCell colSpan={4} className="text-center py-12 text-muted-foreground italic text-sm">
+                          Aucun identifiant en attente d'activation.
                         </TableCell>
                       </TableRow>
                     )}
