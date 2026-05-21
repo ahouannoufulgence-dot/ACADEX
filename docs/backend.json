@@ -1,3 +1,4 @@
+
 {
   "entities": {
     "User": {
@@ -23,19 +24,20 @@
       "required": ["id", "role", "password"]
     },
     "Student": {
-      "title": "Élève (Pré-provisionné)",
-      "description": "Information sur un élève inscrit servant à l'activation de compte",
+      "title": "Registre Élève",
+      "description": "Information sur un élève pré-provisionné ou actif",
       "type": "object",
       "properties": {
         "id": { "type": "string" },
         "firstName": { "type": "string" },
         "lastName": { "type": "string" },
         "gradeLevel": { "type": "string" },
-        "status": { "type": "string", "enum": ["Inscrit", "En attente"] },
+        "status": { "type": "string", "enum": ["En attente", "Actif"] },
         "paymentStatus": { "type": "string", "enum": ["Payé", "Partiel", "Impayé"] },
-        "createdAt": { "type": "string", "format": "date-time" }
+        "createdAt": { "type": "string", "format": "date-time" },
+        "activatedAt": { "type": "string", "format": "date-time" }
       },
-      "required": ["id", "firstName", "lastName", "gradeLevel"]
+      "required": ["id", "gradeLevel", "status"]
     },
     "Subject": {
       "title": "Matière",
@@ -82,23 +84,23 @@
   },
   "firestore": {
     "/users/{userId}": {
-      "schema": "#/entities/User",
+      "schema": "#/backend/entities/User",
       "description": "Profils des utilisateurs et comptes activés"
     },
     "/students/{studentId}": {
-      "schema": "#/entities/Student",
+      "schema": "#/backend/entities/Student",
       "description": "Base de données des élèves (Source pour activation)"
     },
     "/subjects/{subjectId}": {
-      "schema": "#/entities/Subject",
+      "schema": "#/backend/entities/Subject",
       "description": "Configuration académique"
     },
     "/grades/{gradeId}": {
-      "schema": "#/entities/Grade",
+      "schema": "#/backend/entities/Grade",
       "description": "Notes des élèves"
     },
     "/payments/{paymentId}": {
-      "schema": "#/entities/Payment",
+      "schema": "#/backend/entities/Payment",
       "description": "Versements de scolarité"
     }
   }

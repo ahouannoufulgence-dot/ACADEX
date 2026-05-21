@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState } from "react";
@@ -9,8 +10,10 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { useFirestore } from "@/firebase";
-import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
+import { doc, getDoc, setDoc, updateDoc, serverTimestamp } from "firebase/firestore";
 import Link from "next/link";
+import { errorEmitter } from "@/firebase/error-emitter";
+import { FirestorePermissionError } from "@/firebase/errors";
 
 export default function StudentActivationPage() {
   const [step, setStep] = useState(1);
@@ -30,20 +33,29 @@ export default function StudentActivationPage() {
   const db = useFirestore();
 
   const verifyId = async () => {
-    if (!db) return;
+    if (!db || !studentId) return;
     setIsLoading(true);
     try {
-      // On vérifie d'abord si l'identifiant existe dans la collection students (pré-provisionnés)
+      // On vérifie si l'identifiant existe dans la collection students (pré-provisionnés par le dir)
       const studentDoc = await getDoc(doc(db, "students", studentId));
+      
       if (studentDoc.exists()) {
-        setStudentInfo(studentDoc.data());
-        setFormData({...formData, firstName: studentDoc.data().firstName, lastName: studentDoc.data().lastName});
+        const data = studentDoc.data();
+        if (data.status === "Actif") {
+          toast({ variant: "destructive", title: "Déjà activé", description: "Ce compte est déjà actif. Connectez-vous directement." });
+          return;
+        }
+        setStudentInfo(data);
         setStep(2);
       } else {
-        toast({ variant: "destructive", title: "ID Invalide", description: "Cet identifiant n'existe pas ou n'a pas été pré-créé par le directeur." });
+        toast({ 
+          variant: "destructive", 
+          title: "ID Invalide", 
+          description: "Cet identifiant n'existe pas. Demandez-le à votre direction." 
+        });
       }
     } catch (err) {
-      toast({ variant: "destructive", title: "Erreur", description: "Une erreur est survenue lors de la vérification." });
+      toast({ variant: "destructive", title: "Erreur", description: "Vérification impossible." });
     } finally {
       setIsLoading(false);
     }
@@ -51,7 +63,7 @@ export default function StudentActivationPage() {
 
   const activateAccount = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!db) return;
+    if (!db || !studentId) return;
 
     if (formData.password !== formData.confirmPassword) {
       toast({ variant: "destructive", title: "Erreur", description: "Les mots de passe ne correspondent pas." });
@@ -59,28 +71,46 @@ export default function StudentActivationPage() {
     }
 
     setIsLoading(true);
+    const userRef = doc(db, "users", studentId);
+    const studentRef = doc(db, "students", studentId);
+    
+    const userData = {
+      id: studentId,
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      name: `${formData.firstName} ${formData.lastName}`,
+      role: "STUDENT_PARENT",
+      password: formData.password,
+      secretQuestion: formData.secretQuestion,
+      secretAnswer: formData.secretAnswer,
+      status: "Actif",
+      activatedAt: serverTimestamp()
+    };
+
     try {
-      const userRef = doc(db, "users", studentId);
-      await setDoc(userRef, {
-        id: studentId,
+      // 1. Créer le compte utilisateur
+      await setDoc(userRef, userData);
+      
+      // 2. Mettre à jour le statut dans le registre des élèves
+      await updateDoc(studentRef, {
+        status: "Actif",
         firstName: formData.firstName,
         lastName: formData.lastName,
-        name: `${formData.firstName} ${formData.lastName}`,
-        role: "STUDENT_PARENT",
-        password: formData.password,
-        secretQuestion: formData.secretQuestion,
-        secretAnswer: formData.secretAnswer,
-        status: "Actif",
         activatedAt: serverTimestamp()
       });
 
       toast({
         title: "Compte activé !",
-        description: "Vous pouvez maintenant vous connecter avec votre identifiant.",
+        description: "Vous pouvez maintenant vous connecter.",
       });
       router.push("/login");
-    } catch (err) {
-      toast({ variant: "destructive", title: "Erreur", description: "Impossible d'activer le compte." });
+    } catch (err: any) {
+      const permissionError = new FirestorePermissionError({
+        path: userRef.path,
+        operation: 'create',
+        requestResourceData: userData,
+      });
+      errorEmitter.emit('permission-error', permissionError);
     } finally {
       setIsLoading(false);
     }
@@ -98,23 +128,22 @@ export default function StudentActivationPage() {
             <GraduationCap className="w-10 h-10 text-black" />
           </div>
           <CardTitle className="text-3xl font-headline font-bold text-white">Activation Élève</CardTitle>
-          <CardDescription>Accédez à votre espace réussite ACADEX</CardDescription>
+          <CardDescription>Activez votre espace avec l'ID fourni par l'école</CardDescription>
         </CardHeader>
         <CardContent>
           {step === 1 ? (
             <div className="space-y-6">
               <div className="space-y-2">
-                <Label>Saisissez votre identifiant direction</Label>
+                <Label>Identifiant Direction</Label>
                 <div className="relative">
                   <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                   <Input 
-                    placeholder="Ex: ELV-3D-001" 
-                    className="bg-white/5 border-white/10 pl-10 h-12 text-lg font-mono uppercase"
+                    placeholder="Ex: ELV-3EME-001" 
+                    className="bg-white/5 border-white/10 pl-10 h-12 text-lg font-mono uppercase tracking-widest"
                     value={studentId}
                     onChange={(e) => setStudentId(e.target.value.toUpperCase())}
                   />
                 </div>
-                <p className="text-[10px] text-white/40 italic">L'identifiant est fourni par le secrétariat de l'école.</p>
               </div>
               <Button className="w-full h-12 bg-accent text-black font-bold" onClick={verifyId} disabled={isLoading}>
                 {isLoading ? "Vérification..." : "Vérifier mon identifiant"}
@@ -124,22 +153,32 @@ export default function StudentActivationPage() {
             <form onSubmit={activateAccount} className="space-y-4 animate-in fade-in slide-in-from-bottom-4">
               <div className="p-3 rounded-lg bg-accent/10 border border-accent/20 flex items-center gap-3 mb-4">
                 <CheckCircle2 className="w-5 h-5 text-accent" />
-                <p className="text-sm font-bold text-white">ID {studentId} Validé</p>
+                <p className="text-sm font-bold text-white">Code {studentId} Validé</p>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
                   <Label className="text-xs">Prénom</Label>
-                  <Input className="bg-white/5 border-white/10" value={formData.firstName} readOnly />
+                  <Input 
+                    className="bg-white/5 border-white/10" 
+                    value={formData.firstName}
+                    onChange={(e) => setFormData({...formData, firstName: e.target.value})}
+                    required
+                  />
                 </div>
                 <div className="space-y-1">
-                  <Label className="text-xs">Nom</Label>
-                  <Input className="bg-white/5 border-white/10" value={formData.lastName} readOnly />
+                  <Label className="text-xs">Nom de famille</Label>
+                  <Input 
+                    className="bg-white/5 border-white/10" 
+                    value={formData.lastName}
+                    onChange={(e) => setFormData({...formData, lastName: e.target.value})}
+                    required
+                  />
                 </div>
               </div>
 
               <div className="space-y-1">
-                <Label className="text-xs">Nouveau mot de passe</Label>
+                <Label className="text-xs">Choisir un mot de passe</Label>
                 <Input 
                   type="password" 
                   className="bg-white/5 border-white/10"
@@ -149,7 +188,7 @@ export default function StudentActivationPage() {
                 />
               </div>
               <div className="space-y-1">
-                <Label className="text-xs">Confirmation</Label>
+                <Label className="text-xs">Confirmer le mot de passe</Label>
                 <Input 
                   type="password" 
                   className="bg-white/5 border-white/10"
@@ -161,10 +200,10 @@ export default function StudentActivationPage() {
 
               <div className="space-y-1 pt-4 border-t border-white/5">
                 <Label className="text-xs flex items-center gap-1">
-                  <HelpCircle className="w-3 h-3" /> Question Secrète
+                  <HelpCircle className="w-3 h-3 text-accent" /> Question de sécurité (pour récupération)
                 </Label>
                 <Input 
-                  placeholder="Ex: Le nom de mon premier animal ?" 
+                  placeholder="Ex: Quel est votre plat préféré ?" 
                   className="bg-white/5 border-white/10 text-xs"
                   value={formData.secretQuestion}
                   onChange={(e) => setFormData({...formData, secretQuestion: e.target.value})}
@@ -172,7 +211,7 @@ export default function StudentActivationPage() {
                 />
               </div>
               <div className="space-y-1">
-                <Label className="text-xs">Réponse</Label>
+                <Label className="text-xs">Votre réponse secrète</Label>
                 <Input 
                   className="bg-white/5 border-white/10 text-xs"
                   value={formData.secretAnswer}
