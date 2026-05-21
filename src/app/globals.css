@@ -55,6 +55,23 @@
   @apply bg-card/40 backdrop-blur-xl border border-white/5 shadow-2xl;
 }
 
+/* Custom Scrollbar for Sidebar */
+.sidebar-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sidebar-scroll::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+.sidebar-scroll::-webkit-scrollbar-thumb {
+  @apply bg-white/10 rounded-full;
+}
+
+.sidebar-scroll::-webkit-scrollbar-thumb:hover {
+  @apply bg-accent/50;
+}
+
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -69,4 +86,13 @@
 
 ::-webkit-scrollbar-thumb:hover {
   @apply bg-muted-foreground/30;
+}
+
+@keyframes pulse-slow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 8s ease-in-out infinite;
 }

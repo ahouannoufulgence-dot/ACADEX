@@ -1,21 +1,30 @@
-
 {
   "entities": {
     "User": {
       "title": "Utilisateur",
-      "description": "Profil utilisateur du système ACADEX",
+      "description": "Profil utilisateur du système ACADEX (Identifiants DIR-, ENS-, ELV-)",
       "type": "object",
       "properties": {
         "id": { "type": "string" },
+        "firstName": { "type": "string" },
+        "lastName": { "type": "string" },
         "name": { "type": "string" },
         "email": { "type": "string", "format": "email" },
-        "role": { "type": "string", "enum": ["DIRECTOR", "TEACHER", "STUDENT_PARENT"] }
+        "phone": { "type": "string" },
+        "role": { "type": "string", "enum": ["DIRECTOR", "TEACHER", "STUDENT_PARENT"] },
+        "password": { "type": "string" },
+        "schoolName": { "type": "string" },
+        "subject": { "type": "string" },
+        "secretQuestion": { "type": "string" },
+        "secretAnswer": { "type": "string" },
+        "status": { "type": "string", "enum": ["Actif", "Inactif", "Suspendu"] },
+        "createdAt": { "type": "string", "format": "date-time" }
       },
-      "required": ["id", "name", "role"]
+      "required": ["id", "role", "password"]
     },
     "Student": {
-      "title": "Élève",
-      "description": "Information sur un élève inscrit",
+      "title": "Élève (Pré-provisionné)",
+      "description": "Information sur un élève inscrit servant à l'activation de compte",
       "type": "object",
       "properties": {
         "id": { "type": "string" },
@@ -74,11 +83,11 @@
   "firestore": {
     "/users/{userId}": {
       "schema": "#/entities/User",
-      "description": "Profils des utilisateurs"
+      "description": "Profils des utilisateurs et comptes activés"
     },
     "/students/{studentId}": {
       "schema": "#/entities/Student",
-      "description": "Base de données des élèves"
+      "description": "Base de données des élèves (Source pour activation)"
     },
     "/subjects/{subjectId}": {
       "schema": "#/entities/Subject",

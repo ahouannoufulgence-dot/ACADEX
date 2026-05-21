@@ -24,7 +24,6 @@ import { cn } from "@/lib/utils";
 import { UserRole } from "@/lib/auth-utils";
 import { useAuth } from "@/firebase";
 import { signOut } from "firebase/auth";
-import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface SidebarProps {
   role: UserRole;
@@ -73,6 +72,7 @@ export const Sidebar = ({ role, userName }: SidebarProps) => {
         { name: "Saisie Notes", href: "/grades/entry", icon: FileText },
         { name: "Absences", href: "/absences", icon: ShieldAlert },
         { name: "Agenda", href: "/agenda", icon: Calendar },
+        { name: "Messagerie", href: "/messages", icon: MessageSquare },
       ];
     }
 
@@ -90,7 +90,7 @@ export const Sidebar = ({ role, userName }: SidebarProps) => {
 
   return (
     <aside className="w-64 h-screen bg-sidebar flex flex-col border-r border-sidebar-border fixed left-0 top-0 z-40">
-      <div className="p-6 pb-2">
+      <div className="p-6 pb-2 shrink-0">
         <Link href="/dashboard" className="flex items-center gap-3 mb-6 hover:opacity-80 transition-opacity">
           <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center shadow-lg shadow-primary/20">
             <span className="text-white font-bold text-xl">A</span>
@@ -102,7 +102,7 @@ export const Sidebar = ({ role, userName }: SidebarProps) => {
         </Link>
       </div>
 
-      <ScrollArea className="flex-1 px-4">
+      <div className="flex-1 overflow-y-auto sidebar-scroll px-4">
         <nav className="space-y-1 pb-6">
           {navItems.map((item) => {
             const isActive = pathname === item.href;
@@ -126,9 +126,9 @@ export const Sidebar = ({ role, userName }: SidebarProps) => {
             );
           })}
         </nav>
-      </ScrollArea>
+      </div>
 
-      <div className="p-4 border-t border-sidebar-border bg-sidebar-accent/30 mt-auto">
+      <div className="p-4 border-t border-sidebar-border bg-sidebar-accent/30 shrink-0">
         <div className="flex items-center gap-3 mb-4 px-2">
           <div className="w-8 h-8 rounded-full bg-accent flex items-center justify-center text-accent-foreground font-bold text-xs">
             {userName.substring(0, 2).toUpperCase()}
