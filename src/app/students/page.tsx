@@ -1,9 +1,8 @@
-
 "use client";
 
 import React, { useState, useMemo } from "react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
-import { Plus, Search, Filter, GraduationCap, MoreVertical, Mail, UserPlus, Sparkles, Copy, CheckCircle } from "lucide-react";
+import { Search, Filter, MoreVertical, Mail, UserPlus, Sparkles, Copy, CheckCircle } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,6 +15,8 @@ import { provisionUserAccount, DirectorAccountProvisioningOutput } from "@/ai/fl
 import { useToast } from "@/hooks/use-toast";
 import { useFirestore, useCollection } from "@/firebase";
 import { collection, setDoc, doc, serverTimestamp } from "firebase/firestore";
+import { errorEmitter } from "@/firebase/error-emitter";
+import { FirestorePermissionError } from "@/firebase/errors";
 
 export default function StudentsPage() {
   const { toast } = useToast();
@@ -29,7 +30,6 @@ export default function StudentsPage() {
     gradeLevel: ""
   });
 
-  // Real-time data from Firestore
   const studentsQuery = useMemo(() => {
     if (!db) return null;
     return collection(db, "students");
@@ -72,8 +72,7 @@ export default function StudentsPage() {
 
     const studentId = aiResult.suggestedId;
     const studentRef = doc(db, "students", studentId);
-
-    setDoc(studentRef, {
+    const studentData = {
       id: studentId,
       firstName: formData.firstName,
       lastName: formData.lastName,
@@ -81,15 +80,25 @@ export default function StudentsPage() {
       status: "Inscrit",
       paymentStatus: "Impayé",
       createdAt: serverTimestamp()
-    });
+    };
 
-    toast({
-      title: "Élève enregistré",
-      description: `${formData.firstName} ${formData.lastName} a été ajouté à la base de données.`
-    });
-
-    setAiResult(null);
-    setFormData({ firstName: "", lastName: "", gradeLevel: "" });
+    setDoc(studentRef, studentData)
+      .then(() => {
+        toast({
+          title: "Élève enregistré",
+          description: `${formData.firstName} ${formData.lastName} a été ajouté avec succès.`
+        });
+        setAiResult(null);
+        setFormData({ firstName: "", lastName: "", gradeLevel: "" });
+      })
+      .catch(async (err) => {
+        const permissionError = new FirestorePermissionError({
+          path: studentRef.path,
+          operation: 'write',
+          requestResourceData: studentData,
+        });
+        errorEmitter.emit('permission-error', permissionError);
+      });
   };
 
   const copyToClipboard = (text: string) => {
@@ -122,7 +131,7 @@ export default function StudentsPage() {
                     Provisionnement de Compte AI
                   </DialogTitle>
                   <DialogDescription className="text-white/60">
-                    Saisissez les informations pour générer automatiquement un compte et un message de bienvenue.
+                    Générez automatiquement un compte et un message de bienvenue.
                   </DialogDescription>
                 </DialogHeader>
                 
@@ -173,13 +182,6 @@ export default function StudentsPage() {
                     <div className="p-4 rounded-xl bg-white/5 border border-white/10">
                       <p className="text-xs font-bold text-white/60 uppercase mb-2">Message de Bienvenue</p>
                       <p className="text-sm text-white/80 italic leading-relaxed whitespace-pre-wrap">{aiResult.draftWelcomeMessage}</p>
-                      <Button 
-                        variant="link" 
-                        className="p-0 h-auto mt-2 text-accent" 
-                        onClick={() => copyToClipboard(aiResult.draftWelcomeMessage)}
-                      >
-                        <Copy className="w-3 h-3 mr-1" /> Copier le message
-                      </Button>
                     </div>
                   </div>
                 )}
@@ -214,16 +216,14 @@ export default function StudentsPage() {
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input placeholder="Rechercher un nom ou ID..." className="pl-10 bg-white/5 border-white/10" />
               </div>
-              <div className="flex gap-2">
-                <Button variant="outline" size="sm" className="border-white/10 text-white">
-                  <Filter className="w-4 h-4 mr-2" /> Filtrer par classe
-                </Button>
-              </div>
+              <Button variant="outline" size="sm" className="border-white/10 text-white">
+                <Filter className="w-4 h-4 mr-2" /> Filtrer
+              </Button>
             </div>
           </CardHeader>
           <CardContent>
             {loading ? (
-              <div className="flex justify-center p-12 text-muted-foreground">Chargement des données...</div>
+              <div className="flex justify-center p-12 text-muted-foreground">Chargement...</div>
             ) : (
               <div className="rounded-xl border border-white/10 overflow-hidden">
                 <Table>
@@ -242,7 +242,7 @@ export default function StudentsPage() {
                         <TableCell>
                           <div className="flex items-center gap-3">
                             <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-xs">
-                              {s.firstName.substring(0, 1).toUpperCase()}{s.lastName.substring(0, 1).toUpperCase()}
+                              {s.firstName[0]}{s.lastName[0]}
                             </div>
                             <span className="font-medium text-white">{s.firstName} {s.lastName}</span>
                           </div>
@@ -253,14 +253,13 @@ export default function StudentsPage() {
                           <Badge className={cn(
                             "text-[10px] font-bold",
                             s.paymentStatus === "Payé" ? "bg-accent/20 text-accent border-accent/20" : 
-                            s.paymentStatus === "Partiel" ? "bg-amber-400/20 text-amber-400 border-amber-400/20" :
                             "bg-destructive/20 text-destructive border-destructive/20"
                           )} variant="outline">
                             {s.paymentStatus}
                           </Badge>
                         </TableCell>
                         <TableCell className="text-right">
-                          <Button variant="ghost" size="icon" className="hover:bg-white/5">
+                          <Button variant="ghost" size="icon">
                             <MoreVertical className="w-4 h-4 text-muted-foreground" />
                           </Button>
                         </TableCell>

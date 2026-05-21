@@ -2,12 +2,13 @@
 
 import React from "react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
-import { ShieldAlert, Search, Filter, Calendar } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { ShieldAlert, Search, Calendar } from "lucide-react";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
 
 export default function AbsencesPage() {
   const absences = [
@@ -64,7 +65,7 @@ export default function AbsencesPage() {
                       <TableCell>
                         <Badge className={cn(
                           "text-[10px] font-bold",
-                          a.status === "Justifié" ? "bg-accent/20 text-accent" : "bg-destructive/20 text-destructive"
+                          a.status === "Justifié" ? "bg-accent/20 text-accent border-accent/20" : "bg-destructive/20 text-destructive border-destructive/20"
                         )} variant="outline">
                           {a.status}
                         </Badge>
