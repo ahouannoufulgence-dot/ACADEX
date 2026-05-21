@@ -36,7 +36,6 @@ export default function StudentActivationPage() {
     if (!db || !studentId) return;
     setIsLoading(true);
     try {
-      // On vérifie si l'identifiant existe dans la collection students (pré-provisionnés par le dir)
       const studentDoc = await getDoc(doc(db, "students", studentId));
       
       if (studentDoc.exists()) {
@@ -61,7 +60,7 @@ export default function StudentActivationPage() {
     }
   };
 
-  const activateAccount = async (e: React.FormEvent) => {
+  const activateAccount = (e: React.FormEvent) => {
     e.preventDefault();
     if (!db || !studentId) return;
 
@@ -87,33 +86,39 @@ export default function StudentActivationPage() {
       activatedAt: serverTimestamp()
     };
 
-    try {
-      // 1. Créer le compte utilisateur
-      await setDoc(userRef, userData);
-      
-      // 2. Mettre à jour le statut dans le registre des élèves
-      await updateDoc(studentRef, {
-        status: "Actif",
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        activatedAt: serverTimestamp()
+    // Mutations non-bloquantes pour activation instantanée côté UI
+    setDoc(userRef, userData)
+      .catch(async (err) => {
+        const permissionError = new FirestorePermissionError({
+          path: userRef.path,
+          operation: 'create',
+          requestResourceData: userData,
+        });
+        errorEmitter.emit('permission-error', permissionError);
       });
+    
+    updateDoc(studentRef, {
+      status: "Actif",
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      activatedAt: serverTimestamp()
+    }).catch(async () => {
+       const permissionError = new FirestorePermissionError({
+          path: studentRef.path,
+          operation: 'update',
+        });
+        errorEmitter.emit('permission-error', permissionError);
+    });
 
-      toast({
-        title: "Compte activé !",
-        description: "Vous pouvez maintenant vous connecter.",
-      });
+    toast({
+      title: "Compte activé !",
+      description: "Vous pouvez maintenant vous connecter.",
+    });
+    
+    // Délai court avant redirection pour laisser le cache se mettre à jour
+    setTimeout(() => {
       router.push("/login");
-    } catch (err: any) {
-      const permissionError = new FirestorePermissionError({
-        path: userRef.path,
-        operation: 'create',
-        requestResourceData: userData,
-      });
-      errorEmitter.emit('permission-error', permissionError);
-    } finally {
-      setIsLoading(false);
-    }
+    }, 500);
   };
 
   return (

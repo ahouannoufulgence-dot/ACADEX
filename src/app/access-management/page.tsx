@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useMemo } from "react";
@@ -33,7 +34,7 @@ export default function AccessManagementPage() {
 
   const { data: students, loading } = useCollection(studentsQuery);
 
-  const handleBulkGenerate = async () => {
+  const handleBulkGenerate = () => {
     if (!db || !bulkData.gradeLevel || bulkData.count < 1) {
       toast({
         variant: "destructive",
@@ -60,24 +61,23 @@ export default function AccessManagementPage() {
       });
     }
 
+    // Mutation non-bloquante pour une action rapide
     batch.commit()
-      .then(() => {
-        toast({
-          title: "Identifiants générés",
-          description: `${bulkData.count} accès créés pour la classe ${bulkData.gradeLevel}.`
-        });
-        setBulkData({ gradeLevel: "", count: 1 });
-      })
       .catch(async () => {
         const permissionError = new FirestorePermissionError({
           path: 'students/bulk',
           operation: 'write',
         });
         errorEmitter.emit('permission-error', permissionError);
-      })
-      .finally(() => {
-        setIsGenerating(false);
       });
+
+    toast({
+      title: "Génération lancée",
+      description: `${bulkData.count} accès sont en cours de création pour ${bulkData.gradeLevel}.`
+    });
+    
+    setIsGenerating(false);
+    setBulkData({ gradeLevel: "", count: 1 });
   };
 
   const copyToClipboard = (text: string) => {
@@ -167,7 +167,7 @@ export default function AccessManagementPage() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {students?.filter(s => s.status === "En attente").map((u: any) => (
+                    {students?.filter((s: any) => s.status === "En attente").map((u: any) => (
                       <TableRow key={u.id} className="hover:bg-white/5 border-white/5">
                         <TableCell className="font-mono font-bold text-accent">{u.id}</TableCell>
                         <TableCell className="text-white/80">{u.gradeLevel}</TableCell>
@@ -188,7 +188,7 @@ export default function AccessManagementPage() {
                         </TableCell>
                       </TableRow>
                     ))}
-                    {students?.filter(s => s.status === "En attente").length === 0 && (
+                    {students?.filter((s: any) => s.status === "En attente").length === 0 && (
                       <TableRow>
                         <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">
                           Aucun identifiant en attente.

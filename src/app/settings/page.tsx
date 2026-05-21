@@ -11,6 +11,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { useToast } from "@/hooks/use-toast";
 import { useFirestore, useCollection } from "@/firebase";
 import { collection, addDoc, deleteDoc, doc, updateDoc } from "firebase/firestore";
+import { errorEmitter } from "@/firebase/error-emitter";
+import { FirestorePermissionError } from "@/firebase/errors";
 
 export default function SettingsPage() {
   const db = useFirestore();
@@ -24,23 +26,44 @@ export default function SettingsPage() {
 
   const { data: subjects, loading } = useCollection(subjectsQuery);
 
-  const handleAdd = async () => {
+  const handleAdd = () => {
     if (!db || !newSub.subject || !newSub.coeff) return;
     
-    await addDoc(collection(db, "subjects"), {
+    const data = {
       name: newSub.subject,
       coefficient: Number(newSub.coeff),
       level: newSub.level
-    });
+    };
+
+    // Mutation non-bloquante
+    addDoc(collection(db, "subjects"), data)
+      .catch(async () => {
+        const permissionError = new FirestorePermissionError({
+          path: 'subjects',
+          operation: 'create',
+          requestResourceData: data,
+        });
+        errorEmitter.emit('permission-error', permissionError);
+      });
 
     setNewSub({ subject: "", coeff: "", level: "Lycée" });
-    toast({ title: "Ajouté", description: "La matière a été ajoutée avec succès." });
+    toast({ title: "Matière ajoutée", description: "L'opération est en cours de traitement." });
   };
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = (id: string) => {
     if (!db) return;
-    await deleteDoc(doc(db, "subjects", id));
-    toast({ title: "Supprimé", description: "Coefficient retiré." });
+    
+    // Mutation non-bloquante
+    deleteDoc(doc(db, "subjects", id))
+      .catch(async () => {
+        const permissionError = new FirestorePermissionError({
+          path: `subjects/${id}`,
+          operation: 'delete',
+        });
+        errorEmitter.emit('permission-error', permissionError);
+      });
+      
+    toast({ title: "Suppression", description: "La matière a été retirée." });
   };
 
   return (
@@ -112,7 +135,7 @@ export default function SettingsPage() {
                   {loading ? (
                     <TableRow><TableCell colSpan={4} className="text-center py-8 text-muted-foreground">Chargement...</TableCell></TableRow>
                   ) : (
-                    subjects?.map((item) => (
+                    subjects?.map((item: any) => (
                       <TableRow key={item.id} className="hover:bg-white/5 border-white/5">
                         <TableCell className="font-medium text-white">{item.name}</TableCell>
                         <TableCell>
@@ -145,7 +168,7 @@ export default function SettingsPage() {
 
             <div className="mt-6 flex justify-end">
               <Button className="bg-accent hover:bg-accent/90 text-black font-bold px-8">
-                <Save className="w-4 h-4 mr-2" /> Sauvegarder la configuration
+                <Save className="w-4 h-4 mr-2" /> Appliquer les modifications
               </Button>
             </div>
           </CardContent>

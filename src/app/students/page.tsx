@@ -38,13 +38,11 @@ export default function StudentsPage() {
 
   const { data: students, loading } = useCollection(studentsQuery);
 
-  // Tri alphabétique des élèves par Nom puis Prénom
   const sortedStudents = useMemo(() => {
     if (!students) return [];
     return [...students].sort((a: any, b: any) => {
       const nameA = `${a.lastName || ""} ${a.firstName || ""}`.toLowerCase().trim();
       const nameB = `${b.lastName || ""} ${b.firstName || ""}`.toLowerCase().trim();
-      // Si le nom n'est pas encore défini (compte non activé), on utilise l'ID
       if (!nameA && !nameB) return a.id.localeCompare(b.id);
       if (!nameA) return 1;
       if (!nameB) return -1;
@@ -82,7 +80,7 @@ export default function StudentsPage() {
     }
   };
 
-  const saveStudent = async () => {
+  const saveStudent = () => {
     if (!db || !aiResult) return;
 
     const studentId = aiResult.suggestedId;
@@ -97,15 +95,8 @@ export default function StudentsPage() {
       createdAt: serverTimestamp()
     };
 
+    // Mutation non-bloquante pour rapidité
     setDoc(studentRef, studentData)
-      .then(() => {
-        toast({
-          title: "Élève enregistré",
-          description: `${formData.firstName} ${formData.lastName} a été ajouté avec succès.`
-        });
-        setAiResult(null);
-        setFormData({ firstName: "", lastName: "", gradeLevel: "" });
-      })
       .catch(async (err) => {
         const permissionError = new FirestorePermissionError({
           path: studentRef.path,
@@ -114,6 +105,13 @@ export default function StudentsPage() {
         });
         errorEmitter.emit('permission-error', permissionError);
       });
+
+    toast({
+      title: "Élève enregistré",
+      description: `${formData.firstName} ${formData.lastName} a été ajouté avec succès.`
+    });
+    setAiResult(null);
+    setFormData({ firstName: "", lastName: "", gradeLevel: "" });
   };
 
   const copyToClipboard = (text: string) => {
