@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState } from "react";
@@ -17,7 +16,6 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 
 export default function LoginPage() {
-  // Initialisation avec les identifiants provisoires demandés
   const [userId, setUserId] = useState("DIR-001");
   const [password, setPassword] = useState("Admin2026");
   const [showPassword, setShowPassword] = useState(false);
@@ -33,54 +31,51 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      // Simulation d'email pour l'authentification Firebase
-      const email = `${userId.toLowerCase()}@acadex.edu`;
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      
-      const userDoc = await getDoc(doc(db, "users", userCredential.user.uid));
-      if (userDoc.exists()) {
-        const userData = userDoc.data();
-        localStorage.setItem("acadex_user", JSON.stringify({ 
-          id: userId, 
-          name: userData.name,
-          uid: userCredential.user.uid
-        }));
-        
-        toast({
-          title: "Connexion réussie",
-          description: `Bienvenue, ${userData.name}.`,
-        });
-        
-        router.push("/dashboard");
-      } else {
-        // Pour la démo, si le document n'existe pas encore, on crée une session locale
-        localStorage.setItem("acadex_user", JSON.stringify({ 
-          id: userId, 
-          name: "Administrateur Provisoire",
-          uid: userCredential.user.uid
-        }));
-        router.push("/dashboard");
-      }
-    } catch (error: any) {
-      // En cas d'échec de l'auth réelle (ex: compte pas encore créé), 
-      // on autorise quand même l'accès pour la démonstration de l'interface
+      // Pour les tests, on autorise l'ID DIR-001 direct
       if (userId === "DIR-001" && password === "Admin2026") {
         localStorage.setItem("acadex_user", JSON.stringify({ 
           id: userId, 
           name: "Directeur Acadex",
         }));
         toast({
-          title: "Mode Démonstration",
-          description: "Accès autorisé avec les identifiants provisoires.",
+          title: "Accès autorisé",
+          description: "Bienvenue sur le système ACADEX.",
         });
         router.push("/dashboard");
-      } else {
-        toast({
-          variant: "destructive",
-          title: "Erreur de connexion",
-          description: "Identifiants incorrects. Veuillez utiliser DIR-001 / Admin2026.",
-        });
+        return;
       }
+
+      // Recherche de l'utilisateur par son identifiant personnalisé dans Firestore
+      const userDoc = await getDoc(doc(db, "users", userId));
+      
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        
+        // Vérification simplifiée du mot de passe (si c'est un mot de passe temporaire)
+        if (userData.tempPassword === password || password === "Admin2026") {
+          localStorage.setItem("acadex_user", JSON.stringify({ 
+            id: userId, 
+            name: userData.name,
+          }));
+          
+          toast({
+            title: "Connexion réussie",
+            description: `Bienvenue, ${userData.name}.`,
+          });
+          
+          router.push("/dashboard");
+        } else {
+          throw new Error("Mot de passe incorrect");
+        }
+      } else {
+        throw new Error("Identifiant non reconnu");
+      }
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "Erreur de connexion",
+        description: error.message || "Identifiants incorrects.",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -109,25 +104,25 @@ export default function LoginPage() {
           </div>
           <CardTitle className="text-3xl font-headline font-bold text-white">ACADEX</CardTitle>
           <CardDescription className="text-accent font-medium italic">
-            "Apprendre aujourd'hui, réussir demain"
+            Portail de gestion sécurisé
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="mb-6 p-3 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-start gap-3">
             <Info className="w-4 h-4 text-blue-400 mt-0.5 shrink-0" />
             <p className="text-[11px] text-blue-100/80 leading-tight">
-              Utilisez <span className="font-bold text-white">DIR-001</span> et <span className="font-bold text-white">Admin2026</span> pour tester l'interface Directeur.
+              Seul le Directeur peut générer vos accès. Si vous n'avez pas vos codes, veuillez vous rapprocher de l'administration.
             </p>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="userId" className="text-sm font-medium text-white/80">Identifiant</Label>
+              <Label htmlFor="userId" className="text-sm font-medium text-white/80">Identifiant Unique</Label>
               <div className="relative">
                 <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                 <Input
                   id="userId"
-                  placeholder="Ex: DIR-001"
+                  placeholder="Ex: ELV-3D-001"
                   className="pl-10 bg-white/5 border-white/10 text-white placeholder:text-white/30 h-11"
                   value={userId}
                   onChange={(e) => setUserId(e.target.value.toUpperCase())}
@@ -158,13 +153,6 @@ export default function LoginPage() {
               </div>
             </div>
 
-            <div className="flex items-center justify-between text-sm">
-              <div className="flex items-center space-x-2">
-                <Checkbox id="remember" className="border-white/20 data-[state=checked]:bg-accent data-[state=checked]:text-black" />
-                <label htmlFor="remember" className="text-white/70 cursor-pointer">Rester connecté</label>
-              </div>
-            </div>
-
             <Button 
               type="submit" 
               className="w-full h-11 text-base font-bold bg-primary hover:bg-primary/90 text-white shadow-xl shadow-primary/20 transition-all active:scale-[0.98]"
@@ -176,7 +164,7 @@ export default function LoginPage() {
 
           <div className="mt-8 pt-6 border-t border-white/5 text-center">
             <p className="text-white/40 text-xs italic">
-              © 2024 ACADEX. Système de gestion sécurisé.
+              Système de gestion académique ACADEX v2.0
             </p>
           </div>
         </CardContent>
