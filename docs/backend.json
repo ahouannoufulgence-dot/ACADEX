@@ -56,10 +56,16 @@
       "description": "Évaluation d'un élève dans une matière",
       "type": "object",
       "properties": {
+        "id": { "type": "string" },
         "studentId": { "type": "string" },
+        "studentName": { "type": "string" },
         "subjectId": { "type": "string" },
+        "subjectName": { "type": "string" },
         "value": { "type": "number" },
         "term": { "type": "string" },
+        "type": { "type": "string" },
+        "status": { "type": "string", "enum": ["Brouillon", "Confirmé"] },
+        "updatedBy": { "type": "string" },
         "date": { "type": "string", "format": "date-time" }
       },
       "required": ["studentId", "subjectId", "value"]
