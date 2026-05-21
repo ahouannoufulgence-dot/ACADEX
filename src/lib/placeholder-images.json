@@ -1,3 +1,16 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "login-bg",
+      "description": "Smiling African students working together in a classroom",
+      "imageUrl": "https://picsum.photos/seed/acadex-login/1920/1080",
+      "imageHint": "African students classroom"
+    },
+    {
+      "id": "school-logo",
+      "description": "Abstract school logo representing growth",
+      "imageUrl": "https://picsum.photos/seed/acadex-logo/200/200",
+      "imageHint": "education logo"
+    }
+  ]
 }
