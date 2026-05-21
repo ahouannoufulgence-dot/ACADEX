@@ -1,0 +1,96 @@
+
+{
+  "entities": {
+    "User": {
+      "title": "Utilisateur",
+      "description": "Profil utilisateur du système ACADEX",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "role": { "type": "string", "enum": ["DIRECTOR", "TEACHER", "STUDENT_PARENT"] }
+      },
+      "required": ["id", "name", "role"]
+    },
+    "Student": {
+      "title": "Élève",
+      "description": "Information sur un élève inscrit",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "firstName": { "type": "string" },
+        "lastName": { "type": "string" },
+        "gradeLevel": { "type": "string" },
+        "status": { "type": "string", "enum": ["Inscrit", "En attente"] },
+        "paymentStatus": { "type": "string", "enum": ["Payé", "Partiel", "Impayé"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "firstName", "lastName", "gradeLevel"]
+    },
+    "Subject": {
+      "title": "Matière",
+      "description": "Configuration des matières et coefficients",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "coefficient": { "type": "number" },
+        "level": { "type": "string" }
+      },
+      "required": ["name", "coefficient"]
+    },
+    "Grade": {
+      "title": "Note",
+      "description": "Évaluation d'un élève dans une matière",
+      "type": "object",
+      "properties": {
+        "studentId": { "type": "string" },
+        "subjectId": { "type": "string" },
+        "value": { "type": "number" },
+        "term": { "type": "string" },
+        "date": { "type": "string", "format": "date-time" }
+      },
+      "required": ["studentId", "subjectId", "value"]
+    },
+    "Payment": {
+      "title": "Paiement",
+      "description": "Historique des versements de scolarité",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "studentId": { "type": "string" },
+        "amount": { "type": "number" },
+        "date": { "type": "string", "format": "date-time" },
+        "type": { "type": "string" },
+        "status": { "type": "string", "enum": ["Payé", "Partiel"] }
+      },
+      "required": ["studentId", "amount", "date"]
+    }
+  },
+  "auth": {
+    "providers": ["password"]
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "#/entities/User",
+      "description": "Profils des utilisateurs"
+    },
+    "/students/{studentId}": {
+      "schema": "#/entities/Student",
+      "description": "Base de données des élèves"
+    },
+    "/subjects/{subjectId}": {
+      "schema": "#/entities/Subject",
+      "description": "Configuration académique"
+    },
+    "/grades/{gradeId}": {
+      "schema": "#/entities/Grade",
+      "description": "Notes des élèves"
+    },
+    "/payments/{paymentId}": {
+      "schema": "#/entities/Payment",
+      "description": "Versements de scolarité"
+    }
+  }
+}

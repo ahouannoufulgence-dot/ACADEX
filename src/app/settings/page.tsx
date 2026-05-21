@@ -1,6 +1,7 @@
+
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { Plus, Save, Trash2, Edit2, BookOpen } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -8,28 +9,37 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useToast } from "@/hooks/use-toast";
+import { useFirestore, useCollection } from "@/firebase";
+import { collection, addDoc, deleteDoc, doc, updateDoc } from "firebase/firestore";
 
 export default function SettingsPage() {
-  const [coefficients, setCoefficients] = useState([
-    { id: 1, subject: "Mathématiques", coeff: 4, level: "Lycée" },
-    { id: 2, subject: "Français", coeff: 4, level: "Lycée" },
-    { id: 3, subject: "Physique-Chimie", coeff: 3, level: "Lycée" },
-    { id: 4, subject: "SVT", coeff: 3, level: "Lycée" },
-    { id: 5, subject: "Anglais", coeff: 2, level: "Lycée" },
-  ]);
-
-  const [newSub, setNewSub] = useState({ subject: "", coeff: "", level: "Lycée" });
+  const db = useFirestore();
   const { toast } = useToast();
+  const [newSub, setNewSub] = useState({ subject: "", coeff: "", level: "Lycée" });
 
-  const handleAdd = () => {
-    if (!newSub.subject || !newSub.coeff) return;
-    setCoefficients([...coefficients, { ...newSub, id: Date.now(), coeff: Number(newSub.coeff) } as any]);
+  const subjectsQuery = useMemo(() => {
+    if (!db) return null;
+    return collection(db, "subjects");
+  }, [db]);
+
+  const { data: subjects, loading } = useCollection(subjectsQuery);
+
+  const handleAdd = async () => {
+    if (!db || !newSub.subject || !newSub.coeff) return;
+    
+    await addDoc(collection(db, "subjects"), {
+      name: newSub.subject,
+      coefficient: Number(newSub.coeff),
+      level: newSub.level
+    });
+
     setNewSub({ subject: "", coeff: "", level: "Lycée" });
     toast({ title: "Ajouté", description: "La matière a été ajoutée avec succès." });
   };
 
-  const handleDelete = (id: number) => {
-    setCoefficients(coefficients.filter(c => c.id !== id));
+  const handleDelete = async (id: string) => {
+    if (!db) return;
+    await deleteDoc(doc(db, "subjects", id));
     toast({ title: "Supprimé", description: "Coefficient retiré." });
   };
 
@@ -99,32 +109,36 @@ export default function SettingsPage() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {coefficients.map((item) => (
-                    <TableRow key={item.id} className="hover:bg-white/5 border-white/5">
-                      <TableCell className="font-medium text-white">{item.subject}</TableCell>
-                      <TableCell>
-                        <span className="px-2 py-1 rounded bg-accent/20 text-accent font-bold text-xs">
-                          {item.coeff}
-                        </span>
-                      </TableCell>
-                      <TableCell className="text-muted-foreground">{item.level}</TableCell>
-                      <TableCell className="text-right">
-                        <div className="flex justify-end gap-2">
-                          <Button variant="ghost" size="icon" className="hover:bg-blue-500/20 text-blue-400">
-                            <Edit2 className="w-4 h-4" />
-                          </Button>
-                          <Button 
-                            variant="ghost" 
-                            size="icon" 
-                            className="hover:bg-destructive/20 text-destructive"
-                            onClick={() => handleDelete(item.id)}
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                  {loading ? (
+                    <TableRow><TableCell colSpan={4} className="text-center py-8 text-muted-foreground">Chargement...</TableCell></TableRow>
+                  ) : (
+                    subjects?.map((item) => (
+                      <TableRow key={item.id} className="hover:bg-white/5 border-white/5">
+                        <TableCell className="font-medium text-white">{item.name}</TableCell>
+                        <TableCell>
+                          <span className="px-2 py-1 rounded bg-accent/20 text-accent font-bold text-xs">
+                            {item.coefficient}
+                          </span>
+                        </TableCell>
+                        <TableCell className="text-muted-foreground">{item.level}</TableCell>
+                        <TableCell className="text-right">
+                          <div className="flex justify-end gap-2">
+                            <Button variant="ghost" size="icon" className="hover:bg-blue-500/20 text-blue-400">
+                              <Edit2 className="w-4 h-4" />
+                            </Button>
+                            <Button 
+                              variant="ghost" 
+                              size="icon" 
+                              className="hover:bg-destructive/20 text-destructive"
+                              onClick={() => handleDelete(item.id)}
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  )}
                 </TableBody>
               </Table>
             </div>

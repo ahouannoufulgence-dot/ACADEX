@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState } from "react";
@@ -11,6 +12,9 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
+import { useAuth, useFirestore } from "@/firebase";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
 
 export default function LoginPage() {
   const [userId, setUserId] = useState("");
@@ -19,40 +23,53 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { toast } = useToast();
+  const auth = useAuth();
+  const db = useFirestore();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!auth || !db) return;
     setIsLoading(true);
 
-    // Mock validation logic
-    setTimeout(() => {
-      if (userId && password) {
-        // Save mock session (prefix based role)
-        localStorage.setItem("acadex_user", JSON.stringify({ id: userId, name: "Utilisateur ACADEX" }));
+    try {
+      // Dans ACADEX, l'identifiant (ex: DIR-001) sert de pseudo-email pour la démo
+      // En production, nous utiliserions de vrais emails. Ici on simule un email.
+      const email = `${userId.toLowerCase()}@acadex.edu`;
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      
+      const userDoc = await getDoc(doc(db, "users", userCredential.user.uid));
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        localStorage.setItem("acadex_user", JSON.stringify({ 
+          id: userId, 
+          name: userData.name,
+          uid: userCredential.user.uid
+        }));
         
         toast({
           title: "Connexion réussie",
-          description: "Bienvenue sur ACADEX.",
+          description: `Bienvenue, ${userData.name}.`,
         });
         
-        // Redirect to dashboard
         router.push("/dashboard");
       } else {
-        toast({
-          variant: "destructive",
-          title: "Erreur de connexion",
-          description: "Veuillez vérifier vos identifiants.",
-        });
+        throw new Error("Profil utilisateur introuvable.");
       }
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "Erreur de connexion",
+        description: error.message || "Identifiants incorrects.",
+      });
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   const bgImage = PlaceHolderImages.find(img => img.id === "login-bg");
 
   return (
     <div className="relative min-h-screen w-full flex items-center justify-center overflow-hidden">
-      {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
         <Image
           src={bgImage?.imageUrl || ""}
@@ -65,7 +82,6 @@ export default function LoginPage() {
         <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px]" />
       </div>
 
-      {/* Login Card */}
       <Card className="relative z-10 w-full max-w-md mx-4 glass-card border-white/10 animate-in fade-in zoom-in duration-500">
         <CardHeader className="text-center space-y-2">
           <div className="mx-auto w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mb-4 shadow-lg shadow-primary/20">
