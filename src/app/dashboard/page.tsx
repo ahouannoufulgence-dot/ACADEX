@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { getRoleFromId } from "@/lib/auth-utils";
+import { cn } from "@/lib/utils";
 
 export default function DashboardPage() {
   const [role, setRole] = useState<any>(null);
