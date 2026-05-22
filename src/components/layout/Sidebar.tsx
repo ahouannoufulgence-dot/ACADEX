@@ -1,3 +1,4 @@
+
 "use client";
 
 import React from "react";
@@ -8,20 +9,18 @@ import {
   Users, 
   GraduationCap, 
   Calendar, 
-  BookOpen, 
   FileText, 
   CreditCard, 
   MessageSquare, 
   Settings, 
   ShieldAlert,
   LogOut,
-  ChevronRight,
   ClipboardList,
   BarChart3,
   KeyRound,
   Home,
-  BookMarked,
-  FileCheck
+  FileCheck,
+  X
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { UserRole } from "@/lib/auth-utils";
@@ -31,9 +30,11 @@ import { signOut } from "firebase/auth";
 interface SidebarProps {
   role: UserRole;
   userName: string;
+  isOpen: boolean;
+  onClose: () => void;
 }
 
-export const Sidebar = ({ role, userName }: SidebarProps) => {
+export const Sidebar = ({ role, userName, isOpen, onClose }: SidebarProps) => {
   const pathname = usePathname();
   const router = useRouter();
   const auth = useAuth();
@@ -50,8 +51,6 @@ export const Sidebar = ({ role, userName }: SidebarProps) => {
     { name: "Accueil", href: "/dashboard", icon: Home, roles: ['DIRECTOR', 'TEACHER', 'STUDENT_PARENT'] },
     { name: "Messagerie", href: "/messages", icon: MessageSquare, roles: ['DIRECTOR', 'TEACHER', 'STUDENT_PARENT'] },
     { name: "Agenda", href: "/agenda", icon: Calendar, roles: ['DIRECTOR', 'TEACHER', 'STUDENT_PARENT'] },
-    
-    // Director Only
     { name: "Élèves", href: "/students", icon: GraduationCap, roles: ['DIRECTOR'] },
     { name: "Enseignants", href: "/teachers", icon: Users, roles: ['DIRECTOR'] },
     { name: "Classes", href: "/classes", icon: ClipboardList, roles: ['DIRECTOR'] },
@@ -59,32 +58,34 @@ export const Sidebar = ({ role, userName }: SidebarProps) => {
     { name: "Statistiques", href: "/stats", icon: BarChart3, roles: ['DIRECTOR'] },
     { name: "Génération Accès", href: "/access-management", icon: KeyRound, roles: ['DIRECTOR'] },
     { name: "Sécurité", href: "/security", icon: ShieldAlert, roles: ['DIRECTOR'] },
-    
-    // Teacher Only
     { name: "Mes Classes", href: "/my-classes", icon: ClipboardList, roles: ['TEACHER'] },
     { name: "Saisie Notes", href: "/grades/entry", icon: FileText, roles: ['TEACHER'] },
-    
-    // Student Only
     { name: "Mes Notes", href: "/grades/my", icon: FileText, roles: ['STUDENT_PARENT'] },
     { name: "Bulletin", href: "/report-card", icon: FileCheck, roles: ['STUDENT_PARENT'] },
     { name: "Mes Paiements", href: "/payments/my", icon: CreditCard, roles: ['STUDENT_PARENT'] },
-    
-    // Global Access based on permissions (Common)
     { name: "Emploi du temps", href: "/schedule", icon: Calendar, roles: ['DIRECTOR', 'STUDENT_PARENT'] },
     { name: "Absences", href: "/absences", icon: ShieldAlert, roles: ['DIRECTOR', 'TEACHER', 'STUDENT_PARENT'] },
     { name: "Paramètres", href: "/settings", icon: Settings, roles: ['DIRECTOR'] },
   ].filter(item => item.roles.includes(role));
 
   return (
-    <aside className="w-64 h-screen bg-[#14532D] flex flex-col fixed left-0 top-0 z-40 border-r border-slate-200">
-      <div className="p-8 pb-10 flex items-center gap-3">
-        <div className="w-9 h-9 bg-white rounded-lg flex items-center justify-center shadow-lg">
-          <span className="text-[#14532D] font-bold text-lg">A</span>
+    <aside className={cn(
+      "w-64 h-screen bg-[#14532D] flex flex-col fixed left-0 top-0 z-40 border-r border-slate-200 transition-transform duration-300 ease-in-out lg:translate-x-0",
+      isOpen ? "translate-x-0" : "-translate-x-full"
+    )}>
+      <div className="p-8 pb-10 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 bg-white rounded-lg flex items-center justify-center shadow-lg">
+            <span className="text-[#14532D] font-bold text-lg">A</span>
+          </div>
+          <div className="flex flex-col">
+            <span className="text-white font-headline font-bold text-lg leading-tight tracking-tight">ACADEX</span>
+            <span className="text-white/40 text-[8px] font-bold uppercase tracking-[0.2em]">Management Elite</span>
+          </div>
         </div>
-        <div className="flex flex-col">
-          <span className="text-white font-headline font-bold text-lg leading-tight tracking-tight">ACADEX</span>
-          <span className="text-white/40 text-[8px] font-bold uppercase tracking-[0.2em]">Management Elite</span>
-        </div>
+        <button className="lg:hidden text-white/60 hover:text-white" onClick={onClose}>
+          <X className="w-6 h-6" />
+        </button>
       </div>
 
       <div className="flex-1 sidebar-scroll px-4">
@@ -95,6 +96,7 @@ export const Sidebar = ({ role, userName }: SidebarProps) => {
               <Link
                 key={item.href}
                 href={item.href}
+                onClick={() => onClose()}
                 className={cn(
                   "group flex items-center justify-between px-4 py-2.5 rounded-xl transition-all duration-200",
                   isActive 

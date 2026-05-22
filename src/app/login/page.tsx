@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState } from "react";
@@ -63,23 +64,23 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen w-full relative flex items-center justify-center p-6 lg:p-12 overflow-hidden bg-[#111827]">
-      {/* Background Image - Happy Students in school uniform working joyfully */}
+    <div className="min-h-screen w-full relative flex items-center justify-center p-4 md:p-6 lg:p-12 overflow-hidden bg-[#111827]">
+      {/* Background Image */}
       <Image
         src={loginImage?.imageUrl || "https://picsum.photos/seed/acadex-students-uniform/1200/1200"}
-        alt="Élèves ACADEX rayonnants"
+        alt="Élèves ACADEX"
         fill
         priority
-        className="object-cover opacity-70 animate-pulse-slow scale-105"
+        className="object-cover opacity-70 animate-pulse-slow"
         data-ai-hint="African students school uniform smiling"
       />
       <div className="absolute inset-0 bg-gradient-to-br from-[#14532D]/90 via-[#111827]/40 to-[#111827]/80" />
       
-      <div className="relative z-10 w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-        {/* Left Side - Inspirational Content */}
+      <div className="relative z-10 w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+        {/* Left Side - Hidden on Mobile */}
         <div className="hidden lg:flex flex-col space-y-10 animate-fade-up">
           <div className="flex items-center gap-4">
-            <div className="w-20 h-20 bg-white rounded-3xl flex items-center justify-center shadow-2xl transition-transform hover:rotate-6">
+            <div className="w-20 h-20 bg-white rounded-3xl flex items-center justify-center shadow-2xl">
               <span className="text-[#14532D] font-black text-4xl">A</span>
             </div>
             <h1 className="text-white font-headline font-bold text-6xl tracking-tighter drop-shadow-2xl">ACADEX</h1>
@@ -93,32 +94,27 @@ export default function LoginPage() {
               L'avenir commence <span className="text-accent">ici</span>.
             </h2>
             <p className="text-2xl text-white/95 font-medium leading-relaxed drop-shadow-xl max-w-lg">
-              Pilotez votre réussite avec la plateforme la plus avancée du Bénin. Précision, Joie et Innovation.
+              Pilotez votre réussite avec la plateforme la plus avancée du Bénin.
             </p>
-          </div>
-          
-          <div className="flex gap-6 items-center">
-            <div className="h-1.5 w-32 bg-accent rounded-full" />
-            <div className="h-1.5 w-16 bg-white/20 rounded-full" />
           </div>
         </div>
 
-        {/* Right Side - Floating Glass Form */}
-        <Card className="glass-card border-white/10 shadow-[0_0_80px_rgba(0,0,0,0.3)] rounded-[3rem] overflow-hidden backdrop-blur-3xl bg-white/10 animate-fade-up" style={{ animationDelay: '0.2s' }}>
-          <CardContent className="p-10 lg:p-14 space-y-10">
-            <div className="space-y-3">
-              <h3 className="text-4xl font-headline font-bold text-white tracking-tight">Accès Institutionnel</h3>
-              <p className="text-slate-300 font-medium">Authentification sécurisée Élite.</p>
+        {/* Right Side - Form */}
+        <Card className="glass-card border-white/10 shadow-2xl rounded-[2rem] md:rounded-[3rem] overflow-hidden backdrop-blur-3xl bg-white/10 animate-fade-up">
+          <CardContent className="p-8 md:p-14 space-y-8 md:space-y-10">
+            <div className="space-y-2">
+              <h3 className="text-3xl md:text-4xl font-headline font-bold text-white tracking-tight">Accès Institutionnel</h3>
+              <p className="text-slate-300 text-sm md:text-base font-medium">Authentification sécurisée Élite.</p>
             </div>
 
-            <form onSubmit={handleLogin} className="space-y-8">
-              <div className="space-y-3">
+            <form onSubmit={handleLogin} className="space-y-6 md:space-y-8">
+              <div className="space-y-2">
                 <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Identifiant Unique</Label>
                 <div className="relative group">
-                  <User className="absolute left-5 top-5 h-6 w-6 text-slate-400 group-focus-within:text-accent transition-colors" />
+                  <User className="absolute left-4 top-4 h-5 w-5 text-slate-400 group-focus-within:text-accent transition-colors" />
                   <Input
-                    placeholder="DIR-001, ENS-..."
-                    className="pl-14 h-16 bg-white/5 border-white/10 rounded-2xl focus-visible:ring-2 focus-visible:ring-accent/20 transition-all text-white text-lg font-medium placeholder:text-white/20"
+                    placeholder="DIR-001..."
+                    className="pl-12 h-14 bg-white/5 border-white/10 rounded-xl focus-visible:ring-2 focus-visible:ring-accent/20 text-white"
                     value={userId}
                     onChange={(e) => setUserId(e.target.value.toUpperCase())}
                     required
@@ -126,16 +122,15 @@ export default function LoginPage() {
                 </div>
               </div>
 
-              <div className="space-y-3">
+              <div className="space-y-2">
                 <div className="flex justify-between items-center">
                   <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Mot de passe</Label>
-                  <button type="button" className="text-[10px] font-bold text-accent hover:underline uppercase tracking-widest">Récupérer</button>
                 </div>
                 <div className="relative group">
-                  <Lock className="absolute left-5 top-5 h-6 w-6 text-slate-400 group-focus-within:text-accent transition-colors" />
+                  <Lock className="absolute left-4 top-4 h-5 w-5 text-slate-400 group-focus-within:text-accent transition-colors" />
                   <Input
                     type={showPassword ? "text" : "password"}
-                    className="pl-14 pr-14 h-16 bg-white/5 border-white/10 rounded-2xl focus-visible:ring-2 focus-visible:ring-accent/20 transition-all text-white text-lg font-medium placeholder:text-white/20"
+                    className="pl-12 pr-12 h-14 bg-white/5 border-white/10 rounded-xl focus-visible:ring-2 focus-visible:ring-accent/20 text-white"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
@@ -143,33 +138,33 @@ export default function LoginPage() {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-6 top-5 text-slate-400 hover:text-white transition-colors"
+                    className="absolute right-4 top-4 text-slate-400 hover:text-white transition-colors"
                   >
-                    {showPassword ? <EyeOff size={24} /> : <Eye size={24} />}
+                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                   </button>
                 </div>
               </div>
 
               <Button 
                 type="submit" 
-                className="w-full h-16 text-xl font-bold bg-[#14532D] hover:bg-[#1a6b3a] text-white shadow-2xl transition-all active:scale-95 rounded-2xl gap-3"
+                className="w-full h-14 text-lg font-bold bg-[#14532D] hover:bg-[#1a6b3a] text-white rounded-xl gap-2"
                 disabled={isLoading}
               >
-                {isLoading ? "Vérification..." : "Se connecter"} <ArrowRight className="w-6 h-6" />
+                {isLoading ? "Chargement..." : "Se connecter"} <ArrowRight className="w-5 h-5" />
               </Button>
             </form>
 
-            <div className="pt-8 border-t border-white/5 flex flex-col gap-6">
-              <span className="text-center text-[10px] font-bold text-slate-400 uppercase tracking-widest">Première connexion ?</span>
-              <div className="grid grid-cols-3 gap-3">
+            <div className="pt-6 border-t border-white/5 space-y-4">
+              <span className="block text-center text-[10px] font-bold text-slate-400 uppercase tracking-widest">Première connexion ?</span>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                 <Link href="/activate/student">
-                  <Button variant="outline" className="w-full h-12 border-white/10 bg-white/5 text-white hover:bg-white/10 text-[9px] font-bold uppercase tracking-tighter">Élève</Button>
+                  <Button variant="outline" className="w-full h-10 border-white/10 bg-white/5 text-white text-[9px] uppercase tracking-tighter">Élève</Button>
                 </Link>
                 <Link href="/setup/teacher">
-                  <Button variant="outline" className="w-full h-12 border-white/10 bg-white/5 text-white hover:bg-white/10 text-[9px] font-bold uppercase tracking-tighter">Enseignant</Button>
+                  <Button variant="outline" className="w-full h-10 border-white/10 bg-white/5 text-white text-[9px] uppercase tracking-tighter">Enseignant</Button>
                 </Link>
                 <Link href="/setup/director">
-                  <Button variant="outline" className="w-full h-12 border-white/10 bg-white/5 text-white hover:bg-white/10 text-[9px] font-bold uppercase tracking-tighter">Direction</Button>
+                  <Button variant="outline" className="w-full h-10 border-white/10 bg-white/5 text-white text-[9px] uppercase tracking-tighter">Direction</Button>
                 </Link>
               </div>
             </div>
