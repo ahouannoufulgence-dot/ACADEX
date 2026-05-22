@@ -1,4 +1,3 @@
-
 "use client";
 
 import React from "react";
@@ -20,7 +19,8 @@ import {
   FileText, 
   FileCheck, 
   LogOut, 
-  X 
+  X,
+  BookOpen
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { UserRole } from "@/lib/auth-utils";
@@ -61,6 +61,7 @@ export const Sidebar = ({ role, userName, isOpen, onClose, schoolName = "ACADEX"
     { name: "Génération Accès", href: "/access-management", icon: KeyRound, roles: ['DIRECTOR'] },
     { name: "Sécurité", href: "/security", icon: ShieldAlert, roles: ['DIRECTOR'] },
     { name: "Mes Classes", href: "/my-classes", icon: ClipboardList, roles: ['TEACHER'] },
+    { name: "Programme", href: "/course-program", icon: BookOpen, roles: ['TEACHER'] },
     { name: "Saisie Notes", href: "/grades/entry", icon: FileText, roles: ['TEACHER'] },
     { name: "Mes Notes", href: "/grades/my", icon: FileText, roles: ['STUDENT_PARENT'] },
     { name: "Bulletin", href: "/report-card", icon: FileCheck, roles: ['STUDENT_PARENT'] },
