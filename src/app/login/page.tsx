@@ -66,7 +66,7 @@ export default function LoginPage() {
       {/* Left - Vibrant Visual Section */}
       <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-[#14532D]">
         <Image
-          src={loginImage?.imageUrl || "https://picsum.photos/seed/acadex-students-uniform/1200/1200"}
+          src={loginImage?.imageUrl || "https://picsum.photos/seed/acadex-joy-success/1200/1200"}
           alt="Élèves ACADEX en tenue"
           fill
           priority

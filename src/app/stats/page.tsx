@@ -18,6 +18,7 @@ import {
   CartesianGrid,
   ResponsiveContainer
 } from "recharts";
+import { cn } from "@/lib/utils";
 
 export default function StatisticsPage() {
   const data = [
