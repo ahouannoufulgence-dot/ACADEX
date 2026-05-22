@@ -64,31 +64,33 @@ export default function DashboardPage() {
   return (
     <DashboardLayout>
       <div className="space-y-10 animate-fade-up">
-        {/* Hero Section - Elite Institution Look */}
-        <div className="relative h-[380px] w-full rounded-[2.5rem] overflow-hidden shadow-xl border border-white">
+        {/* Hero Section - Elite Institution Look with Joyful Background */}
+        <div className="relative h-[420px] w-full rounded-[2.5rem] overflow-hidden shadow-2xl border border-white">
           <Image
-            src={heroImage?.imageUrl || "https://picsum.photos/seed/acadex-joy/1200/400"}
+            src={heroImage?.imageUrl || "https://picsum.photos/seed/acadex-joy/1200/600"}
             alt="Joie de l'apprentissage"
             fill
             priority
-            className="object-cover"
+            className="object-cover transition-transform duration-700 hover:scale-105"
             data-ai-hint="happy African students"
           />
           <div className="absolute inset-0 hero-overlay" />
-          <div className="absolute inset-0 p-12 lg:p-16 flex flex-col justify-center text-white space-y-4">
-            <div className="flex items-center gap-2 bg-white/20 backdrop-blur-md w-fit px-4 py-1.5 rounded-full text-[9px] font-bold tracking-[0.2em] uppercase border border-white/20">
-              <Sparkles className="w-3 h-3" />
-              Excellence Académique
+          <div className="absolute inset-0 p-12 lg:p-16 flex flex-col justify-center text-white space-y-6">
+            <div className="flex items-center gap-2 bg-white/20 backdrop-blur-xl w-fit px-5 py-2 rounded-full text-[10px] font-bold tracking-[0.2em] uppercase border border-white/30">
+              <Sparkles className="w-4 h-4 text-white" />
+              Excellence Académique & Joie d'Apprendre
             </div>
-            <h1 className="text-5xl lg:text-6xl font-headline font-bold text-white leading-none">
-              Bienvenue sur ACADEX
-            </h1>
-            <p className="text-lg text-white/80 font-medium max-w-xl leading-relaxed">
-              La gestion scolaire réinventée pour les établissements d'élite. Pilotez avec précision et sérénité.
-            </p>
+            <div className="space-y-2">
+              <h1 className="text-5xl lg:text-7xl font-headline font-bold text-white leading-tight drop-shadow-lg">
+                Bienvenue sur ACADEX
+              </h1>
+              <p className="text-xl text-white/90 font-medium max-w-2xl leading-relaxed drop-shadow-md">
+                "Apprendre aujourd’hui, réussir demain". Gérez votre établissement avec la précision du futur.
+              </p>
+            </div>
             <div className="pt-6">
-              <Button className="bg-white hover:bg-slate-100 text-[#14532D] font-bold h-12 px-8 rounded-xl shadow-lg transition-transform hover:scale-105">
-                Voir le rapport du jour <ArrowUpRight className="ml-2 w-4 h-4" />
+              <Button className="bg-white hover:bg-slate-50 text-[#14532D] font-bold h-14 px-10 rounded-2xl shadow-xl transition-all hover:scale-105 active:scale-95">
+                Rapport d'Excellence du Jour <ArrowUpRight className="ml-2 w-5 h-5" />
               </Button>
             </div>
           </div>
@@ -107,7 +109,7 @@ export default function DashboardPage() {
           <Card className="lg:col-span-2 premium-card">
             <CardHeader className="p-8 pb-4 flex flex-row items-center justify-between">
               <div>
-                <CardTitle className="text-xl font-bold">Performance Académique</CardTitle>
+                <CardTitle className="text-xl font-bold text-[#111827]">Performance Académique</CardTitle>
                 <CardDescription>Répartition des moyennes trimestrielles</CardDescription>
               </div>
               <Activity className="w-5 h-5 text-slate-300" />
@@ -134,7 +136,7 @@ export default function DashboardPage() {
           {/* Institutional Agenda */}
           <Card className="premium-card">
             <CardHeader className="p-8 pb-4">
-              <CardTitle className="flex items-center gap-2 text-xl font-bold">
+              <CardTitle className="flex items-center gap-2 text-xl font-bold text-[#111827]">
                 <Calendar className="w-5 h-5 text-[#14532D]" />
                 Journal de Bord
               </CardTitle>
@@ -169,7 +171,7 @@ function StatCard({ title, value, trend, icon: Icon, type }: any) {
             </p>
           </div>
           <div className={cn(
-            "p-3 rounded-xl transition-all duration-300",
+            "p-3 rounded-xl transition-all duration-300 shadow-sm",
             type === "positive" ? "bg-[#14532D]/10 text-[#14532D]" : 
             type === "warning" ? "bg-[#B91C1C]/10 text-[#B91C1C]" : "bg-slate-50 text-slate-400"
           )}>
