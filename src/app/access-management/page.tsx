@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from "react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
-import { KeyRound, ShieldCheck, Users, Copy, Trash2 } from "lucide-react";
+import { KeyRound, ShieldCheck, Users, Copy, Trash2, Sparkles, Loader2, CheckCircle2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,9 +12,10 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogT
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { useFirestore, useCollection } from "@/firebase";
-import { collection, doc, serverTimestamp, writeBatch, deleteDoc } from "firebase/firestore";
+import { collection, doc, serverTimestamp, writeBatch, deleteDoc, query, where, orderBy } from "firebase/firestore";
 import { errorEmitter } from "@/firebase/error-emitter";
 import { FirestorePermissionError } from "@/firebase/errors";
+import { cn } from "@/lib/utils";
 
 export default function AccessManagementPage() {
   const { toast } = useToast();
@@ -26,9 +27,14 @@ export default function AccessManagementPage() {
     count: 1
   });
 
+  // On ne charge que les accès en attente pour la clarté
   const studentsQuery = useMemo(() => {
     if (!db) return null;
-    return collection(db, "students");
+    return query(
+      collection(db, "students"), 
+      where("status", "==", "En attente"),
+      orderBy("createdAt", "desc")
+    );
   }, [db]);
 
   const { data: students, loading } = useCollection(studentsQuery);
@@ -47,8 +53,9 @@ export default function AccessManagementPage() {
     const batch = writeBatch(db);
     const classCode = bulkData.gradeLevel.replace(/\s+/g, '').toUpperCase();
     
+    // Génération de codes aléatoires pour éviter les collisions en masse
     for (let i = 1; i <= bulkData.count; i++) {
-      const studentNumber = i.toString().padStart(3, '0');
+      const studentNumber = Math.floor(Math.random() * 900) + 100; 
       const studentId = `ELV-${classCode}-${studentNumber}`;
       const studentRef = doc(db, "students", studentId);
       
@@ -61,6 +68,12 @@ export default function AccessManagementPage() {
     }
 
     batch.commit()
+      .then(() => {
+        toast({
+          title: "Génération réussie",
+          description: `${bulkData.count} accès créés pour ${bulkData.gradeLevel}.`
+        });
+      })
       .catch(async () => {
         const permissionError = new FirestorePermissionError({
           path: 'students/bulk',
@@ -68,11 +81,6 @@ export default function AccessManagementPage() {
         });
         errorEmitter.emit('permission-error', permissionError);
       });
-
-    toast({
-      title: "Génération lancée",
-      description: `${bulkData.count} accès créés pour ${bulkData.gradeLevel}.`
-    });
     
     setIsGenerating(false);
     setBulkData({ gradeLevel: "", count: 1 });
@@ -103,125 +111,139 @@ export default function AccessManagementPage() {
 
   return (
     <DashboardLayout>
-      <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-300">
-        <div className="flex justify-between items-center">
+      <div className="space-y-12 animate-fade-up">
+        {/* Header - Vivid Premium */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-10">
           <div>
-            <h1 className="text-3xl font-headline font-bold text-white mb-2">Gestion des Accès</h1>
-            <p className="text-muted-foreground">Provisionnez les accès élèves par classe.</p>
+            <h1 className="text-5xl md:text-8xl font-headline font-black text-[#0F172A] mb-4 tracking-tighter">Gestion des Accès</h1>
+            <p className="text-[#0F172A] text-2xl font-black">Provisionnez les accès élèves par classe avec ACADEX AI.</p>
           </div>
           
           <Dialog>
             <DialogTrigger asChild>
-              <Button className="bg-primary text-white font-bold h-10 px-6">
-                <Users className="w-4 h-4 mr-2" /> Provisionner une classe
+              <Button className="bg-primary hover:bg-slate-900 text-white font-black h-20 px-14 rounded-[2.5rem] shadow-2xl transition-all active:scale-95 flex gap-6 text-xl border-4 border-white/10">
+                <Users className="w-8 h-8" /> Provisionner une classe
               </Button>
             </DialogTrigger>
-            <DialogContent className="glass-card border-white/10 text-white sm:max-w-[425px]">
-              <DialogHeader>
-                <DialogTitle className="flex items-center gap-2">
-                  <ShieldCheck className="w-5 h-5 text-accent" />
-                  Génération par Lot
-                </DialogTitle>
-                <CardDescription className="text-white/60">
-                  Créez plusieurs identifiants d'activation pour une classe spécifique.
-                </CardDescription>
+            <DialogContent className="vivid-box border-none shadow-[0_60px_180px_rgba(0,0,0,0.4)] sm:max-w-[550px] p-0 overflow-hidden bg-white">
+              <DialogHeader className="p-12 bg-primary text-white border-b-8 border-accent">
+                <div className="flex items-center gap-6">
+                  <div className="p-4 bg-white rounded-2xl shadow-2xl rotate-6">
+                    <ShieldCheck className="w-10 h-10 text-primary animate-pulse" />
+                  </div>
+                  <DialogTitle className="text-4xl font-black tracking-tighter">Génération par Lot</DialogTitle>
+                </div>
+                <CardDescription className="text-white font-black text-xl mt-4 opacity-80">Créez massivement des codes d'accès sécurisés.</CardDescription>
               </DialogHeader>
 
-              <div className="grid gap-4 py-4">
-                <div className="space-y-2">
-                  <Label>Niveau / Classe (Ex: 3EME A)</Label>
+              <div className="p-12 space-y-10 bg-white">
+                <div className="space-y-4">
+                  <Label className="text-[12px] font-black text-[#0F172A] uppercase tracking-[0.3em] ml-2">Niveau / Classe (Ex: 3EME A)</Label>
                   <Input 
                     placeholder="3EME A"
-                    className="bg-white/5 border-white/10 h-11" 
+                    className="bg-[#F1F5F9] border-4 border-slate-50 h-16 rounded-2xl font-black text-xl text-[#0F172A] px-6 shadow-inner" 
                     value={bulkData.gradeLevel}
                     onChange={(e) => setBulkData({...bulkData, gradeLevel: e.target.value.toUpperCase()})}
                   />
                 </div>
-                <div className="space-y-2">
-                  <Label>Nombre d'élèves</Label>
+                <div className="space-y-4">
+                  <Label className="text-[12px] font-black text-[#0F172A] uppercase tracking-[0.3em] ml-2">Nombre d'élèves</Label>
                   <Input 
                     type="number"
                     min="1"
                     max="100"
-                    className="bg-white/5 border-white/10 h-11" 
+                    className="bg-[#F1F5F9] border-4 border-slate-50 h-16 rounded-2xl font-black text-xl text-[#0F172A] px-6 shadow-inner text-center" 
                     value={bulkData.count}
                     onChange={(e) => setBulkData({...bulkData, count: parseInt(e.target.value) || 0})}
                   />
                 </div>
               </div>
 
-              <DialogFooter>
+              <DialogFooter className="p-12 pt-0 bg-white">
                 <Button 
-                  className="bg-accent text-black font-bold w-full h-11" 
+                  className="bg-accent text-white hover:bg-slate-900 font-black w-full h-24 rounded-[2.5rem] shadow-2xl text-2xl border-4 border-white/10" 
                   onClick={handleBulkGenerate} 
                   disabled={isGenerating}
                 >
-                  {isGenerating ? "Génération..." : "Générer les identifiants"}
+                  {isGenerating ? <Loader2 className="w-10 h-10 animate-spin" /> : "Générer les identifiants"}
                 </Button>
               </DialogFooter>
             </DialogContent>
           </Dialog>
         </div>
 
-        <Card className="glass-card border-none shadow-xl">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-lg text-white">Identifiants en attente d'activation</CardTitle>
-            <CardDescription>Remettez ces codes aux élèves pour qu'ils créent leur compte.</CardDescription>
+        <Card className="vivid-box border-none shadow-2xl overflow-hidden bg-white">
+          <CardHeader className="p-12 md:p-14 border-b-4 border-slate-50 bg-slate-50/30">
+            <div>
+              <CardTitle className="text-3xl font-black text-[#0F172A] tracking-tighter">Identifiants en attente d'activation</CardTitle>
+              <CardDescription className="text-xl font-bold mt-2 text-slate-600">Remettez ces codes aux élèves pour qu'ils créent leur compte ACADEX.</CardDescription>
+            </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-0">
             {loading ? (
-              <div className="flex justify-center p-12 text-muted-foreground">
-                 <div className="w-6 h-6 border-2 border-accent border-t-transparent rounded-full animate-spin" />
+              <div className="flex flex-col items-center justify-center py-56">
+                <Loader2 className="w-24 h-24 animate-spin text-primary mb-8" />
+                <p className="text-[#0F172A] font-black uppercase tracking-[0.4em] text-xl">Accès au registre...</p>
               </div>
             ) : (
-              <div className="rounded-xl border border-white/10 overflow-hidden">
+              <div className="overflow-x-auto">
                 <Table>
-                  <TableHeader className="bg-white/5">
-                    <TableRow className="border-white/5">
-                      <TableHead className="text-white text-xs uppercase font-bold">Identifiant</TableHead>
-                      <TableHead className="text-white text-xs uppercase font-bold">Classe</TableHead>
-                      <TableHead className="text-white text-xs uppercase font-bold">Statut</TableHead>
-                      <TableHead className="text-right text-white text-xs uppercase font-bold">Actions</TableHead>
+                  <TableHeader className="bg-slate-900">
+                    <TableRow className="border-none h-24">
+                      <TableHead className="text-white font-black pl-20 text-xs uppercase tracking-[0.3em]">Identifiant Personnel</TableHead>
+                      <TableHead className="text-white font-black text-xs uppercase tracking-[0.3em]">Classe Affectée</TableHead>
+                      <TableHead className="text-white font-black text-xs uppercase tracking-[0.3em]">Statut Actuel</TableHead>
+                      <TableHead className="text-right pr-20 text-white font-black text-xs uppercase tracking-[0.3em]">Actions</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {students?.filter((s: any) => s.status === "En attente").map((u: any) => (
-                      <TableRow key={u.id} className="hover:bg-white/5 border-white/5 transition-colors group">
-                        <TableCell className="font-mono font-bold text-accent">{u.id}</TableCell>
-                        <TableCell className="text-white/80">{u.gradeLevel}</TableCell>
-                        <TableCell>
-                          <Badge className="bg-amber-400/20 text-amber-400 text-[10px] border-amber-400/20" variant="outline">
+                    {students?.map((u: any) => (
+                      <TableRow key={u.id} className="hover:bg-primary/5 transition-all border-slate-100 group">
+                        <TableCell className="pl-20 py-12">
+                           <div className="flex items-center gap-10">
+                              <div className="w-16 h-16 rounded-[1.5rem] bg-primary/10 text-primary flex items-center justify-center font-black text-xl shadow-inner border-4 border-primary/5">
+                                <KeyRound className="w-8 h-8" />
+                              </div>
+                              <span className="font-mono font-black text-primary text-3xl tracking-tighter">{u.id}</span>
+                           </div>
+                        </TableCell>
+                        <TableCell className="py-12">
+                          <span className="font-black text-[#0F172A] text-2xl tracking-tighter uppercase">{u.gradeLevel}</span>
+                        </TableCell>
+                        <TableCell className="py-12">
+                          <Badge className="bg-primary text-white text-[12px] font-black px-6 py-2.5 h-12 uppercase tracking-[0.2em] border-none shadow-2xl" variant="outline">
                             {u.status}
                           </Badge>
                         </TableCell>
-                        <TableCell className="text-right">
-                          <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <TableCell className="text-right pr-20 py-12">
+                          <div className="flex justify-end gap-6 opacity-0 group-hover:opacity-100 transition-all translate-x-4 group-hover:translate-x-0">
                             <Button 
                               variant="ghost" 
-                              size="icon" 
-                              className="h-8 w-8 text-muted-foreground hover:text-accent"
+                              className="h-16 px-8 bg-slate-50 border-4 border-slate-100 rounded-2xl font-black text-primary hover:bg-primary hover:text-white transition-all shadow-xl"
                               onClick={() => copyToClipboard(u.id)}
-                              title="Copier le code"
                             >
-                              <Copy className="h-4 w-4" />
+                              <Copy className="h-6 w-6 mr-3" /> Copier
                             </Button>
                             <Button 
                               variant="ghost" 
-                              size="icon" 
-                              className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                              className="h-16 px-8 bg-red-50 border-4 border-red-100 rounded-2xl font-black text-destructive hover:bg-destructive hover:text-white transition-all shadow-xl"
                               onClick={() => handleDelete(u.id)}
-                              title="Supprimer l'accès"
                             >
-                              <Trash2 className="h-4 w-4" />
+                              <Trash2 className="h-6 w-6 mr-3" /> Supprimer
                             </Button>
                           </div>
                         </TableCell>
                       </TableRow>
                     ))}
-                    {students?.filter((s: any) => s.status === "En attente").length === 0 && (
+                    {(!students || students.length === 0) && (
                       <TableRow>
-                        <TableCell colSpan={4} className="text-center py-12 text-muted-foreground italic text-sm">
-                          Aucun identifiant en attente d'activation.
+                        <TableCell colSpan={4} className="text-center py-64">
+                          <div className="flex flex-col items-center space-y-10">
+                             <div className="p-16 bg-white rounded-[4rem] border-8 border-slate-50 shadow-inner">
+                                <Sparkles className="w-32 h-32 text-slate-100" />
+                             </div>
+                             <p className="text-4xl font-black uppercase text-[#0F172A] tracking-[0.4em] opacity-30">Aucun accès en attente</p>
+                          </div>
                         </TableCell>
                       </TableRow>
                     )}
