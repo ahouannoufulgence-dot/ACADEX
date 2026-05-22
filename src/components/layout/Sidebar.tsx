@@ -5,23 +5,22 @@ import React from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { 
-  LayoutDashboard, 
-  Users, 
-  GraduationCap, 
-  Calendar, 
-  FileText, 
-  CreditCard, 
+  Home, 
   MessageSquare, 
+  Calendar, 
+  GraduationCap, 
+  Users, 
+  ClipboardList, 
+  ShieldCheck, 
+  CreditCard, 
+  BarChart3, 
+  KeyRound, 
+  ShieldAlert, 
   Settings, 
-  ShieldAlert,
-  LogOut,
-  ClipboardList,
-  BarChart3,
-  KeyRound,
-  Home,
-  FileCheck,
-  X,
-  ShieldCheck
+  FileText, 
+  FileCheck, 
+  LogOut, 
+  X 
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { UserRole } from "@/lib/auth-utils";
@@ -33,9 +32,10 @@ interface SidebarProps {
   userName: string;
   isOpen: boolean;
   onClose: () => void;
+  schoolName?: string;
 }
 
-export const Sidebar = ({ role, userName, isOpen, onClose }: SidebarProps) => {
+export const Sidebar = ({ role, userName, isOpen, onClose, schoolName = "ACADEX" }: SidebarProps) => {
   const pathname = usePathname();
   const router = useRouter();
   const auth = useAuth();
@@ -77,11 +77,11 @@ export const Sidebar = ({ role, userName, isOpen, onClose }: SidebarProps) => {
     )}>
       <div className="p-6 pb-8 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center shadow-lg">
-            <span className="text-[#14532D] font-bold text-base">A</span>
+          <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center shadow-lg shrink-0">
+            <span className="text-[#14532D] font-bold text-base">{schoolName[0].toUpperCase()}</span>
           </div>
-          <div className="flex flex-col">
-            <span className="text-white font-headline font-bold text-base leading-tight tracking-tight">ACADEX</span>
+          <div className="flex flex-col min-w-0">
+            <span className="text-white font-headline font-black text-sm leading-tight tracking-tight uppercase truncate">{schoolName}</span>
             <span className="text-white/40 text-[7px] font-bold uppercase tracking-[0.2em]">Management Elite</span>
           </div>
         </div>
@@ -108,7 +108,7 @@ export const Sidebar = ({ role, userName, isOpen, onClose }: SidebarProps) => {
               >
                 <div className="flex items-center gap-2.5">
                   <item.icon className={cn("w-3.5 h-3.5 transition-colors", isActive ? "text-white" : "text-white/40 group-hover:text-white")} />
-                  <span className="text-[13px] font-medium">{item.name}</span>
+                  <span className="text-[13px] font-bold uppercase tracking-tighter">{item.name}</span>
                 </div>
                 {isActive && <div className="w-1 h-3 bg-white/30 rounded-full" />}
               </Link>
@@ -119,12 +119,12 @@ export const Sidebar = ({ role, userName, isOpen, onClose }: SidebarProps) => {
 
       <div className="p-5 border-t border-white/5 bg-black/10">
         <div className="flex items-center gap-2.5 mb-5 px-1">
-          <div className="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center text-white font-bold text-[10px]">
+          <div className="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center text-white font-bold text-[10px] shrink-0">
             {userName.substring(0, 1).toUpperCase()}
           </div>
           <div className="flex-1 overflow-hidden">
-            <p className="text-[11px] font-bold text-white truncate">{userName}</p>
-            <p className="text-[8px] text-white/40 uppercase font-bold tracking-tighter">{role}</p>
+            <p className="text-[11px] font-black text-white truncate uppercase tracking-tighter">{userName}</p>
+            <p className="text-[8px] text-white/40 uppercase font-black tracking-tighter">{role}</p>
           </div>
         </div>
         <button 
@@ -132,7 +132,7 @@ export const Sidebar = ({ role, userName, isOpen, onClose }: SidebarProps) => {
           className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-white/50 hover:bg-red-500/10 hover:text-red-400 transition-all group"
         >
           <LogOut className="w-3.5 h-3.5" />
-          <span className="text-[13px] font-bold">Quitter</span>
+          <span className="text-[11px] font-black uppercase tracking-widest">Quitter</span>
         </button>
       </div>
     </aside>

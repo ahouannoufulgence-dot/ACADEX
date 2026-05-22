@@ -1,6 +1,7 @@
+
 "use client";
 
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Sidebar } from "./Sidebar";
@@ -9,6 +10,8 @@ import { getRoleFromId } from "@/lib/auth-utils";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
+import { useFirestore, useDoc } from "@/firebase";
+import { doc } from "firebase/firestore";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -22,6 +25,11 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const router = useRouter();
   const { toast } = useToast();
+  const db = useFirestore();
+
+  // Fetch School Config globally
+  const schoolConfigRef = useMemo(() => (db ? doc(db, "config", "school") : null), [db]);
+  const { data: schoolConfig } = useDoc(schoolConfigRef);
 
   const handleLogout = useCallback(() => {
     localStorage.removeItem("acadex_user");
@@ -82,7 +90,6 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 
   return (
     <div className="min-h-screen relative flex w-full overflow-hidden">
-      {/* GLOBAL VIVID BACKGROUND */}
       <div className="fixed inset-0 z-0">
         <Image
           src={backgroundImage?.imageUrl || "https://picsum.photos/seed/acadex-joy-study/1400/1000"}
@@ -99,6 +106,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         userName={user.name} 
         isOpen={isSidebarOpen} 
         onClose={() => setIsSidebarOpen(false)} 
+        schoolName={schoolConfig?.name || "ACADEX"}
       />
       
       {isSidebarOpen && (
@@ -116,13 +124,14 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
           role={role} 
           userName={user.name} 
           onMenuClick={() => setIsSidebarOpen(true)}
+          academicYear={schoolConfig?.academicYear || "2023-2024"}
         />
         <main className="flex-1 overflow-y-auto w-full">
           <div className="p-4 md:p-6 lg:p-8 max-w-[1440px] mx-auto w-full box-border">
             {children}
           </div>
           <footer className="p-4 md:p-6 text-center text-[#0F172A] text-[9px] font-black uppercase tracking-widest border-t border-black/5 bg-white/30 backdrop-blur-md mt-10">
-            © 2024 ACADEX Premium Systems • Excellence Éducative au Bénin
+            © 2024 {schoolConfig?.name || "ACADEX"} Premium Systems • Excellence Éducative au Bénin
           </footer>
         </main>
       </div>

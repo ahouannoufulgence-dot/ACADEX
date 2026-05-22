@@ -1,7 +1,7 @@
 
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import Image from "next/image";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { 
@@ -20,10 +20,17 @@ import { Button } from "@/components/ui/button";
 import { getRoleFromId } from "@/lib/auth-utils";
 import { cn } from "@/lib/utils";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
+import { useFirestore, useDoc } from "@/firebase";
+import { doc } from "firebase/firestore";
 
 export default function DashboardPage() {
   const [role, setRole] = useState<any>(null);
   const [mounted, setMounted] = useState(false);
+  const db = useFirestore();
+
+  // Fetch school config for customization
+  const schoolConfigRef = useMemo(() => (db ? doc(db, "config", "school") : null), [db]);
+  const { data: schoolConfig } = useDoc(schoolConfigRef);
 
   useEffect(() => {
     setMounted(true);
@@ -54,18 +61,18 @@ export default function DashboardPage() {
           <div className="absolute inset-0 p-6 md:p-14 flex flex-col justify-center space-y-4 md:space-y-6">
             <div className="flex items-center gap-2 bg-primary text-white w-fit px-4 py-1.5 rounded-full text-[9px] md:text-xs font-black tracking-widest uppercase shadow-xl border border-white/20">
               <Sparkles className="w-3.5 h-3.5 text-accent" />
-              Session 2023-2024
+              Session {schoolConfig?.academicYear || "2023-2024"}
             </div>
             <div className="space-y-1 md:space-y-2">
-              <h1 className="text-3xl md:text-7xl font-headline font-black text-[#0F172A] leading-tight tracking-tighter">
-                Espace <br className="hidden md:block"/><span className="text-primary">ACADEX</span>
+              <h1 className="text-3xl md:text-7xl font-headline font-black text-[#0F172A] leading-tight tracking-tighter uppercase">
+                Espace <br className="hidden md:block"/><span className="text-primary">{schoolConfig?.name || "ACADEX"}</span>
               </h1>
-              <p className="text-xs md:text-xl text-[#0F172A] font-black max-w-md leading-tight opacity-90">
-                L'excellence est une habitude. <br/>Préparez le futur aujourd'hui.
+              <p className="text-xs md:text-xl text-[#0F172A] font-black max-w-md leading-tight opacity-90 italic">
+                "{schoolConfig?.slogan || "L'excellence est une habitude. Préparez le futur aujourd'hui."}"
               </p>
             </div>
             <div className="pt-2">
-              <Button className="bg-primary hover:bg-slate-900 text-white font-black h-10 md:h-14 px-6 md:px-10 rounded-xl md:rounded-2xl shadow-2xl transition-all hover:translate-y-[-4px] text-[10px] md:text-lg flex items-center gap-3 border-4 border-white/20 w-full md:w-auto">
+              <Button className="bg-primary hover:bg-slate-900 text-white font-black h-10 md:h-14 px-6 md:px-10 rounded-xl md:rounded-2xl shadow-2xl transition-all hover:translate-y-[-4px] text-[10px] md:text-lg flex items-center gap-3 border-4 border-white/20 w-full md:w-auto uppercase tracking-tighter">
                 Lancer la Session <ArrowUpRight className="w-4 h-4 md:w-5 md:h-5" />
               </Button>
             </div>
@@ -84,8 +91,8 @@ export default function DashboardPage() {
           <Card className="lg:col-span-2 vivid-box border-none shadow-2xl overflow-hidden p-0">
             <CardHeader className="p-6 md:p-10 flex flex-row items-center justify-between border-b-2 border-slate-50/50 bg-slate-50/30">
               <div>
-                <CardTitle className="text-xl md:text-4xl font-black text-[#0F172A] tracking-tighter">Suivi Académique</CardTitle>
-                <CardDescription className="text-xs md:text-lg font-black text-[#0F172A] opacity-60">Analyse stratégique des résultats.</CardDescription>
+                <CardTitle className="text-xl md:text-4xl font-black text-[#0F172A] tracking-tighter uppercase">Suivi Académique</CardTitle>
+                <CardDescription className="text-xs md:text-lg font-black text-[#0F172A] opacity-60 uppercase tracking-widest">Analyse stratégique des résultats.</CardDescription>
               </div>
               <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-[1.25rem] bg-primary text-white flex items-center justify-center shadow-xl shrink-0 rotate-3 border-4 border-white/10">
                 <Activity className="w-5 h-5 md:w-6 md:h-6" />
@@ -95,7 +102,7 @@ export default function DashboardPage() {
               <div className="w-12 h-12 md:w-16 md:h-16 bg-white rounded-2xl md:rounded-[2rem] flex items-center justify-center border-4 border-slate-100 shadow-inner">
                  <Sparkles className="w-6 h-6 md:w-8 md:h-8 text-primary animate-pulse" />
               </div>
-              <p className="text-sm md:text-2xl text-[#0F172A] font-black max-w-xs md:max-w-md leading-tight">
+              <p className="text-sm md:text-2xl text-[#0F172A] font-black max-w-xs md:max-w-md leading-tight uppercase tracking-tighter">
                 En attente des saisies de notes. <br/>
                 <span className="text-slate-400 text-[10px] md:text-base">Les graphiques apparaîtront ici.</span>
               </p>
@@ -110,7 +117,7 @@ export default function DashboardPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4 md:space-y-6 p-6 md:p-8">
-              <JournalEntry author="Système ACADEX" action="Version 2024 active" module="Système" time="Maintenant" type="positive" />
+              <JournalEntry author={schoolConfig?.name || "Système ACADEX"} action="Version 2024 active" module="Système" time="Maintenant" type="positive" />
               <JournalEntry author="Administration" action="Définissez les coefficients" module="Gestion" time="En cours" />
               <JournalEntry author="Sécurité" action="Chiffrement activé" module="Sécurité" time="Actif" type="positive" />
             </CardContent>
@@ -158,7 +165,7 @@ function JournalEntry({ author, action, time, type = "neutral" }: any) {
       />
       <div className="flex-1 space-y-0.5">
         <div className="flex justify-between items-center">
-          <p className="text-[10px] md:text-base font-black text-[#0F172A]">{author}</p>
+          <p className="text-[10px] md:text-base font-black text-[#0F172A] uppercase tracking-tighter">{author}</p>
           <span className="text-[7px] md:text-[9px] text-slate-400 font-black uppercase tracking-widest">{time}</span>
         </div>
         <p className="text-[9px] md:text-sm text-[#0F172A] font-black leading-tight opacity-70">{action}</p>
