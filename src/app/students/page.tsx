@@ -4,7 +4,7 @@
 import React, { useState, useMemo, useCallback, useEffect } from "react";
 import Image from "next/image";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
-import { Search, UserPlus, Sparkles, CheckCircle, Loader2, FileDown } from "lucide-react";
+import { Search, UserPlus, Sparkles, CheckCircle, Loader2, FileDown, Save, CheckCircle2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,6 +12,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
+import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { provisionUserAccount, DirectorAccountProvisioningOutput } from "@/ai/flows/director-account-provisioning-assistant";
 import { useToast } from "@/hooks/use-toast";
@@ -21,12 +22,13 @@ import { errorEmitter } from "@/firebase/error-emitter";
 import { FirestorePermissionError } from "@/firebase/errors";
 import { jsPDF } from "jspdf";
 import "jspdf-autotable";
-import { PlaceHolderImages } from "@/lib/placeholder-images";
 
 export default function StudentsPage() {
   const { toast } = useToast();
   const db = useFirestore();
   const [isAiLoading, setIsAiLoading] = useState(false);
+  const [isProvisioning, setIsProvisioning] = useState(false);
+  const [provisionProgress, setProvisionProgress] = useState(0);
   const [aiResult, setAiResult] = useState<DirectorAccountProvisioningOutput | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   
@@ -37,15 +39,15 @@ export default function StudentsPage() {
     id: ""
   });
 
-  // Génération d'identifiant spontanée
+  // Génération d'identifiant instantanée dès que possible
   useEffect(() => {
-    if (formData.firstName && formData.lastName && formData.gradeLevel) {
+    if (formData.firstName && formData.lastName && formData.gradeLevel && !formData.id) {
       const classCode = formData.gradeLevel.replace(/\s+/g, '').substring(0, 3).toUpperCase() || "GEN";
       const randomNum = Math.floor(Math.random() * 900) + 100;
       const generatedId = `ELV-${classCode}-${randomNum}`;
       setFormData(prev => ({ ...prev, id: generatedId }));
     }
-  }, [formData.firstName, formData.lastName, formData.gradeLevel]);
+  }, [formData.firstName, formData.lastName, formData.gradeLevel, formData.id]);
 
   const studentsQuery = useMemo(() => {
     if (!db) return null;
@@ -84,6 +86,47 @@ export default function StudentsPage() {
     }
   };
 
+  const saveStudent = useCallback(() => {
+    if (!db || !formData.id || isProvisioning) return;
+    
+    setIsProvisioning(true);
+    setProvisionProgress(30);
+
+    const studentId = formData.id;
+    const studentRef = doc(db, "students", studentId);
+    const studentData = {
+      id: studentId,
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      gradeLevel: formData.gradeLevel,
+      status: "En attente",
+      createdAt: serverTimestamp()
+    };
+    
+    setProvisionProgress(70);
+
+    // Écriture Spontanée (Non-bloquante)
+    setDoc(studentRef, studentData)
+      .then(() => {
+        setProvisionProgress(100);
+        toast({ title: "Accès provisionné", description: `ID : ${studentId} (Spontané)` });
+        setTimeout(() => {
+          setIsProvisioning(false);
+          setAiResult(null);
+          setFormData({ firstName: "", lastName: "", gradeLevel: "", id: "" });
+        }, 500);
+      })
+      .catch(async () => {
+        setIsProvisioning(false);
+        const permissionError = new FirestorePermissionError({
+          path: studentRef.path,
+          operation: 'create',
+          requestResourceData: studentData,
+        });
+        errorEmitter.emit('permission-error', permissionError);
+    });
+  }, [db, formData, toast, isProvisioning]);
+
   const downloadStudentPDF = (id: string, firstName: string, lastName: string, grade: string) => {
     const doc = new jsPDF();
     doc.setFillColor(20, 83, 45); 
@@ -102,33 +145,6 @@ export default function StudentsPage() {
     doc.save(`ACADEX_ACCES_${id}.pdf`);
   };
 
-  const saveStudent = useCallback(() => {
-    if (!db || !formData.id) return;
-    const studentId = formData.id;
-    const studentRef = doc(db, "students", studentId);
-    const studentData = {
-      id: studentId,
-      firstName: formData.firstName,
-      lastName: formData.lastName,
-      gradeLevel: formData.gradeLevel,
-      status: "En attente",
-      createdAt: serverTimestamp()
-    };
-    
-    setDoc(studentRef, studentData).catch(async () => {
-        const permissionError = new FirestorePermissionError({
-          path: studentRef.path,
-          operation: 'create',
-          requestResourceData: studentData,
-        });
-        errorEmitter.emit('permission-error', permissionError);
-    });
-    
-    toast({ title: "Accès provisionné", description: `L'ID ${studentId} est prêt.` });
-    setAiResult(null);
-    setFormData({ firstName: "", lastName: "", gradeLevel: "", id: "" });
-  }, [db, formData, toast]);
-
   return (
     <DashboardLayout>
       <div className="space-y-6 md:space-y-8 animate-fade-up">
@@ -139,8 +155,8 @@ export default function StudentsPage() {
           </div>
           <Dialog onOpenChange={(open) => !open && (setAiResult(null), setFormData({ firstName: "", lastName: "", gradeLevel: "", id: "" }))}>
             <DialogTrigger asChild>
-              <Button className="bg-primary hover:bg-slate-900 text-white font-black h-10 md:h-12 px-5 md:px-6 rounded-xl shadow-xl transition-all flex gap-2 text-[10px] md:text-sm uppercase tracking-tighter border-2 border-white/10 shrink-0">
-                <UserPlus className="w-3.5 h-3.5 md:w-4 md:h-4" /> Nouveau
+              <Button className="bg-primary hover:bg-slate-900 text-white font-black h-10 md:h-12 px-5 rounded-xl shadow-xl transition-all flex gap-2 text-[10px] md:text-sm uppercase tracking-tighter border-2 border-white/10 shrink-0">
+                <UserPlus className="w-3.5 h-3.5" /> Nouveau
               </Button>
             </DialogTrigger>
             <DialogContent className="vivid-box border-none bg-white p-0 overflow-hidden shadow-2xl sm:max-w-[400px] rounded-[2rem]">
@@ -154,37 +170,58 @@ export default function StudentsPage() {
               </DialogHeader>
               
               <div className="p-6 space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-1">
-                    <Label className="text-[8px] font-black text-[#0F172A] uppercase tracking-widest">Prénom</Label>
-                    <Input className="h-10 bg-slate-50 border-2 border-slate-100 rounded-xl font-black text-xs" value={formData.firstName} onChange={(e) => setFormData({...formData, firstName: e.target.value})} />
+                {isProvisioning ? (
+                  <div className="py-8 space-y-6 flex flex-col items-center">
+                    <Loader2 className="w-12 h-12 text-primary animate-spin" />
+                    <div className="w-full space-y-2">
+                       <div className="flex justify-between text-[8px] font-black uppercase tracking-widest text-primary">
+                          <span>Création du compte...</span>
+                          <span>{provisionProgress}%</span>
+                       </div>
+                       <Progress value={provisionProgress} className="h-1.5" />
+                       <div className="p-3 bg-slate-50 rounded-xl border-2 border-slate-100 flex items-center justify-between">
+                         <CheckCircle2 className="w-4 h-4 text-primary" />
+                         <span className="font-mono font-black text-primary">{formData.id}</span>
+                       </div>
+                    </div>
                   </div>
-                  <div className="space-y-1">
-                    <Label className="text-[8px] font-black text-[#0F172A] uppercase tracking-widest">Nom</Label>
-                    <Input className="h-10 bg-slate-50 border-2 border-slate-100 rounded-xl font-black text-xs" value={formData.lastName} onChange={(e) => setFormData({...formData, lastName: e.target.value})} />
-                  </div>
-                </div>
-                <div className="space-y-1">
-                  <Label className="text-[8px] font-black text-[#0F172A] uppercase tracking-widest">Classe</Label>
-                  <Input placeholder="3EME A" className="h-10 bg-slate-50 border-2 border-slate-100 rounded-xl font-black text-xs" value={formData.gradeLevel} onChange={(e) => setFormData({...formData, gradeLevel: e.target.value.toUpperCase()})} />
-                </div>
+                ) : (
+                  <>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-1">
+                        <Label className="text-[8px] font-black text-[#0F172A] uppercase tracking-widest">Prénom</Label>
+                        <Input className="h-10 bg-slate-50 border-2 border-slate-100 rounded-xl font-black text-xs" value={formData.firstName} onChange={(e) => setFormData({...formData, firstName: e.target.value})} />
+                      </div>
+                      <div className="space-y-1">
+                        <Label className="text-[8px] font-black text-[#0F172A] uppercase tracking-widest">Nom</Label>
+                        <Input className="h-10 bg-slate-50 border-2 border-slate-100 rounded-xl font-black text-xs" value={formData.lastName} onChange={(e) => setFormData({...formData, lastName: e.target.value})} />
+                      </div>
+                    </div>
+                    <div className="space-y-1">
+                      <Label className="text-[8px] font-black text-[#0F172A] uppercase tracking-widest">Classe</Label>
+                      <Input placeholder="3EME A" className="h-10 bg-slate-50 border-2 border-slate-100 rounded-xl font-black text-xs" value={formData.gradeLevel} onChange={(e) => setFormData({...formData, gradeLevel: e.target.value.toUpperCase()})} />
+                    </div>
 
-                {formData.id && (
-                  <div className="p-4 rounded-xl bg-primary/5 border-2 border-dashed border-primary/20 space-y-1.5 text-center">
-                    <p className="text-[7px] font-black uppercase text-primary tracking-[0.3em]">Identifiant Spontané</p>
-                    <p className="text-xl font-black text-primary font-mono tracking-tighter">{formData.id}</p>
-                  </div>
+                    {formData.id && (
+                      <div className="p-4 rounded-xl bg-primary/5 border-2 border-dashed border-primary/20 space-y-1.5 text-center">
+                        <p className="text-[7px] font-black uppercase text-primary tracking-[0.3em]">Identifiant Spontané</p>
+                        <p className="text-xl font-black text-primary font-mono tracking-tighter">{formData.id}</p>
+                      </div>
+                    )}
+                  </>
                 )}
               </div>
 
-              <DialogFooter className="p-6 pt-0 flex flex-col gap-2">
-                <Button className="bg-primary hover:bg-slate-900 text-white font-black w-full h-11 rounded-xl text-xs uppercase" onClick={saveStudent} disabled={!formData.id}>
-                  Valider Inscription
-                </Button>
-                <Button variant="ghost" className="text-[8px] uppercase font-black text-slate-400 hover:text-primary h-8" onClick={handleAiProvision} disabled={isAiLoading || !formData.id}>
-                   {isAiLoading ? <Loader2 className="w-3 h-3 animate-spin mr-2" /> : <Sparkles className="w-3 h-3 mr-2" />} Affiner avec l'IA
-                </Button>
-              </DialogFooter>
+              {!isProvisioning && (
+                <DialogFooter className="p-6 pt-0 flex flex-col gap-2">
+                  <Button className="bg-primary hover:bg-slate-900 text-white font-black w-full h-11 rounded-xl text-xs uppercase shadow-lg" onClick={saveStudent} disabled={!formData.id}>
+                    Valider Inscription
+                  </Button>
+                  <Button variant="ghost" className="text-[8px] uppercase font-black text-slate-400 hover:text-primary h-8" onClick={handleAiProvision} disabled={isAiLoading || !formData.id}>
+                     {isAiLoading ? <Loader2 className="w-3 h-3 animate-spin mr-2" /> : <Sparkles className="w-3 h-3 mr-2" />} Affiner avec l'IA
+                  </Button>
+                </DialogFooter>
+              )}
             </DialogContent>
           </Dialog>
         </div>
