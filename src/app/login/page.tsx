@@ -66,59 +66,59 @@ export default function LoginPage() {
       {/* Left - Vibrant Visual Section */}
       <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-[#14532D]">
         <Image
-          src={loginImage?.imageUrl || "https://picsum.photos/seed/acadex-joy-success/1200/1200"}
-          alt="Élèves ACADEX en tenue"
+          src={loginImage?.imageUrl || "https://picsum.photos/seed/acadex-students-uniform/1200/1200"}
+          alt="Élèves ACADEX souriants"
           fill
           priority
-          className="object-cover animate-pulse-slow duration-[10s]"
+          className="object-cover animate-pulse-slow transition-all duration-1000"
           data-ai-hint="African students school uniform smiling"
         />
-        <div className="absolute inset-0 bg-gradient-to-tr from-[#14532D]/95 via-[#14532D]/40 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-tr from-[#14532D]/90 via-[#14532D]/40 to-transparent" />
         
         <div className="absolute inset-0 p-16 flex flex-col justify-between z-10 animate-fade-up">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-2xl transition-transform hover:rotate-6">
+            <div className="w-14 h-14 bg-white rounded-[1.25rem] flex items-center justify-center shadow-2xl transition-transform hover:rotate-6">
               <span className="text-[#14532D] font-bold text-2xl">A</span>
             </div>
-            <h1 className="text-white font-headline font-bold text-3xl tracking-tight drop-shadow-md">ACADEX</h1>
+            <h1 className="text-white font-headline font-bold text-4xl tracking-tight drop-shadow-xl">ACADEX</h1>
           </div>
           
-          <div className="space-y-6 max-w-xl">
-            <div className="flex items-center gap-2 bg-white/20 backdrop-blur-xl w-fit px-4 py-1.5 rounded-full text-[10px] font-bold tracking-[0.2em] uppercase border border-white/30 text-white">
+          <div className="space-y-8 max-w-xl">
+            <div className="flex items-center gap-2 bg-accent/20 backdrop-blur-xl w-fit px-5 py-2 rounded-full text-[11px] font-bold tracking-[0.2em] uppercase border border-white/30 text-white animate-pulse">
               <Sparkles className="w-4 h-4 text-white" /> Excellence Institutionnelle
             </div>
-            <h2 className="text-5xl lg:text-6xl font-headline font-bold text-white leading-tight drop-shadow-xl">
+            <h2 className="text-5xl lg:text-7xl font-headline font-bold text-white leading-[1.1] drop-shadow-2xl">
               L'excellence scolaire par l'innovation.
             </h2>
-            <p className="text-xl text-white/90 font-medium leading-relaxed drop-shadow-lg">
+            <p className="text-2xl text-white/95 font-medium leading-relaxed drop-shadow-xl">
               Une plateforme SaaS premium conçue pour les établissements d'élite. Pilotez votre succès avec précision.
             </p>
           </div>
           
-          <div className="flex gap-4 items-center">
-            <div className="h-1 w-20 bg-white rounded-full" />
-            <div className="h-1 w-6 bg-white/30 rounded-full" />
-            <span className="ml-4 text-[10px] font-bold text-white/60 uppercase tracking-widest">Session Académique 2024 / 2025</span>
+          <div className="flex gap-6 items-center">
+            <div className="h-1.5 w-24 bg-accent rounded-full" />
+            <div className="h-1.5 w-8 bg-white/30 rounded-full" />
+            <span className="ml-4 text-xs font-bold text-white/70 uppercase tracking-widest">Session Académique 2024 / 2025</span>
           </div>
         </div>
       </div>
 
       {/* Right - Clean Login Form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 lg:p-20">
-        <div className="w-full max-w-md space-y-10 animate-fade-up" style={{ animationDelay: '0.2s' }}>
-          <div className="space-y-3">
-            <h1 className="text-4xl font-headline font-bold text-[#111827]">Accès Institutionnel</h1>
-            <p className="text-slate-500 font-medium">Authentification sécurisée pour le personnel et les élèves.</p>
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 lg:p-24 bg-white">
+        <div className="w-full max-w-md space-y-12 animate-fade-up" style={{ animationDelay: '0.2s' }}>
+          <div className="space-y-4">
+            <h1 className="text-5xl font-headline font-bold text-[#111827]">Accès Institutionnel</h1>
+            <p className="text-slate-500 text-lg font-medium">Authentification sécurisée pour le personnel et les élèves.</p>
           </div>
 
-          <form onSubmit={handleLogin} className="space-y-6">
-            <div className="space-y-2">
-              <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Identifiant Unique</Label>
+          <form onSubmit={handleLogin} className="space-y-8">
+            <div className="space-y-3">
+              <Label className="text-xs font-bold uppercase tracking-widest text-slate-400">Identifiant Unique</Label>
               <div className="relative group">
-                <User className="absolute left-4 top-4 h-5 w-5 text-slate-300 group-focus-within:text-[#14532D] transition-colors" />
+                <User className="absolute left-4 top-4.5 h-6 w-6 text-slate-300 group-focus-within:text-accent transition-colors" />
                 <Input
                   placeholder="DIR-001, ENS-..."
-                  className="pl-12 h-14 bg-white border-slate-200 rounded-2xl focus-visible:ring-2 focus-visible:ring-[#14532D]/10 transition-all text-sm"
+                  className="pl-14 h-16 bg-slate-50 border-slate-200 rounded-[1.25rem] focus-visible:ring-2 focus-visible:ring-accent/20 transition-all text-base font-medium"
                   value={userId}
                   onChange={(e) => setUserId(e.target.value.toUpperCase())}
                   required
@@ -126,16 +126,16 @@ export default function LoginPage() {
               </div>
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-3">
               <div className="flex justify-between items-center">
-                <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Mot de passe</Label>
-                <button type="button" className="text-[10px] font-bold text-[#14532D] hover:underline uppercase tracking-widest">Récupérer</button>
+                <Label className="text-xs font-bold uppercase tracking-widest text-slate-400">Mot de passe</Label>
+                <button type="button" className="text-xs font-bold text-accent hover:underline uppercase tracking-widest">Récupérer</button>
               </div>
               <div className="relative group">
-                <Lock className="absolute left-4 top-4 h-5 w-5 text-slate-300 group-focus-within:text-[#14532D] transition-colors" />
+                <Lock className="absolute left-4 top-4.5 h-6 w-6 text-slate-300 group-focus-within:text-accent transition-colors" />
                 <Input
                   type={showPassword ? "text" : "password"}
-                  className="pl-12 pr-12 h-14 bg-white border-slate-200 rounded-2xl focus-visible:ring-2 focus-visible:ring-[#14532D]/10 transition-all text-sm"
+                  className="pl-14 pr-14 h-16 bg-slate-50 border-slate-200 rounded-[1.25rem] focus-visible:ring-2 focus-visible:ring-accent/20 transition-all text-base font-medium"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
@@ -143,34 +143,34 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-4 text-slate-300 hover:text-[#111827] transition-colors"
+                  className="absolute right-5 top-5 text-slate-300 hover:text-[#111827] transition-colors"
                 >
-                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                  {showPassword ? <EyeOff size={22} /> : <Eye size={22} />}
                 </button>
               </div>
             </div>
 
             <Button 
               type="submit" 
-              className="w-full h-14 text-sm font-bold bg-[#14532D] hover:bg-[#166534] text-white shadow-xl shadow-[#14532D]/10 transition-all active:scale-95 rounded-2xl"
+              className="w-full h-16 text-lg font-bold bg-[#14532D] hover:bg-[#166534] text-white shadow-2xl shadow-accent/20 transition-all active:scale-95 rounded-[1.25rem]"
               disabled={isLoading}
             >
-              {isLoading ? "Vérification..." : "Se connecter"} <ArrowRight className="ml-2 w-5 h-5" />
+              {isLoading ? "Vérification..." : "Se connecter"} <ArrowRight className="ml-2 w-6 h-6" />
             </Button>
           </form>
 
-          <div className="pt-8 border-t border-slate-100 flex flex-col gap-6">
-            <div className="flex items-center gap-4">
+          <div className="pt-10 border-t border-slate-100 flex flex-col gap-8">
+            <div className="flex items-center gap-6">
                <div className="h-px bg-slate-100 flex-1" />
-               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Première connexion ?</span>
+               <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Première connexion ?</span>
                <div className="h-px bg-slate-100 flex-1" />
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-6">
               <Link href="/activate/student" className="flex-1">
-                <Button variant="outline" className="w-full h-12 border-slate-200 rounded-2xl text-[10px] font-bold uppercase tracking-widest hover:bg-slate-50 transition-colors">Espace Élève</Button>
+                <Button variant="outline" className="w-full h-14 border-slate-200 rounded-[1.25rem] text-xs font-bold uppercase tracking-widest hover:bg-slate-50 transition-colors hover:border-accent">Espace Élève</Button>
               </Link>
               <Link href="/setup/director" className="flex-1">
-                <Button variant="outline" className="w-full h-12 border-slate-200 rounded-2xl text-[10px] font-bold uppercase tracking-widest hover:bg-slate-50 transition-colors">Portail Direction</Button>
+                <Button variant="outline" className="w-full h-14 border-slate-200 rounded-[1.25rem] text-xs font-bold uppercase tracking-widest hover:bg-slate-50 transition-colors hover:border-accent">Portail Direction</Button>
               </Link>
             </div>
           </div>

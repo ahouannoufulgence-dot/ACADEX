@@ -16,9 +16,9 @@
     --secondary-foreground: 222 47% 11.2%;
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 144 61% 35%;
+    --accent: 142 76% 36%;
     --accent-foreground: 210 40% 98%;
-    --destructive: 0 84.2% 40.2%;
+    --destructive: 0 84.2% 48%;
     --destructive-foreground: 210 40% 98%;
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
@@ -29,7 +29,7 @@
     --sidebar-foreground: 210 40% 98%;
     --sidebar-primary: 144 61% 25%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 255 255 255 / 0.12;
+    --sidebar-accent: 255 255 255 / 0.15;
     --sidebar-accent-foreground: 0 0% 100%;
     --sidebar-border: 144 61% 10%;
     --sidebar-ring: 144 61% 20%;
@@ -41,7 +41,7 @@
     @apply border-border;
   }
   body {
-    @apply bg-[#F8FAFC] text-foreground font-body;
+    @apply bg-[#F1F5F9] text-foreground font-body;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
   }
@@ -51,11 +51,11 @@
 }
 
 .premium-card {
-  @apply bg-white border border-slate-100 shadow-[0_4px_20px_-5px_rgba(0,0,0,0.05)] transition-all duration-300 rounded-2xl overflow-hidden hover:shadow-[0_12px_40px_-10px_rgba(0,0,0,0.08)] hover:scale-[1.01];
+  @apply bg-white border border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-300 rounded-[1.5rem] overflow-hidden hover:shadow-[0_15px_45px_rgb(0,0,0,0.08)] hover:scale-[1.01] hover:border-accent/20;
 }
 
 .glass-card {
-  @apply backdrop-blur-xl bg-white/80 border border-white/40 shadow-xl;
+  @apply backdrop-blur-2xl bg-white/90 border border-white/40 shadow-2xl;
 }
 
 @keyframes fade-up {
