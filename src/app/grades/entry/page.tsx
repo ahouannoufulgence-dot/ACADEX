@@ -15,6 +15,7 @@ import { useFirestore, useCollection } from "@/firebase";
 import { collection, doc, setDoc, serverTimestamp, query, where } from "firebase/firestore";
 import { errorEmitter } from "@/firebase/error-emitter";
 import { FirestorePermissionError } from "@/firebase/errors";
+import { cn } from "@/lib/utils";
 
 export default function GradesEntryPage() {
   const { toast } = useToast();
@@ -38,7 +39,7 @@ export default function GradesEntryPage() {
       collection(db, "grades"), 
       where("subjectName", "==", selectedSubject),
       where("type", "==", selectedType),
-      where("term", "==", "Trimestre 2")
+      where("term", "==", "Trimestre 1")
     );
   }, [db, selectedClass, selectedSubject, selectedType]);
 
@@ -84,7 +85,7 @@ export default function GradesEntryPage() {
         type: selectedType,
         value: Number(gradeValue),
         status: status,
-        term: "Trimestre 2",
+        term: "Trimestre 1",
         updatedBy: user.name,
         date: serverTimestamp()
       };
@@ -112,8 +113,8 @@ export default function GradesEntryPage() {
       <div className="space-y-10 animate-fade-up">
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
           <div>
-            <h1 className="text-4xl font-headline font-bold text-[#111827] mb-2">Saisie des Notes</h1>
-            <p className="text-slate-500 text-lg font-medium">Enregistrement des évaluations institutionnelles.</p>
+            <h1 className="text-4xl font-headline font-bold text-[#111827] mb-2">Saisie des Notes (T1)</h1>
+            <p className="text-slate-500 text-lg font-medium">Enregistrement des premières évaluations de l'année.</p>
           </div>
           <div className="flex flex-wrap gap-4">
             {!isConfirmed && (
@@ -248,7 +249,7 @@ export default function GradesEntryPage() {
                           </TableCell>
                         </TableRow>
                       ))}
-                      {students?.length === 0 && (
+                      {(students?.length === 0 || !students) && (
                         <TableRow>
                           <TableCell colSpan={2} className="text-center py-20 text-slate-400 italic font-medium">
                             Aucun élève actif trouvé dans cette classe.

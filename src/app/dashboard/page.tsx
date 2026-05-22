@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -51,10 +52,10 @@ export default function DashboardPage() {
   const heroImage = PlaceHolderImages.find(img => img.id === "dashboard-hero");
 
   const distributionData = [
-    { range: "0-8", count: 45, color: "#B91C1C" },
-    { range: "8-12", count: 120, color: "#111827" },
-    { range: "12-16", count: 240, color: "#16A34A" },
-    { range: "16-20", count: 85, color: "#16A34A" },
+    { range: "0-8", count: 0, color: "#B91C1C" },
+    { range: "8-12", count: 0, color: "#111827" },
+    { range: "12-16", count: 0, color: "#16A34A" },
+    { range: "16-20", count: 0, color: "#16A34A" },
   ];
 
   const chartConfig = {
@@ -76,61 +77,47 @@ export default function DashboardPage() {
           />
           <div className="absolute inset-0 bg-gradient-to-r from-[#14532D]/95 via-[#14532D]/30 to-transparent" />
           <div className="absolute inset-0 p-8 md:p-20 flex flex-col justify-center text-white space-y-4 md:space-y-8">
-            <div className="flex items-center gap-3 bg-white/10 backdrop-blur-xl w-fit px-6 py-2.5 rounded-full text-[10px] md:text-[11px] font-bold tracking-[0.2em] uppercase border border-white/20 animate-pulse">
+            <div className="flex items-center gap-3 bg-white/10 backdrop-blur-xl w-fit px-6 py-2.5 rounded-full text-[10px] md:text-[11px] font-bold tracking-[0.2em] uppercase border border-white/20">
               <Sparkles className="w-4 md:w-5 h-4 md:h-5 text-accent" />
-              Excellence & Joie d'Apprendre
+              Lancement de l'Année Académique
             </div>
             <div className="space-y-3">
               <h1 className="text-4xl md:text-7xl lg:text-8xl font-headline font-bold text-white leading-[1.1] drop-shadow-2xl">
                 Bienvenue sur <span className="text-accent">ACADEX</span>
               </h1>
               <p className="text-base md:text-2xl text-white/90 font-medium max-w-2xl leading-relaxed drop-shadow-xl">
-                "Apprendre aujourd’hui, réussir demain". Précision institutionnelle pour une éducation d'élite au Bénin.
+                "Apprendre aujourd’hui, réussir demain". L'excellence commence ici. Initialisez votre établissement.
               </p>
             </div>
             <div className="pt-4 md:pt-10">
               <Button className="bg-white hover:bg-slate-100 text-[#14532D] font-bold h-12 md:h-18 px-8 md:px-14 rounded-2xl shadow-2xl transition-all hover:translate-y-[-4px] text-sm md:text-xl flex items-center gap-4">
-                Rapport du Jour <ArrowUpRight className="w-5 md:w-7 h-5 md:h-7" />
+                Démarrer la Session <ArrowUpRight className="w-5 md:w-7 h-5 md:h-7" />
               </Button>
             </div>
           </div>
         </div>
 
-        {/* Stats Grid */}
+        {/* Stats Grid - Reset to 0 */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-10">
-          <StatCard title="Effectif Total" value="842" trend="+12%" icon={Users} type="neutral" delay="0s" />
-          <StatCard title="Enseignants" value="48" trend="Connectés" icon={GraduationCap} type="neutral" delay="0.1s" />
-          <StatCard title="Taux Réussite" value="88%" trend="+5.2 pts" icon={TrendingUp} type="positive" delay="0.2s" />
-          <StatCard title="Paiements" value="72%" trend="T2" icon={CreditCard} type="warning" delay="0.3s" />
+          <StatCard title="Effectif Total" value="0" trend="Initial" icon={Users} type="neutral" delay="0s" />
+          <StatCard title="Enseignants" value="0" trend="À inscrire" icon={GraduationCap} type="neutral" delay="0.1s" />
+          <StatCard title="Taux Réussite" value="--" trend="Trimestre 1" icon={TrendingUp} type="neutral" delay="0.2s" />
+          <StatCard title="Paiements" value="0%" trend="T1" icon={CreditCard} type="warning" delay="0.3s" />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-12">
           <Card className="lg:col-span-2 premium-card">
             <CardHeader className="p-8 md:p-12 pb-4 flex flex-row items-center justify-between">
               <div>
-                <CardTitle className="text-xl md:text-3xl font-bold text-[#111827]">Performance Globale</CardTitle>
-                <CardDescription className="text-base">Répartition des moyennes trimestrielles</CardDescription>
+                <CardTitle className="text-xl md:text-3xl font-bold text-[#111827]">Performance T1</CardTitle>
+                <CardDescription className="text-base">Aucune donnée d'évaluation disponible.</CardDescription>
               </div>
               <div className="p-4 rounded-2xl bg-accent/10">
                 <Activity className="w-6 h-6 text-accent" />
               </div>
             </CardHeader>
-            <CardContent className="h-[280px] md:h-[400px] p-6 md:p-12 pt-0">
-              <ChartContainer config={chartConfig} className="h-full w-full">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={distributionData}>
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
-                    <XAxis dataKey="range" axisLine={false} tickLine={false} tick={{fill: '#64748B', fontSize: 12, fontWeight: 600}} />
-                    <YAxis axisLine={false} tickLine={false} tick={{fill: '#64748B', fontSize: 12, fontWeight: 600}} />
-                    <ChartTooltip content={<ChartTooltipContent />} />
-                    <Bar dataKey="count" radius={[8, 8, 0, 0]} barSize={50}>
-                      {distributionData.map((entry, index) => (
-                        <rect key={`cell-${index}`} fill={entry.color} />
-                      ))}
-                    </Bar>
-                  </BarChart>
-                </ResponsiveContainer>
-              </ChartContainer>
+            <CardContent className="h-[280px] md:h-[400px] p-6 md:p-12 pt-0 flex items-center justify-center">
+              <p className="text-slate-400 font-medium italic">En attente des premières saisies de notes...</p>
             </CardContent>
           </Card>
 
@@ -142,10 +129,8 @@ export default function DashboardPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-8 md:space-y-10 p-8 md:p-12 pt-8">
-              <JournalEntry author="Conseil de Classe" action="Tle D - Salle de réunion" module="Urgent" time="15:00" type="danger" />
-              <JournalEntry author="M. Kouassi" action="Saisie des notes MATH" module="Notes" time="09:42" type="neutral" />
-              <JournalEntry author="Administration" action="Clôture inscriptions T2" module="Finance" time="Hier" type="danger" />
-              <JournalEntry author="Direction" action="Mise à jour Emploi du temps" module="System" time="Hier" type="positive" />
+              <JournalEntry author="Système ACADEX" action="Ouverture de la session 2023-2024" module="Système" time="Maintenant" type="positive" />
+              <JournalEntry author="Administration" action="Veuillez provisionner les classes" module="Gestion" time="En attente" type="neutral" />
             </CardContent>
           </Card>
         </div>
