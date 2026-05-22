@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState } from "react";
@@ -62,122 +63,118 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen w-full flex bg-[#F8FAFC]">
-      {/* Left - Vibrant Visual Section */}
-      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-[#14532D]">
-        <Image
-          src={loginImage?.imageUrl || "https://picsum.photos/seed/acadex-students-uniform/1200/1200"}
-          alt="Élèves ACADEX souriants"
-          fill
-          priority
-          className="object-cover animate-pulse-slow transition-all duration-1000"
-          data-ai-hint="African students school uniform smiling"
-        />
-        <div className="absolute inset-0 bg-gradient-to-tr from-[#14532D]/95 via-[#14532D]/40 to-transparent" />
-        
-        <div className="absolute inset-0 p-16 flex flex-col justify-between z-10 animate-fade-up">
-          <div className="flex items-center gap-3">
-            <div className="w-14 h-14 bg-white rounded-[1.25rem] flex items-center justify-center shadow-2xl transition-transform hover:rotate-6">
-              <span className="text-[#14532D] font-bold text-2xl">A</span>
+    <div className="min-h-screen w-full relative flex items-center justify-center p-6 lg:p-12 overflow-hidden bg-[#111827]">
+      {/* Background Image - Happy Students */}
+      <Image
+        src={loginImage?.imageUrl || "https://picsum.photos/seed/acadex-students-uniform/1200/1200"}
+        alt="Élèves ACADEX rayonnants"
+        fill
+        priority
+        className="object-cover opacity-70 animate-pulse-slow"
+        data-ai-hint="African students school uniform smiling"
+      />
+      <div className="absolute inset-0 bg-gradient-to-br from-[#14532D]/90 via-[#111827]/50 to-[#111827]/80" />
+      
+      <div className="relative z-10 w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        {/* Left Side - Inspirational Content */}
+        <div className="hidden lg:flex flex-col space-y-10 animate-fade-up">
+          <div className="flex items-center gap-4">
+            <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-2xl transition-transform hover:rotate-6">
+              <span className="text-[#14532D] font-black text-3xl">A</span>
             </div>
-            <h1 className="text-white font-headline font-bold text-4xl tracking-tight drop-shadow-xl">ACADEX</h1>
+            <h1 className="text-white font-headline font-bold text-5xl tracking-tighter drop-shadow-2xl">ACADEX</h1>
           </div>
           
-          <div className="space-y-8 max-w-xl">
-            <div className="flex items-center gap-2 bg-accent/20 backdrop-blur-xl w-fit px-5 py-2 rounded-full text-[11px] font-bold tracking-[0.2em] uppercase border border-white/30 text-white animate-pulse">
-              <Sparkles className="w-4 h-4 text-white" /> Excellence Institutionnelle
+          <div className="space-y-6">
+            <div className="flex items-center gap-2 bg-accent/30 backdrop-blur-xl w-fit px-6 py-2.5 rounded-full text-[11px] font-bold tracking-[0.2em] uppercase border border-white/20 text-white animate-pulse">
+              <Sparkles className="w-5 h-5 text-white" /> Excellence Éducative
             </div>
-            <h2 className="text-5xl lg:text-7xl font-headline font-bold text-white leading-[1.1] drop-shadow-2xl">
-              L'excellence scolaire par l'innovation.
+            <h2 className="text-6xl font-headline font-bold text-white leading-[1.1] drop-shadow-2xl">
+              L'avenir commence <span className="text-accent">ici</span>.
             </h2>
-            <p className="text-2xl text-white/95 font-medium leading-relaxed drop-shadow-xl">
-              Une plateforme SaaS premium conçue pour les établissements d'élite. Pilotez votre succès avec précision.
+            <p className="text-2xl text-white/90 font-medium leading-relaxed drop-shadow-xl max-w-lg">
+              Pilotez votre réussite avec la plateforme la plus avancée du Bénin. Précision, Joie et Innovation.
             </p>
           </div>
           
           <div className="flex gap-6 items-center">
-            <div className="h-1.5 w-24 bg-accent rounded-full" />
-            <div className="h-1.5 w-8 bg-white/30 rounded-full" />
-            <span className="ml-4 text-xs font-bold text-white/70 uppercase tracking-widest">Session Académique 2024 / 2025</span>
+            <div className="h-1 w-24 bg-accent rounded-full" />
+            <div className="h-1 w-12 bg-white/20 rounded-full" />
           </div>
         </div>
-      </div>
 
-      {/* Right - Clean Login Form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 lg:p-24 bg-white">
-        <div className="w-full max-w-md space-y-12 animate-fade-up" style={{ animationDelay: '0.2s' }}>
-          <div className="space-y-4">
-            <h1 className="text-5xl font-headline font-bold text-[#111827]">Accès Institutionnel</h1>
-            <p className="text-slate-500 text-lg font-medium">Authentification sécurisée pour le personnel et les élèves.</p>
-          </div>
-
-          <form onSubmit={handleLogin} className="space-y-8">
+        {/* Right Side - Floating Glass Form */}
+        <Card className="glass-card border-white/10 shadow-2xl rounded-[3rem] overflow-hidden backdrop-blur-3xl bg-white/10 animate-fade-up" style={{ animationDelay: '0.2s' }}>
+          <CardContent className="p-10 lg:p-14 space-y-10">
             <div className="space-y-3">
-              <Label className="text-xs font-bold uppercase tracking-widest text-slate-400">Identifiant Unique</Label>
-              <div className="relative group">
-                <User className="absolute left-4 top-4.5 h-6 w-6 text-slate-300 group-focus-within:text-accent transition-colors" />
-                <Input
-                  placeholder="DIR-001, ENS-..."
-                  className="pl-14 h-16 bg-slate-50 border-slate-200 rounded-[1.25rem] focus-visible:ring-2 focus-visible:ring-accent/20 transition-all text-base font-medium"
-                  value={userId}
-                  onChange={(e) => setUserId(e.target.value.toUpperCase())}
-                  required
-                />
-              </div>
+              <h3 className="text-4xl font-headline font-bold text-white tracking-tight">Accès Institutionnel</h3>
+              <p className="text-slate-300 font-medium">Authentification sécurisée Élite.</p>
             </div>
 
-            <div className="space-y-3">
-              <div className="flex justify-between items-center">
-                <Label className="text-xs font-bold uppercase tracking-widest text-slate-400">Mot de passe</Label>
-                <button type="button" className="text-xs font-bold text-accent hover:underline uppercase tracking-widest">Récupérer</button>
+            <form onSubmit={handleLogin} className="space-y-8">
+              <div className="space-y-3">
+                <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Identifiant Unique</Label>
+                <div className="relative group">
+                  <User className="absolute left-5 top-5 h-6 w-6 text-slate-400 group-focus-within:text-accent transition-colors" />
+                  <Input
+                    placeholder="DIR-001, ENS-..."
+                    className="pl-14 h-16 bg-white/5 border-white/10 rounded-2xl focus-visible:ring-2 focus-visible:ring-accent/20 transition-all text-white text-lg font-medium"
+                    value={userId}
+                    onChange={(e) => setUserId(e.target.value.toUpperCase())}
+                    required
+                  />
+                </div>
               </div>
-              <div className="relative group">
-                <Lock className="absolute left-4 top-4.5 h-6 w-6 text-slate-300 group-focus-within:text-accent transition-colors" />
-                <Input
-                  type={showPassword ? "text" : "password"}
-                  className="pl-14 pr-14 h-16 bg-slate-50 border-slate-200 rounded-[1.25rem] focus-visible:ring-2 focus-visible:ring-accent/20 transition-all text-base font-medium"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-5 top-5 text-slate-300 hover:text-[#111827] transition-colors"
-                >
-                  {showPassword ? <EyeOff size={22} /> : <Eye size={22} />}
-                </button>
+
+              <div className="space-y-3">
+                <div className="flex justify-between items-center">
+                  <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Mot de passe</Label>
+                  <button type="button" className="text-[10px] font-bold text-accent hover:underline uppercase tracking-widest">Récupérer</button>
+                </div>
+                <div className="relative group">
+                  <Lock className="absolute left-5 top-5 h-6 w-6 text-slate-400 group-focus-within:text-accent transition-colors" />
+                  <Input
+                    type={showPassword ? "text" : "password"}
+                    className="pl-14 pr-14 h-16 bg-white/5 border-white/10 rounded-2xl focus-visible:ring-2 focus-visible:ring-accent/20 transition-all text-white text-lg font-medium"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-6 top-5 text-slate-400 hover:text-white transition-colors"
+                  >
+                    {showPassword ? <EyeOff size={24} /> : <Eye size={24} />}
+                  </button>
+                </div>
+              </div>
+
+              <Button 
+                type="submit" 
+                className="w-full h-16 text-xl font-bold bg-[#14532D] hover:bg-[#1a6b3a] text-white shadow-2xl transition-all active:scale-95 rounded-2xl gap-3"
+                disabled={isLoading}
+              >
+                {isLoading ? "Vérification..." : "Se connecter"} <ArrowRight className="w-6 h-6" />
+              </Button>
+            </form>
+
+            <div className="pt-8 border-t border-white/5 flex flex-col gap-6">
+              <span className="text-center text-[10px] font-bold text-slate-400 uppercase tracking-widest">Première connexion ?</span>
+              <div className="grid grid-cols-3 gap-3">
+                <Link href="/activate/student">
+                  <Button variant="outline" className="w-full h-12 border-white/10 bg-white/5 text-white hover:bg-white/10 text-[9px] font-bold uppercase tracking-tighter">Élève</Button>
+                </Link>
+                <Link href="/setup/teacher">
+                  <Button variant="outline" className="w-full h-12 border-white/10 bg-white/5 text-white hover:bg-white/10 text-[9px] font-bold uppercase tracking-tighter">Enseignant</Button>
+                </Link>
+                <Link href="/setup/director">
+                  <Button variant="outline" className="w-full h-12 border-white/10 bg-white/5 text-white hover:bg-white/10 text-[9px] font-bold uppercase tracking-tighter">Direction</Button>
+                </Link>
               </div>
             </div>
-
-            <Button 
-              type="submit" 
-              className="w-full h-16 text-lg font-bold bg-[#14532D] hover:bg-[#166534] text-white shadow-2xl shadow-accent/20 transition-all active:scale-95 rounded-[1.25rem]"
-              disabled={isLoading}
-            >
-              {isLoading ? "Vérification..." : "Se connecter"} <ArrowRight className="ml-2 w-6 h-6" />
-            </Button>
-          </form>
-
-          <div className="pt-10 border-t border-slate-100 flex flex-col gap-8">
-            <div className="flex items-center gap-6">
-               <div className="h-px bg-slate-100 flex-1" />
-               <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Première connexion ?</span>
-               <div className="h-px bg-slate-100 flex-1" />
-            </div>
-            <div className="grid grid-cols-3 gap-4">
-              <Link href="/activate/student">
-                <Button variant="outline" className="w-full h-14 border-slate-200 rounded-[1.25rem] text-[10px] font-bold uppercase tracking-widest hover:bg-slate-50 transition-colors hover:border-accent p-2">Espace Élève</Button>
-              </Link>
-              <Link href="/setup/teacher">
-                <Button variant="outline" className="w-full h-14 border-slate-200 rounded-[1.25rem] text-[10px] font-bold uppercase tracking-widest hover:bg-slate-50 transition-colors hover:border-accent p-2">Enseignant</Button>
-              </Link>
-              <Link href="/setup/director">
-                <Button variant="outline" className="w-full h-14 border-slate-200 rounded-[1.25rem] text-[10px] font-bold uppercase tracking-widest hover:bg-slate-50 transition-colors hover:border-accent p-2">Direction</Button>
-              </Link>
-            </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
