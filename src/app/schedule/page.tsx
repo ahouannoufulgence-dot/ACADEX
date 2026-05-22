@@ -34,16 +34,15 @@ export default function SchedulePage() {
   const [user, setUser] = useState<any>(null);
   const [role, setRole] = useState<any>(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [selectedSlot, setSelectedSlot] = useState<any>(null);
   const [formData, setFormData] = useState({
     day: "Lun",
-    hour: "08h00",
+    hour: "07h00",
     subject: "",
     room: "",
     teacher: ""
   });
 
-  const hours = ["08h00", "09h00", "10h00", "11h00", "12h00", "14h00", "15h00", "16h00", "17h00"];
+  const hours = ["07h00", "08h00", "09h00", "10h00", "11h00", "12h00", "14h00", "15h00", "16h00", "17h00"];
   const days = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"];
 
   useEffect(() => {
@@ -80,6 +79,7 @@ export default function SchedulePage() {
       color: "bg-emerald-50 text-emerald-700 border-emerald-200"
     };
 
+    // Écriture Spontanée (Sans await)
     setDoc(slotRef, data, { merge: true })
       .catch(async () => {
         const permissionError = new FirestorePermissionError({
@@ -92,7 +92,7 @@ export default function SchedulePage() {
 
     toast({ title: "Horaire mis à jour", description: "Le créneau a été enregistré spontanément." });
     setIsEditing(false);
-    setFormData({ day: "Lun", hour: "08h00", subject: "", room: "", teacher: "" });
+    setFormData({ day: "Lun", hour: "07h00", subject: "", room: "", teacher: "" });
   };
 
   const handleDeleteSlot = (id: string) => {
@@ -113,7 +113,7 @@ export default function SchedulePage() {
   return (
     <DashboardLayout>
       <div className="space-y-6 md:space-y-12 animate-fade-up max-w-full overflow-hidden">
-        {/* Header - High Contrast */}
+        {/* Header - High Contrast Vivid Elite */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 px-2">
           <div className="text-left w-full">
             <h1 className="text-3xl md:text-7xl font-headline font-black text-[#0F172A] mb-1 tracking-tighter uppercase leading-none">Planning Élite</h1>
@@ -124,14 +124,14 @@ export default function SchedulePage() {
             <Dialog open={isEditing} onOpenChange={setIsEditing}>
               <DialogTrigger asChild>
                 <Button className="bg-primary hover:bg-slate-900 text-white font-black h-11 md:h-14 px-6 md:px-8 rounded-xl md:rounded-2xl shadow-xl transition-all border-2 border-white/10 w-full md:w-auto text-[10px] md:text-base uppercase tracking-tighter">
-                  <Plus className="w-3.5 h-3.5 md:w-5 md:h-5 mr-2" /> Nouveau Créneau
+                  <Plus className="w-3 h-3 md:w-4 md:h-4 mr-2" /> Nouveau Créneau
                 </Button>
               </DialogTrigger>
               <DialogContent className="vivid-box border-none bg-white p-0 overflow-hidden rounded-[2rem] sm:max-w-[400px]">
                 <DialogHeader className="p-6 bg-primary text-white border-b-2 border-accent">
                    <div className="flex items-center gap-3">
                       <div className="p-2 bg-white rounded-xl shadow-lg rotate-3">
-                        <Clock className="w-4 h-4 text-primary" />
+                        <Clock className="w-3.5 h-3.5 text-primary" />
                       </div>
                       <DialogTitle className="text-lg font-black tracking-tighter uppercase">Planification</DialogTitle>
                    </div>
@@ -163,7 +163,7 @@ export default function SchedulePage() {
                    </div>
                 </div>
                 <DialogFooter className="p-6 pt-0">
-                  <Button className="w-full h-12 bg-primary text-white font-black rounded-xl uppercase shadow-lg" onClick={handleSaveSlot}>
+                  <Button className="w-full h-12 bg-primary text-white font-black rounded-xl uppercase shadow-lg border-2 border-white/10" onClick={handleSaveSlot}>
                     Enregistrer Spontanément
                   </Button>
                 </DialogFooter>
@@ -172,14 +172,14 @@ export default function SchedulePage() {
           )}
         </div>
 
-        {/* Schedule Grid */}
+        {/* Schedule Grid - Vivid Elite Styling */}
         <Card className="vivid-box border-none shadow-2xl overflow-hidden bg-white/95 p-0 rounded-[2rem] md:rounded-[4rem]">
           <div className="overflow-x-auto no-scrollbar">
             <div className="min-w-[800px] md:min-w-full">
               {/* Header Days */}
               <div className="grid grid-cols-7 bg-slate-900 border-b-4 border-white/5">
                 <div className="p-4 md:p-8 text-center border-r-2 border-white/5 flex items-center justify-center">
-                   <Clock className="w-4 h-4 md:w-8 md:h-8 text-white/30" />
+                   <Clock className="w-3.5 h-3.5 md:w-5 md:h-5 text-white/30" />
                 </div>
                 {days.map(day => (
                   <div key={day} className="p-4 md:p-8 text-center border-r-2 border-white/5 last:border-r-0">
@@ -215,7 +215,7 @@ export default function SchedulePage() {
                                 )}
                               </div>
                               <div className="flex items-center gap-1 text-[6px] md:text-[10px] font-black text-slate-400 uppercase tracking-widest mt-2">
-                                <MapPin className="w-2 h-2 md:w-3 md:h-3 shrink-0" />
+                                <MapPin className="w-2 h-2 md:w-2.5 md:h-2.5 shrink-0" />
                                 <span className="truncate">{course.room}</span>
                               </div>
                             </div>
