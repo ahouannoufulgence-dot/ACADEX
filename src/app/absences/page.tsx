@@ -19,58 +19,60 @@ export default function AbsencesPage() {
 
   return (
     <DashboardLayout>
-      <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+      <div className="space-y-8 animate-fade-up">
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-3xl font-headline font-bold text-white mb-2">Suivi des Absences</h1>
-            <p className="text-muted-foreground">Registre des présences et retards.</p>
+            <h1 className="text-3xl font-headline font-bold text-[#111827] mb-2">Suivi des Absences</h1>
+            <p className="text-slate-500 font-medium">Registre des présences et retards.</p>
           </div>
-          <Button className="bg-destructive hover:bg-destructive/90 text-white font-bold">
+          <Button className="bg-[#B91C1C] hover:bg-[#991B1B] text-white font-bold h-12 px-6 rounded-xl shadow-lg transition-all active:scale-95">
             <ShieldAlert className="w-4 h-4 mr-2" /> Signaler une absence
           </Button>
         </div>
 
-        <Card className="glass-card border-none shadow-xl">
-          <CardHeader>
+        <Card className="premium-card border-none shadow-xl">
+          <CardHeader className="p-8">
             <div className="flex flex-col md:flex-row justify-between gap-4">
               <div className="relative w-full max-w-sm">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <Input placeholder="Rechercher un élève..." className="pl-10 bg-white/5 border-white/10" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                <Input placeholder="Rechercher un élève..." className="pl-10 bg-slate-50 border-slate-100 h-11 rounded-xl" />
               </div>
-              <Button variant="outline" className="border-white/10 text-white">
+              <Button variant="outline" className="border-slate-200 text-slate-600 h-11 px-6 rounded-xl">
                 <Calendar className="w-4 h-4 mr-2" /> Mars 2024
               </Button>
             </div>
           </CardHeader>
-          <CardContent>
-            <div className="rounded-xl border border-white/10 overflow-hidden">
+          <CardContent className="p-8 pt-0">
+            <div className="rounded-2xl border border-slate-100 overflow-hidden shadow-inner">
               <Table>
-                <TableHeader className="bg-white/5">
-                  <TableRow>
-                    <TableHead className="text-white">Élève</TableHead>
-                    <TableHead className="text-white">Classe</TableHead>
-                    <TableHead className="text-white">Date</TableHead>
-                    <TableHead className="text-white">Durée</TableHead>
-                    <TableHead className="text-white">Statut</TableHead>
-                    <TableHead className="text-right text-white">Motif</TableHead>
+                <TableHeader className="bg-slate-50">
+                  <TableRow className="border-slate-100">
+                    <TableHead className="text-[#111827] font-bold">Élève</TableHead>
+                    <TableHead className="text-[#111827] font-bold">Classe</TableHead>
+                    <TableHead className="text-[#111827] font-bold">Date</TableHead>
+                    <TableHead className="text-[#111827] font-bold">Durée</TableHead>
+                    <TableHead className="text-[#111827] font-bold">Statut</TableHead>
+                    <TableHead className="text-right text-[#111827] font-bold">Motif</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {absences.map((a, i) => (
-                    <TableRow key={i} className="hover:bg-white/5 border-white/5">
-                      <TableCell className="font-bold text-white">{a.student}</TableCell>
-                      <TableCell className="text-white/60">{a.class}</TableCell>
-                      <TableCell className="text-white/60">{a.date}</TableCell>
-                      <TableCell className="text-white/60">{a.duration}</TableCell>
+                    <TableRow key={i} className="hover:bg-slate-50 transition-colors border-slate-50">
+                      <TableCell className="font-bold text-[#111827]">{a.student}</TableCell>
+                      <TableCell className="text-slate-600">{a.class}</TableCell>
+                      <TableCell className="text-slate-600">{a.date}</TableCell>
+                      <TableCell className="text-slate-600">{a.duration}</TableCell>
                       <TableCell>
                         <Badge className={cn(
-                          "text-[10px] font-bold",
-                          a.status === "Justifié" ? "bg-accent/20 text-accent border-accent/20" : "bg-destructive/20 text-destructive border-destructive/20"
+                          "text-[10px] font-bold h-6 px-3 uppercase tracking-wider",
+                          a.status === "Justifié" 
+                            ? "bg-green-50 text-[#14532D] border-green-100" 
+                            : "bg-red-50 text-[#B91C1C] border-red-100 animate-pulse"
                         )} variant="outline">
                           {a.status}
                         </Badge>
                       </TableCell>
-                      <TableCell className="text-right text-xs text-muted-foreground">{a.reason}</TableCell>
+                      <TableCell className="text-right text-xs text-slate-500 italic">{a.reason}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

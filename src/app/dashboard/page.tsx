@@ -7,15 +7,11 @@ import {
   Users, 
   GraduationCap, 
   TrendingUp, 
-  Clock, 
-  CheckCircle2, 
-  AlertCircle,
-  FileText,
-  CreditCard,
-  ChevronRight,
+  CreditCard, 
   ArrowUpRight,
   Calendar,
-  Sparkles
+  Sparkles,
+  AlertCircle
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -154,9 +150,9 @@ export default function DashboardPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-8 p-10 pt-4">
-              <JournalEntry author="Conseil de Classe" action="3ème D - Salle de réunion" module="Urgent" time="15:00" color="#14532D" />
+              <JournalEntry author="Conseil de Classe" action="3ème D - Salle de réunion" module="Urgent" time="15:00" color="#B91C1C" isAlert={true} />
               <JournalEntry author="M. Kouassi" action="Saisie des notes MATH" module="Notes" time="09:42" color="#111827" />
-              <JournalEntry author="Administration" action="Clôture inscriptions T2" module="Finance" time="18:00" color="#B91C1C" />
+              <JournalEntry author="Administration" action="Clôture inscriptions T2" module="Finance" time="18:00" color="#B91C1C" isAlert={true} />
               <JournalEntry author="Cantine Scolaire" action="Menu spécial fête" module="Vie Scolaire" time="12:00" color="#14532D" />
             </CardContent>
           </Card>
@@ -198,21 +194,28 @@ function StatCard({ title, value, trend, icon: Icon, status }: any) {
   );
 }
 
-function JournalEntry({ author, action, module, time, color }: any) {
+function JournalEntry({ author, action, module, time, color, isAlert }: any) {
   return (
     <div className="flex gap-6 items-start relative pb-10 last:pb-0">
       <div className="absolute left-[9px] top-8 bottom-0 w-[1.5px] bg-slate-100 last:hidden" />
       <div 
-        className="w-5 h-5 rounded-full mt-2 shrink-0 border-4 border-white shadow-xl" 
+        className={cn(
+          "w-5 h-5 rounded-full mt-2 shrink-0 border-4 border-white shadow-xl",
+          isAlert && "animate-pulse"
+        )} 
         style={{ backgroundColor: color }} 
       />
       <div className="flex-1">
         <div className="flex justify-between items-center mb-1.5">
-          <p className="text-base font-bold text-[#111827]">{author}</p>
+          <p className={cn("text-base font-bold", isAlert ? "text-[#B91C1C]" : "text-[#111827]")}>{author}</p>
           <span className="text-[11px] font-bold text-slate-400 bg-slate-50 px-3 py-1 rounded-full">{time}</span>
         </div>
         <p className="text-sm text-slate-500 font-medium leading-relaxed">{action}</p>
-        <Badge variant="outline" className="mt-3 text-[9px] font-bold h-6 tracking-widest uppercase px-3 border-slate-200 text-slate-400 bg-white">
+        <Badge variant="outline" className={cn(
+          "mt-3 text-[9px] font-bold h-6 tracking-widest uppercase px-3",
+          isAlert ? "border-[#B91C1C]/20 text-[#B91C1C] bg-red-50" : "border-slate-200 text-slate-400 bg-white"
+        )}>
+          {isAlert && <AlertCircle className="w-3 h-3 mr-1" />}
           {module}
         </Badge>
       </div>
