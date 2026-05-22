@@ -64,8 +64,8 @@ export default function DashboardPage() {
               </p>
             </div>
             <div className="pt-2">
-              <Button className="bg-primary hover:bg-slate-900 text-white font-black h-12 md:h-20 px-8 md:px-14 rounded-2xl md:rounded-[2rem] shadow-2xl transition-all hover:translate-y-[-4px] text-xs md:text-xl flex items-center gap-4 border-4 border-white/20 w-full md:w-auto">
-                Lancer la Session <ArrowUpRight className="w-5 h-5 md:w-8 md:h-8" />
+              <Button className="bg-primary hover:bg-slate-900 text-white font-black h-12 md:h-18 px-8 md:px-14 rounded-2xl md:rounded-[2rem] shadow-2xl transition-all hover:translate-y-[-4px] text-xs md:text-xl flex items-center gap-4 border-4 border-white/20 w-full md:w-auto">
+                Lancer la Session <ArrowUpRight className="w-5 h-5 md:w-7 md:h-7" />
               </Button>
             </div>
           </div>
@@ -86,13 +86,13 @@ export default function DashboardPage() {
                 <CardTitle className="text-2xl md:text-5xl font-black text-[#0F172A] tracking-tighter">Suivi Académique</CardTitle>
                 <CardDescription className="text-sm md:text-xl font-black text-[#0F172A] opacity-60">Analyse stratégique des résultats.</CardDescription>
               </div>
-              <div className="w-12 h-12 md:w-20 md:h-20 rounded-2xl md:rounded-[2rem] bg-primary text-white flex items-center justify-center shadow-2xl shrink-0 rotate-3 border-4 border-white/10">
-                <Activity className="w-6 h-6 md:w-10 md:h-10" />
+              <div className="w-12 h-12 md:w-16 md:h-16 rounded-2xl md:rounded-[1.5rem] bg-primary text-white flex items-center justify-center shadow-2xl shrink-0 rotate-3 border-4 border-white/10">
+                <Activity className="w-6 h-6 md:w-8 md:h-8" />
               </div>
             </CardHeader>
             <CardContent className="h-[250px] md:h-[450px] p-6 md:p-12 flex flex-col items-center justify-center text-center space-y-6 md:space-y-10">
-              <div className="w-20 h-20 md:w-32 md:h-32 bg-white rounded-3xl md:rounded-[3rem] flex items-center justify-center border-4 border-slate-100 shadow-inner">
-                 <Sparkles className="w-10 h-10 md:w-16 md:h-16 text-primary animate-pulse" />
+              <div className="w-16 h-16 md:w-24 md:h-24 bg-white rounded-3xl md:rounded-[2.5rem] flex items-center justify-center border-4 border-slate-100 shadow-inner">
+                 <Sparkles className="w-8 h-8 md:w-12 md:h-12 text-primary animate-pulse" />
               </div>
               <p className="text-base md:text-3xl text-[#0F172A] font-black max-w-md leading-tight">
                 En attente des saisies de notes. <br/>
@@ -104,7 +104,7 @@ export default function DashboardPage() {
           <Card className="vivid-box border-none shadow-2xl overflow-hidden p-0 h-fit">
             <CardHeader className="p-6 md:p-10 border-b-4 border-primary/10 bg-primary/5">
               <CardTitle className="flex items-center gap-4 text-2xl md:text-4xl font-black text-[#0F172A] tracking-tighter uppercase">
-                <Calendar className="w-6 h-6 md:w-10 md:h-10 text-primary" />
+                <Calendar className="w-6 h-6 md:w-8 md:h-8 text-primary" />
                 Journal
               </CardTitle>
             </CardHeader>
@@ -135,10 +135,10 @@ function StatCard({ title, value, trend, icon: Icon, type = "neutral", delay }: 
           </div>
         </div>
         <div className={cn(
-          "w-12 h-12 md:w-20 md:h-20 rounded-2xl md:rounded-[2rem] flex items-center justify-center text-white shadow-2xl shrink-0 rotate-6 border-4 border-white/10 transition-transform group-hover:rotate-12",
+          "w-10 h-10 md:w-16 md:h-16 rounded-2xl md:rounded-[1.25rem] flex items-center justify-center text-white shadow-2xl shrink-0 rotate-6 border-4 border-white/10 transition-transform group-hover:rotate-12",
           type === "warning" ? "bg-red-500" : "bg-primary"
         )}>
-          <Icon className="w-6 h-6 md:w-10 md:h-10" />
+          <Icon className="w-5 h-5 md:w-8 md:h-8" />
         </div>
       </div>
     </Card>

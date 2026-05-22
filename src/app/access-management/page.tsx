@@ -134,8 +134,8 @@ export default function AccessManagementPage() {
   return (
     <DashboardLayout>
       <div className="space-y-8 md:space-y-16 animate-fade-up max-w-full overflow-hidden">
-        {/* Header - Elite Desktop / Compact Mobile */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 md:gap-12">
+        {/* Header */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
           <div className="w-full text-left">
             <h1 className="text-4xl md:text-8xl font-headline font-black text-[#0F172A] mb-2 tracking-tighter uppercase leading-none">Gestion des Accès</h1>
             <p className="text-[#0F172A] text-sm md:text-3xl font-black opacity-80 uppercase tracking-[0.3em]">Provisionnement Élite</p>
@@ -145,54 +145,54 @@ export default function AccessManagementPage() {
             <Button 
               onClick={exportAccessPDF}
               variant="outline"
-              className="bg-white/90 border-4 border-white text-[#0F172A] font-black h-14 md:h-24 px-6 md:px-10 rounded-2xl md:rounded-[2.5rem] shadow-2xl hover:bg-slate-50 flex gap-4 text-xs md:text-2xl backdrop-blur-xl"
+              className="bg-white/90 border-4 border-white text-[#0F172A] font-black h-14 md:h-20 px-6 md:px-10 rounded-2xl md:rounded-[2rem] shadow-2xl hover:bg-slate-50 flex gap-4 text-xs md:text-xl backdrop-blur-xl"
             >
-              <FileDown className="w-5 h-5 md:w-10 md:h-10" /> <span className="uppercase tracking-tighter">PDF</span>
+              <FileDown className="w-5 h-5 md:w-8 md:h-8" /> <span className="uppercase tracking-tighter">PDF</span>
             </Button>
             <Dialog>
               <DialogTrigger asChild>
-                <Button className="bg-primary hover:bg-slate-900 text-white font-black h-14 md:h-24 px-6 md:px-10 rounded-2xl md:rounded-[2.5rem] shadow-2xl transition-all flex gap-4 text-xs md:text-2xl border-4 border-white/10 uppercase tracking-tighter">
-                  <Users className="w-5 h-5 md:w-10 md:h-10" /> <span className="uppercase">Nouveau</span>
+                <Button className="bg-primary hover:bg-slate-900 text-white font-black h-14 md:h-20 px-6 md:px-10 rounded-2xl md:rounded-[2rem] shadow-2xl transition-all flex gap-4 text-xs md:text-xl border-4 border-white/10 uppercase tracking-tighter">
+                  <Users className="w-5 h-5 md:w-8 md:h-8" /> <span className="uppercase">Nouveau</span>
                 </Button>
               </DialogTrigger>
-              <DialogContent className="vivid-box border-none sm:max-w-[600px] p-0 overflow-hidden bg-white shadow-[0_50px_150px_rgba(0,0,0,0.4)] rounded-[3rem]">
-                <DialogHeader className="p-10 bg-primary text-white border-b-8 border-accent">
-                  <div className="flex items-center gap-6">
-                    <div className="p-5 bg-white rounded-[1.5rem] shadow-2xl shrink-0 rotate-3">
-                      <ShieldCheck className="w-8 h-8 md:w-12 md:h-12 text-primary" />
+              <DialogContent className="vivid-box border-none sm:max-w-[500px] p-0 overflow-hidden bg-white shadow-2xl rounded-[2.5rem]">
+                <DialogHeader className="p-8 bg-primary text-white border-b-4 border-accent">
+                  <div className="flex items-center gap-5">
+                    <div className="p-4 bg-white rounded-2xl shadow-xl shrink-0 rotate-3">
+                      <ShieldCheck className="w-6 h-6 md:w-8 md:h-8 text-primary" />
                     </div>
-                    <DialogTitle className="text-2xl md:text-4xl font-black tracking-tighter uppercase leading-none">Génération par Lot</DialogTitle>
+                    <DialogTitle className="text-xl md:text-3xl font-black tracking-tighter uppercase leading-none">Génération par Lot</DialogTitle>
                   </div>
                 </DialogHeader>
 
-                <div className="p-10 space-y-8 bg-white">
-                  <div className="space-y-3">
-                    <label className="text-[12px] font-black text-[#0F172A] uppercase tracking-[0.4em] ml-2">Niveau (Ex: 3EME A)</label>
+                <div className="p-8 space-y-6 bg-white">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black text-[#0F172A] uppercase tracking-[0.4em] ml-1">Niveau (Ex: 3EME A)</label>
                     <input 
                       placeholder="3EME A"
-                      className="w-full bg-slate-50 border-4 border-slate-100 h-16 md:h-20 rounded-2xl font-black text-2xl text-[#0F172A] px-6 outline-none focus:border-primary/40 shadow-inner" 
+                      className="w-full bg-slate-50 border-4 border-slate-100 h-14 md:h-16 rounded-xl font-black text-xl text-[#0F172A] px-5 outline-none focus:border-primary/40 shadow-inner" 
                       value={bulkData.gradeLevel}
                       onChange={(e) => setBulkData({...bulkData, gradeLevel: e.target.value.toUpperCase()})}
                     />
                   </div>
-                  <div className="space-y-3">
-                    <label className="text-[12px] font-black text-[#0F172A] uppercase tracking-[0.4em] ml-2">Nombre d'élèves</label>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black text-[#0F172A] uppercase tracking-[0.4em] ml-1">Nombre d'élèves</label>
                     <input 
                       type="number"
-                      className="w-full bg-slate-50 border-4 border-slate-100 h-16 md:h-20 rounded-2xl font-black text-3xl text-primary px-6 outline-none text-center shadow-inner" 
+                      className="w-full bg-slate-50 border-4 border-slate-100 h-14 md:h-16 rounded-xl font-black text-2xl text-primary px-5 outline-none text-center shadow-inner" 
                       value={bulkData.count}
                       onChange={(e) => setBulkData({...bulkData, count: parseInt(e.target.value) || 0})}
                     />
                   </div>
                 </div>
 
-                <DialogFooter className="p-10 pt-0 bg-white">
+                <DialogFooter className="p-8 pt-0 bg-white">
                   <Button 
-                    className="bg-primary text-white hover:bg-slate-900 font-black w-full h-18 md:h-24 rounded-[2rem] shadow-2xl text-lg md:text-2xl uppercase border-4 border-white/10" 
+                    className="bg-primary text-white hover:bg-slate-900 font-black w-full h-16 md:h-20 rounded-[1.75rem] shadow-xl text-lg md:text-xl uppercase border-4 border-white/10" 
                     onClick={handleBulkGenerate} 
                     disabled={isGenerating}
                   >
-                    {isGenerating ? <Loader2 className="w-10 h-10 animate-spin" /> : "Générer les accès"}
+                    {isGenerating ? <Loader2 className="w-8 h-8 animate-spin" /> : "Générer les accès"}
                   </Button>
                 </DialogFooter>
               </DialogContent>
@@ -200,51 +200,51 @@ export default function AccessManagementPage() {
           </div>
         </div>
 
-        {/* Small Quadrants Grid for Mobile */}
+        {/* Small Quadrants Grid */}
         <div className="space-y-6 md:space-y-10">
-          <h2 className="text-[12px] md:text-sm font-black text-[#0F172A] uppercase tracking-[0.6em] px-4 text-left">Identifiants Actifs</h2>
+          <h2 className="text-[10px] md:text-[12px] font-black text-[#0F172A] uppercase tracking-[0.6em] px-4 text-left">Identifiants Actifs</h2>
           
           {loading ? (
-            <div className="flex flex-col items-center justify-center py-48 md:py-64">
-              <Loader2 className="w-16 h-16 md:w-32 md:h-32 animate-spin text-primary mb-8" />
-              <p className="text-[#0F172A] font-black uppercase tracking-[0.4em] text-sm md:text-2xl">Lecture du registre sécurisé...</p>
+            <div className="flex flex-col items-center justify-center py-48">
+              <Loader2 className="w-12 h-12 md:w-20 md:h-20 animate-spin text-primary mb-6" />
+              <p className="text-[#0F172A] font-black uppercase tracking-[0.4em] text-xs md:text-lg">Lecture du registre sécurisé...</p>
             </div>
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-10">
               {students?.map((u: any) => (
-                <Card key={u.id} className="vivid-box border-none shadow-2xl bg-white/95 p-4 md:p-10 group relative overflow-hidden transition-all hover:scale-[1.03] hover:rotate-1">
-                  <div className="flex justify-between items-start mb-4 md:mb-8">
-                    <div className="p-2 md:p-5 bg-primary/10 rounded-xl md:rounded-[1.5rem] text-primary shrink-0 rotate-3 border-2 border-primary/5 shadow-lg">
-                      <KeyRound className="w-4 h-4 md:w-12 md:h-12" />
+                <Card key={u.id} className="vivid-box border-none shadow-2xl bg-white/95 p-4 md:p-8 group relative overflow-hidden transition-all hover:scale-[1.03] hover:rotate-1">
+                  <div className="flex justify-between items-start mb-4 md:mb-6">
+                    <div className="p-2 md:p-4 bg-primary/10 rounded-lg md:rounded-[1rem] text-primary shrink-0 rotate-3 border-2 border-primary/5 shadow-lg">
+                      <KeyRound className="w-4 h-4 md:w-8 md:h-8" />
                     </div>
-                    <Badge className="bg-primary text-white text-[8px] md:text-[11px] font-black px-2 md:px-5 py-1 md:py-2 uppercase tracking-[0.2em] border-none shadow-xl">
+                    <Badge className="bg-primary text-white text-[7px] md:text-[10px] font-black px-2 md:px-4 py-1 md:py-1.5 uppercase tracking-[0.2em] border-none shadow-xl">
                       {u.status}
                     </Badge>
                   </div>
                   
-                  <div className="space-y-1 md:space-y-3">
-                    <p className="text-[8px] md:text-[11px] font-black text-slate-400 uppercase tracking-widest opacity-60">Identifiant Unique</p>
-                    <p className="text-[12px] md:text-4xl font-mono font-black text-[#0F172A] tracking-tighter uppercase truncate leading-none">{u.id}</p>
+                  <div className="space-y-1 md:space-y-2">
+                    <p className="text-[7px] md:text-[10px] font-black text-slate-400 uppercase tracking-widest opacity-60">ID Unique</p>
+                    <p className="text-[10px] md:text-3xl font-mono font-black text-[#0F172A] tracking-tighter uppercase truncate leading-none">{u.id}</p>
                   </div>
                   
-                  <div className="mt-4 md:mt-10 flex items-center justify-between border-t-2 border-slate-100 pt-4 md:pt-8">
-                    <span className="text-[10px] md:text-2xl font-black text-[#0F172A] uppercase tracking-tighter truncate opacity-80">{u.gradeLevel}</span>
-                    <div className="flex gap-2 md:gap-4">
+                  <div className="mt-4 md:mt-8 flex items-center justify-between border-t-2 border-slate-100 pt-4 md:pt-6">
+                    <span className="text-[8px] md:text-xl font-black text-[#0F172A] uppercase tracking-tighter truncate opacity-80">{u.gradeLevel}</span>
+                    <div className="flex gap-1.5 md:gap-3">
                       <Button 
                         size="icon" 
                         variant="ghost" 
-                        className="h-8 w-8 md:h-16 md:w-16 rounded-xl md:rounded-2xl text-slate-300 hover:text-primary hover:bg-primary/5 transition-all shadow-sm"
+                        className="h-7 w-7 md:h-12 md:w-12 rounded-lg md:rounded-xl text-slate-300 hover:text-primary hover:bg-primary/5 transition-all shadow-sm"
                         onClick={() => copyToClipboard(u.id)}
                       >
-                        <Copy className="h-4 w-4 md:h-8 md:h-8" />
+                        <Copy className="h-3.5 w-3.5 md:h-6 md:h-6" />
                       </Button>
                       <Button 
                         size="icon" 
                         variant="ghost" 
-                        className="h-8 w-8 md:h-16 md:w-16 rounded-xl md:rounded-2xl text-slate-300 hover:text-destructive hover:bg-destructive/5 transition-all shadow-sm"
+                        className="h-7 w-7 md:h-12 md:w-12 rounded-lg md:rounded-xl text-slate-300 hover:text-destructive hover:bg-destructive/5 transition-all shadow-sm"
                         onClick={() => handleDelete(u.id)}
                       >
-                        <Trash2 className="h-4 w-4 md:h-8 md:h-8" />
+                        <Trash2 className="h-3.5 w-3.5 md:h-6 md:h-6" />
                       </Button>
                     </div>
                   </div>
@@ -252,8 +252,8 @@ export default function AccessManagementPage() {
               ))}
               
               {(students?.length === 0 || !students) && !loading && (
-                <div className="col-span-full p-20 md:p-48 text-center bg-white/40 rounded-[3rem] border-8 border-dashed border-white shadow-inner backdrop-blur-xl">
-                  <p className="text-xl md:text-5xl font-black text-slate-400 uppercase tracking-[0.4em] opacity-30">Registre Vierge</p>
+                <div className="col-span-full p-20 md:p-40 text-center bg-white/40 rounded-[2.5rem] border-8 border-dashed border-white shadow-inner backdrop-blur-xl">
+                  <p className="text-lg md:text-4xl font-black text-slate-400 uppercase tracking-[0.4em] opacity-30">Registre Vierge</p>
                 </div>
               )}
             </div>

@@ -76,15 +76,15 @@ export default function LoginPage() {
       
       <div className="absolute inset-0 bg-gradient-to-r from-white/30 via-transparent to-white/30" />
 
-      <div className="relative z-10 w-full max-w-[480px] animate-fade-up">
-        <Card className="bg-white/95 backdrop-blur-3xl border-none shadow-[0_40px_120px_rgba(0,0,0,0.4)] rounded-[3rem] overflow-hidden">
-          <CardContent className="p-8 md:p-14 text-center space-y-10">
+      <div className="relative z-10 w-full max-w-[460px] animate-fade-up">
+        <Card className="bg-white/95 backdrop-blur-3xl border-none shadow-[0_40px_120px_rgba(0,0,0,0.4)] rounded-[2.5rem] overflow-hidden">
+          <CardContent className="p-8 md:p-12 text-center space-y-10">
             
             <div className="space-y-6">
-              <div className="mx-auto w-20 h-20 md:w-28 md:h-28 relative group">
-                  <div className="absolute inset-0 bg-primary/10 rounded-3xl rotate-6 group-hover:rotate-12 transition-transform"></div>
-                  <div className="relative bg-white h-full rounded-2xl shadow-xl border-4 border-slate-50 p-4 flex flex-col items-center justify-center gap-1">
-                      <GraduationCap className="w-10 h-10 md:w-14 md:h-14 text-primary" />
+              <div className="mx-auto w-16 h-16 md:w-24 md:h-24 relative group">
+                  <div className="absolute inset-0 bg-primary/10 rounded-2xl md:rounded-3xl rotate-6 group-hover:rotate-12 transition-transform"></div>
+                  <div className="relative bg-white h-full rounded-xl md:rounded-2xl shadow-xl border-4 border-slate-50 p-3 md:p-5 flex flex-col items-center justify-center">
+                      <GraduationCap className="w-8 h-8 md:w-14 md:h-14 text-primary" />
                   </div>
               </div>
               <div>
@@ -100,10 +100,10 @@ export default function LoginPage() {
                 <div className="space-y-2">
                   <label className="text-[11px] font-black text-[#0F172A] uppercase tracking-widest ml-1">Identifiant Personnel</label>
                   <div className="relative group">
-                    <User className="absolute left-4 top-1/2 -translate-y-1/2 h-6 w-6 text-[#0F172A] group-focus-within:text-primary transition-colors" />
+                    <User className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 md:h-6 md:w-6 text-[#0F172A] group-focus-within:text-primary transition-colors" />
                     <input
                       placeholder="Ex: DIR-001"
-                      className="w-full pl-14 h-16 bg-slate-50 border-4 border-slate-100 rounded-2xl focus:border-primary/40 outline-none text-[#0F172A] font-black uppercase tracking-widest shadow-inner placeholder:text-[#0F172A]/30"
+                      className="w-full pl-14 h-14 md:h-16 bg-slate-50 border-4 border-slate-100 rounded-xl md:rounded-2xl focus:border-primary/40 outline-none text-[#0F172A] font-black uppercase tracking-widest shadow-inner placeholder:text-[#0F172A]/30"
                       value={userId}
                       onChange={(e) => setUserId(e.target.value.toUpperCase())}
                       required
@@ -114,11 +114,11 @@ export default function LoginPage() {
                 <div className="space-y-2">
                   <label className="text-[11px] font-black text-[#0F172A] uppercase tracking-widest ml-1">Mot de passe</label>
                   <div className="relative group">
-                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-6 w-6 text-[#0F172A] group-focus-within:text-primary transition-colors" />
+                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 md:h-6 md:w-6 text-[#0F172A] group-focus-within:text-primary transition-colors" />
                     <input
                       type={showPassword ? "text" : "password"}
                       placeholder="••••••••"
-                      className="w-full pl-14 pr-14 h-16 bg-slate-50 border-4 border-slate-100 rounded-2xl focus:border-primary/40 outline-none text-[#0F172A] font-black shadow-inner placeholder:text-[#0F172A]/30"
+                      className="w-full pl-14 pr-14 h-14 md:h-16 bg-slate-50 border-4 border-slate-100 rounded-xl md:rounded-2xl focus:border-primary/40 outline-none text-[#0F172A] font-black shadow-inner placeholder:text-[#0F172A]/30"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       required
@@ -128,7 +128,7 @@ export default function LoginPage() {
                       onClick={() => setShowPassword(!showPassword)}
                       className="absolute right-4 top-1/2 -translate-y-1/2 text-[#0F172A] hover:text-primary transition-colors"
                     >
-                      {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                      {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                     </button>
                   </div>
                 </div>
@@ -136,17 +136,17 @@ export default function LoginPage() {
 
               <Button 
                 type="submit" 
-                className="w-full h-20 text-xl font-black bg-primary hover:bg-slate-900 text-white rounded-[1.75rem] shadow-2xl transition-all active:scale-95 flex gap-4 border-4 border-white/10"
+                className="w-full h-18 md:h-20 text-xl font-black bg-primary hover:bg-slate-900 text-white rounded-[1.5rem] md:rounded-[1.75rem] shadow-2xl transition-all active:scale-95 flex gap-4 border-4 border-white/10"
                 disabled={isLoading}
               >
-                {isLoading ? <Loader2 className="w-8 h-8 animate-spin" /> : <>Accéder à l'Espace <ArrowRight className="w-8 h-8" /></>}
+                {isLoading ? <Loader2 className="w-7 h-7 animate-spin" /> : <>Accéder à l'Espace <ArrowRight className="w-7 h-7" /></>}
               </Button>
             </form>
 
-            <div className="pt-10 border-t-4 border-slate-50 flex flex-wrap justify-center gap-6">
-              <Link href="/activate/student" className="text-[11px] font-black text-[#0F172A] hover:text-primary transition-colors uppercase tracking-[0.2em]">Élève</Link>
-              <Link href="/setup/teacher" className="text-[11px] font-black text-[#0F172A] hover:text-primary transition-colors uppercase tracking-[0.2em]">Enseignant</Link>
-              <Link href="/setup/director" className="text-[11px] font-black text-[#0F172A] hover:text-primary transition-colors uppercase tracking-[0.2em]">Direction</Link>
+            <div className="pt-8 border-t-4 border-slate-50 flex flex-wrap justify-center gap-6">
+              <Link href="/activate/student" className="text-[10px] font-black text-[#0F172A] hover:text-primary transition-colors uppercase tracking-[0.2em]">Élève</Link>
+              <Link href="/setup/teacher" className="text-[10px] font-black text-[#0F172A] hover:text-primary transition-colors uppercase tracking-[0.2em]">Enseignant</Link>
+              <Link href="/setup/director" className="text-[10px] font-black text-[#0F172A] hover:text-primary transition-colors uppercase tracking-[0.2em]">Direction</Link>
             </div>
 
           </CardContent>
