@@ -16,7 +16,9 @@ import {
   Phone, 
   MapPin,
   CalendarDays,
-  Loader2
+  Loader2,
+  Layers,
+  GraduationCap
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -34,7 +36,7 @@ export default function SettingsPage() {
   const db = useFirestore();
   const { toast } = useToast();
   const [isSaving, setIsSaving] = useState(false);
-  const [newSub, setNewSub] = useState({ subject: "", coeff: "" });
+  const [newSub, setNewSub] = useState({ subject: "", coeff: "", level: "", gradeLevel: "" });
 
   // School Config
   const schoolConfigRef = useMemo(() => (db ? doc(db, "config", "school") : null), [db]);
@@ -92,11 +94,20 @@ export default function SettingsPage() {
   };
 
   const handleAddSubject = () => {
-    if (!db || !newSub.subject || !newSub.coeff) return;
+    if (!db || !newSub.subject || !newSub.coeff || !newSub.level || !newSub.gradeLevel) {
+      toast({
+        variant: "destructive",
+        title: "Champs manquants",
+        description: "Veuillez remplir toutes les informations de la matière.",
+      });
+      return;
+    }
     
     const data = {
       name: newSub.subject,
       coefficient: Number(newSub.coeff),
+      level: newSub.level,
+      gradeLevel: newSub.gradeLevel,
     };
 
     addDoc(collection(db, "subjects"), data)
@@ -109,7 +120,7 @@ export default function SettingsPage() {
         errorEmitter.emit('permission-error', permissionError);
       });
 
-    setNewSub({ subject: "", coeff: "" });
+    setNewSub({ subject: "", coeff: "", level: "", gradeLevel: "" });
     toast({ title: "Matière ajoutée", description: "La liste a été mise à jour." });
   };
 
@@ -270,33 +281,60 @@ export default function SettingsPage() {
               <CardHeader className="p-10 pb-6 border-b border-slate-50 flex flex-row items-center justify-between">
                 <div>
                   <CardTitle className="text-2xl font-bold">Matières & Coefficients</CardTitle>
-                  <CardDescription className="text-lg">Configurez les poids pour le calcul des moyennes globales.</CardDescription>
+                  <CardDescription className="text-lg">Configurez les poids, niveaux et classes pour le calcul des moyennes.</CardDescription>
                 </div>
               </CardHeader>
               <CardContent className="p-10">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 p-8 rounded-[2rem] bg-slate-50 border border-slate-100 shadow-inner">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-10 p-8 rounded-[2rem] bg-slate-50 border border-slate-100 shadow-inner">
                   <div className="space-y-2">
-                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Nom de la Matière</label>
-                    <Input 
-                      placeholder="Ex: Mathématiques" 
-                      className="h-14 bg-white border-none rounded-xl font-bold"
-                      value={newSub.subject}
-                      onChange={e => setNewSub({...newSub, subject: e.target.value})}
-                    />
+                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Nom Matière</label>
+                    <div className="relative">
+                      <BookOpen className="absolute left-3 top-4 h-4 w-4 text-slate-300" />
+                      <Input 
+                        placeholder="Ex: Maths" 
+                        className="h-12 pl-10 bg-white border-none rounded-xl font-bold"
+                        value={newSub.subject}
+                        onChange={e => setNewSub({...newSub, subject: e.target.value})}
+                      />
+                    </div>
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Coefficient</label>
+                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Niveau</label>
+                    <div className="relative">
+                      <Layers className="absolute left-3 top-4 h-4 w-4 text-slate-300" />
+                      <Input 
+                        placeholder="Ex: 1er Cycle" 
+                        className="h-12 pl-10 bg-white border-none rounded-xl"
+                        value={newSub.level}
+                        onChange={e => setNewSub({...newSub, level: e.target.value})}
+                      />
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Classe</label>
+                    <div className="relative">
+                      <GraduationCap className="absolute left-3 top-4 h-4 w-4 text-slate-300" />
+                      <Input 
+                        placeholder="Ex: 3ème" 
+                        className="h-12 pl-10 bg-white border-none rounded-xl"
+                        value={newSub.gradeLevel}
+                        onChange={e => setNewSub({...newSub, gradeLevel: e.target.value})}
+                      />
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Coeff</label>
                     <Input 
                       type="number" 
                       placeholder="Ex: 4" 
-                      className="h-14 bg-white border-none rounded-xl text-center font-black text-xl"
+                      className="h-12 bg-white border-none rounded-xl text-center font-black"
                       value={newSub.coeff}
                       onChange={e => setNewSub({...newSub, coeff: e.target.value})}
                     />
                   </div>
                   <div className="flex items-end">
-                    <Button onClick={handleAddSubject} className="w-full h-14 bg-accent hover:bg-emerald-600 text-white font-bold rounded-xl shadow-lg transition-all active:scale-95">
-                      <Plus className="w-5 h-5 mr-2" /> Ajouter la Matière
+                    <Button onClick={handleAddSubject} className="w-full h-12 bg-accent hover:bg-emerald-600 text-white font-bold rounded-xl shadow-lg transition-all active:scale-95">
+                      <Plus className="w-5 h-5 mr-2" /> Ajouter
                     </Button>
                   </div>
                 </div>
@@ -306,21 +344,29 @@ export default function SettingsPage() {
                     <TableHeader className="bg-slate-50/50">
                       <TableRow className="border-slate-100">
                         <TableHead className="h-16 pl-10 text-[#111827] font-bold uppercase text-xs tracking-widest">Intitulé</TableHead>
-                        <TableHead className="h-16 text-[#111827] font-bold text-center uppercase text-xs tracking-widest">Poids (Coefficient)</TableHead>
+                        <TableHead className="h-16 text-[#111827] font-bold uppercase text-xs tracking-widest">Niveau</TableHead>
+                        <TableHead className="h-16 text-[#111827] font-bold uppercase text-xs tracking-widest">Classe</TableHead>
+                        <TableHead className="h-16 text-[#111827] font-bold text-center uppercase text-xs tracking-widest">Coefficient</TableHead>
                         <TableHead className="h-16 text-right pr-10 text-[#111827] font-bold uppercase text-xs tracking-widest">Action</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {loadingSubjects ? (
-                        <TableRow><TableCell colSpan={3} className="text-center py-20 text-slate-400 font-medium">Chargement...</TableCell></TableRow>
+                        <TableRow><TableCell colSpan={5} className="text-center py-20 text-slate-400 font-medium">Chargement...</TableCell></TableRow>
                       ) : subjects?.length === 0 ? (
-                        <TableRow><TableCell colSpan={3} className="text-center py-20 text-slate-400 italic">Aucune matière configurée.</TableCell></TableRow>
+                        <TableRow><TableCell colSpan={5} className="text-center py-20 text-slate-400 italic">Aucune matière configurée.</TableCell></TableRow>
                       ) : (
                         subjects?.map((item: any) => (
                           <TableRow key={item.id} className="hover:bg-slate-50 transition-colors border-slate-50">
-                            <TableCell className="pl-10 py-6 font-bold text-[#111827] text-lg">{item.name}</TableCell>
+                            <TableCell className="pl-10 py-6 font-bold text-[#111827]">{item.name}</TableCell>
+                            <TableCell className="py-6">
+                               <Badge variant="outline" className="text-[10px] font-bold uppercase border-slate-200">{item.level}</Badge>
+                            </TableCell>
+                            <TableCell className="py-6">
+                               <Badge variant="outline" className="text-[10px] font-bold uppercase border-slate-200">{item.gradeLevel}</Badge>
+                            </TableCell>
                             <TableCell className="text-center py-6">
-                              <Badge className="bg-accent/10 text-accent font-black text-xl px-4 py-1 h-10 border-none">
+                              <Badge className="bg-accent/10 text-accent font-black text-lg px-3 py-1 h-8 border-none">
                                 {item.coefficient}
                               </Badge>
                             </TableCell>

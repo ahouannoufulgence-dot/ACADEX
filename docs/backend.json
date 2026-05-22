@@ -71,15 +71,16 @@
     },
     "Subject": {
       "title": "Matière",
-      "description": "Configuration des matières et coefficients",
+      "description": "Configuration des matières, niveaux et coefficients",
       "type": "object",
       "properties": {
         "id": { "type": "string" },
         "name": { "type": "string" },
         "coefficient": { "type": "number" },
-        "level": { "type": "string" }
+        "level": { "type": "string" },
+        "gradeLevel": { "type": "string" }
       },
-      "required": ["name", "coefficient"]
+      "required": ["name", "coefficient", "level", "gradeLevel"]
     },
     "Grade": {
       "title": "Note",
