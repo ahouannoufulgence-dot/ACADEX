@@ -1,18 +1,18 @@
+
 "use client";
 
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Eye, EyeOff, Lock, User, ShieldCheck, KeyRound, GraduationCap, Users, Sparkles, ArrowRight } from "lucide-react";
+import { Eye, EyeOff, Lock, User, ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { useFirestore } from "@/firebase";
-import { doc, getDoc, collection, addDoc, serverTimestamp, updateDoc } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 
 export default function LoginPage() {
   const [userId, setUserId] = useState("DIR-001");
@@ -22,6 +22,8 @@ export default function LoginPage() {
   const router = useRouter();
   const { toast } = useToast();
   const db = useFirestore();
+
+  const loginImage = PlaceHolderImages.find(img => img.id === "login-bg");
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,7 +42,11 @@ export default function LoginPage() {
       if (userDoc.exists()) {
         const userData = userDoc.data();
         if (userData.password === password) {
-          const sessionData = { id: userId, name: userData.name || `${userData.firstName} ${userData.lastName}` };
+          const sessionData = { 
+            id: userId, 
+            name: userData.name || `${userData.firstName} ${userData.lastName}`,
+            role: userData.role
+          };
           localStorage.setItem("acadex_user", JSON.stringify(sessionData));
           router.push("/dashboard");
         } else {
@@ -58,53 +64,63 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen w-full flex bg-[#F8FAFC]">
-      {/* Left - Visual Section */}
-      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-[#14532D]">
+      {/* Left - Vibrant Visual Section */}
+      <div className="hidden lg:flex lg:w-3/5 relative overflow-hidden bg-[#14532D]">
         <Image
-          src="https://picsum.photos/seed/acadex-campus/1200/1200"
-          alt="Campus Excellence"
+          src={loginImage?.imageUrl || "https://picsum.photos/seed/acadex-joy-login/1200/1200"}
+          alt="Joie de la réussite"
           fill
-          className="object-cover opacity-40 mix-blend-overlay"
+          priority
+          className="object-cover transition-transform duration-[10s] hover:scale-110"
+          data-ai-hint="happy African students"
         />
-        <div className="absolute inset-0 p-24 flex flex-col justify-between z-10">
+        <div className="absolute inset-0 bg-gradient-to-tr from-[#14532D]/90 via-[#14532D]/40 to-transparent" />
+        
+        <div className="absolute inset-0 p-20 flex flex-col justify-between z-10">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center">
+            <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-2xl">
               <span className="text-[#14532D] font-bold text-2xl">A</span>
             </div>
-            <h1 className="text-white font-headline font-bold text-3xl tracking-tight">ACADEX</h1>
+            <h1 className="text-white font-headline font-bold text-3xl tracking-tight drop-shadow-md">ACADEX</h1>
           </div>
-          <div className="space-y-8">
-            <h2 className="text-6xl font-headline font-bold text-white leading-tight">
-              Le futur de l'éducation se construit ici.
-            </h2>
-            <div className="flex gap-4">
-              <div className="h-1 w-12 bg-white/40 rounded-full" />
-              <div className="h-1 w-4 bg-white/20 rounded-full" />
-              <div className="h-1 w-4 bg-white/20 rounded-full" />
+          
+          <div className="space-y-6 max-w-xl">
+            <div className="flex items-center gap-2 bg-white/20 backdrop-blur-xl w-fit px-4 py-1.5 rounded-full text-[10px] font-bold tracking-[0.2em] uppercase border border-white/30 text-white">
+              <Sparkles className="w-4 h-4" /> Excellence & Épanouissement
             </div>
+            <h2 className="text-6xl font-headline font-bold text-white leading-tight drop-shadow-xl">
+              L'école où chaque sourire est une victoire.
+            </h2>
+            <p className="text-xl text-white/80 font-medium leading-relaxed drop-shadow-lg">
+              Une plateforme moderne pour accompagner la réussite de vos élèves avec passion et précision.
+            </p>
           </div>
-          <p className="text-white/60 font-medium max-w-sm">
-            Plateforme de gestion scolaire premium conçue pour l'excellence académique en Afrique.
-          </p>
+          
+          <div className="flex gap-4 items-center">
+            <div className="h-1 w-20 bg-white rounded-full" />
+            <div className="h-1 w-6 bg-white/30 rounded-full" />
+            <div className="h-1 w-6 bg-white/30 rounded-full" />
+            <span className="ml-4 text-[10px] font-bold text-white/60 uppercase tracking-widest">Session 2024 / 2025</span>
+          </div>
         </div>
       </div>
 
-      {/* Right - Login Form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 lg:p-16">
-        <div className="w-full max-w-md space-y-10">
-          <div className="text-center lg:text-left space-y-3">
-            <h1 className="text-4xl font-headline font-bold text-slate-900">Bon retour.</h1>
-            <p className="text-slate-500 font-medium">Connectez-vous à votre espace institutionnel.</p>
+      {/* Right - Clean Login Form */}
+      <div className="w-full lg:w-2/5 flex items-center justify-center p-8 lg:p-20">
+        <div className="w-full max-w-md space-y-12">
+          <div className="space-y-3">
+            <h1 className="text-4xl font-headline font-bold text-[#111827]">Accès Institutionnel</h1>
+            <p className="text-slate-500 font-medium">Veuillez entrer vos identifiants pour continuer.</p>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-6">
             <div className="space-y-2">
-              <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Identifiant</Label>
+              <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Votre Identifiant</Label>
               <div className="relative group">
                 <User className="absolute left-4 top-4 h-5 w-5 text-slate-300 group-focus-within:text-[#14532D] transition-colors" />
                 <Input
                   placeholder="DIR-001, ENS-..."
-                  className="pl-12 h-14 bg-white border-slate-200 rounded-xl focus-visible:ring-1 focus-visible:ring-[#14532D]/20"
+                  className="pl-12 h-14 bg-white border-slate-200 rounded-2xl focus-visible:ring-1 focus-visible:ring-[#14532D]/20 transition-all"
                   value={userId}
                   onChange={(e) => setUserId(e.target.value.toUpperCase())}
                   required
@@ -113,12 +129,15 @@ export default function LoginPage() {
             </div>
 
             <div className="space-y-2">
-              <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Mot de passe</Label>
+              <div className="flex justify-between items-center">
+                <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Mot de passe</Label>
+                <button type="button" className="text-[10px] font-bold text-[#14532D] hover:underline uppercase tracking-widest">Oublié ?</button>
+              </div>
               <div className="relative group">
                 <Lock className="absolute left-4 top-4 h-5 w-5 text-slate-300 group-focus-within:text-[#14532D] transition-colors" />
                 <Input
                   type={showPassword ? "text" : "password"}
-                  className="pl-12 pr-12 h-14 bg-white border-slate-200 rounded-xl focus-visible:ring-1 focus-visible:ring-[#14532D]/20"
+                  className="pl-12 pr-12 h-14 bg-white border-slate-200 rounded-2xl focus-visible:ring-1 focus-visible:ring-[#14532D]/20 transition-all"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
@@ -126,7 +145,7 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-4 text-slate-300 hover:text-slate-900 transition-colors"
+                  className="absolute right-4 top-4 text-slate-300 hover:text-[#111827] transition-colors"
                 >
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
@@ -135,21 +154,25 @@ export default function LoginPage() {
 
             <Button 
               type="submit" 
-              className="w-full h-14 text-lg font-bold bg-[#14532D] hover:bg-[#166534] text-white shadow-lg transition-transform hover:scale-[1.01] rounded-xl"
+              className="w-full h-14 text-sm font-bold bg-[#14532D] hover:bg-[#166534] text-white shadow-xl shadow-[#14532D]/10 transition-all active:scale-95 rounded-2xl"
               disabled={isLoading}
             >
-              {isLoading ? "Vérification..." : "Se connecter"} <ArrowRight className="ml-2 w-5 h-5" />
+              {isLoading ? "Authentification..." : "Se connecter"} <ArrowRight className="ml-2 w-5 h-5" />
             </Button>
           </form>
 
-          <div className="pt-10 flex flex-col gap-4">
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest text-center">Nouveau sur Acadex ?</p>
+          <div className="pt-8 border-t border-slate-100 flex flex-col gap-6">
+            <div className="flex items-center gap-4">
+               <div className="h-px bg-slate-100 flex-1" />
+               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Nouvel utilisateur ?</span>
+               <div className="h-px bg-slate-100 flex-1" />
+            </div>
             <div className="grid grid-cols-2 gap-4">
               <Link href="/setup/director" className="flex-1">
-                <Button variant="outline" className="w-full h-12 border-slate-200 rounded-xl text-xs font-bold">Directeur</Button>
+                <Button variant="outline" className="w-full h-12 border-slate-200 rounded-2xl text-[10px] font-bold uppercase tracking-widest hover:bg-slate-50">Directeur</Button>
               </Link>
               <Link href="/activate/student" className="flex-1">
-                <Button variant="outline" className="w-full h-12 border-slate-200 rounded-xl text-xs font-bold">Élève/Parent</Button>
+                <Button variant="outline" className="w-full h-12 border-slate-200 rounded-2xl text-[10px] font-bold uppercase tracking-widest hover:bg-slate-50">Élève/Parent</Button>
               </Link>
             </div>
           </div>

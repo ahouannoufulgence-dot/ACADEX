@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -64,17 +65,17 @@ export default function DashboardPage() {
   return (
     <DashboardLayout>
       <div className="space-y-10 animate-fade-up">
-        {/* Hero Section - Elite Institution Look with Joyful Background */}
+        {/* Hero Section - Joyful background */}
         <div className="relative h-[420px] w-full rounded-[2.5rem] overflow-hidden shadow-2xl border border-white">
           <Image
-            src={heroImage?.imageUrl || "https://picsum.photos/seed/acadex-joy/1200/600"}
+            src={heroImage?.imageUrl || "https://picsum.photos/seed/acadex-joy-success/1200/600"}
             alt="Joie de l'apprentissage"
             fill
             priority
             className="object-cover transition-transform duration-700 hover:scale-105"
             data-ai-hint="happy African students"
           />
-          <div className="absolute inset-0 hero-overlay" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#14532D]/95 via-[#14532D]/40 to-transparent" />
           <div className="absolute inset-0 p-12 lg:p-16 flex flex-col justify-center text-white space-y-6">
             <div className="flex items-center gap-2 bg-white/20 backdrop-blur-xl w-fit px-5 py-2 rounded-full text-[10px] font-bold tracking-[0.2em] uppercase border border-white/30">
               <Sparkles className="w-4 h-4 text-white" />
@@ -96,7 +97,7 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Professional Stats Grid */}
+        {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <StatCard title="Effectif Total" value="842" trend="+12% vs 2023" icon={Users} type="neutral" />
           <StatCard title="Enseignants" value="48" trend="98% connectés" icon={GraduationCap} type="neutral" />
@@ -105,7 +106,6 @@ export default function DashboardPage() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Performance Analysis */}
           <Card className="lg:col-span-2 premium-card">
             <CardHeader className="p-8 pb-4 flex flex-row items-center justify-between">
               <div>
@@ -133,7 +133,6 @@ export default function DashboardPage() {
             </CardContent>
           </Card>
 
-          {/* Institutional Agenda */}
           <Card className="premium-card">
             <CardHeader className="p-8 pb-4">
               <CardTitle className="flex items-center gap-2 text-xl font-bold text-[#111827]">

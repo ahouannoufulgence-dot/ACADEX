@@ -2,9 +2,9 @@
   "placeholderImages": [
     {
       "id": "login-bg",
-      "description": "High-end school architectural lines with natural light",
-      "imageUrl": "https://picsum.photos/seed/acadex-elite-hall/1920/1080",
-      "imageHint": "modern university hallway"
+      "description": "Joyful African students celebrating academic success in a bright campus",
+      "imageUrl": "https://picsum.photos/seed/acadex-joy-login/1200/1200",
+      "imageHint": "happy African students"
     },
     {
       "id": "dashboard-hero",
