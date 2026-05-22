@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState } from "react";
@@ -72,50 +73,50 @@ export default function DirectorSetupPage() {
   };
 
   return (
-    <div className="min-h-screen relative flex items-center justify-center p-6 lg:p-12 overflow-hidden bg-[#111827]">
-      {/* Background Image with Overlay */}
+    <div className="min-h-screen relative flex items-center justify-center p-6 lg:p-12 overflow-hidden bg-[#F0F7FF]">
+      {/* Immersive Background */}
       <Image
-        src={registrationImage?.imageUrl || "https://picsum.photos/seed/acadex-joy-success/1400/1000"}
+        src={registrationImage?.imageUrl || "https://picsum.photos/seed/acadex-study-group/1400/1000"}
         alt="Élèves rayonnants"
         fill
         priority
-        className="object-cover opacity-60 animate-pulse-slow"
+        className="object-cover opacity-80 saturate-[1.6]"
         data-ai-hint="happy African students school"
       />
-      <div className="absolute inset-0 bg-gradient-to-br from-[#14532D]/95 via-[#111827]/60 to-[#111827]/90" />
+      <div className="absolute inset-0 bg-gradient-to-br from-white/80 via-transparent to-[#F0F7FF]/60" />
 
       <div className="relative z-10 w-full max-w-3xl animate-fade-up">
-        <Link href="/login" className="mb-8 inline-flex items-center text-accent hover:text-white transition-colors gap-2 font-bold uppercase tracking-widest text-[10px]">
+        <Link href="/login" className="mb-8 inline-flex items-center text-[#14532D] hover:text-black transition-colors gap-2 font-black uppercase tracking-widest text-[10px]">
           <ArrowLeft className="w-4 h-4" /> Retour à la connexion
         </Link>
 
-        <Card className="glass-card border-white/10 shadow-2xl rounded-[2.5rem] overflow-hidden">
+        <Card className="bg-white/95 border-none shadow-[0_40px_120px_-15px_rgba(0,0,0,0.3)] rounded-[3rem] overflow-hidden backdrop-blur-xl">
           <CardHeader className="text-center pt-12 pb-10">
-            <div className="mx-auto w-20 h-20 bg-[#14532D] rounded-[1.5rem] flex items-center justify-center mb-6 shadow-2xl transition-transform hover:scale-110">
-              <ShieldCheck className="w-12 h-12 text-white" />
+            <div className="mx-auto w-24 h-24 bg-[#14532D] rounded-[2rem] flex items-center justify-center mb-6 shadow-2xl rotate-3">
+              <ShieldCheck className="w-14 h-14 text-white" />
             </div>
-            <CardTitle className="text-5xl font-headline font-bold text-white mb-3">Espace Direction</CardTitle>
-            <CardDescription className="text-slate-300 font-medium text-lg">Configuration maîtresse de l'établissement</CardDescription>
+            <CardTitle className="text-5xl font-headline font-black text-[#0F172A] mb-3 tracking-tighter uppercase">Espace Direction</CardTitle>
+            <CardDescription className="text-slate-500 font-black uppercase tracking-widest text-sm">Configuration Maîtresse Élite</CardDescription>
           </CardHeader>
           <CardContent className="px-12 pb-16">
             <form onSubmit={handleSetup} className="space-y-10">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="space-y-3">
-                  <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Prénom du Directeur</Label>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <div className="space-y-4">
+                  <Label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 ml-2">Prénom du Directeur</Label>
                   <div className="relative group">
-                    <User className="absolute left-4 top-4.5 h-6 w-6 text-slate-400 group-focus-within:text-accent transition-colors" />
+                    <User className="absolute left-5 top-1/2 -translate-y-1/2 h-6 w-6 text-slate-400 group-focus-within:text-[#14532D] transition-colors" />
                     <Input 
-                      className="bg-white/5 border-white/10 pl-14 h-16 rounded-2xl focus:ring-accent/20 text-lg" 
+                      className="bg-slate-50 border-4 border-slate-100 pl-16 h-18 rounded-2xl font-black text-xl text-[#0F172A] focus:border-[#14532D]/30" 
                       value={formData.firstName}
                       onChange={(e) => setFormData({...formData, firstName: e.target.value})}
                       required 
                     />
                   </div>
                 </div>
-                <div className="space-y-3">
-                  <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Nom</Label>
+                <div className="space-y-4">
+                  <Label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 ml-2">Nom de famille</Label>
                   <Input 
-                    className="bg-white/5 border-white/10 h-16 rounded-2xl text-lg" 
+                    className="bg-slate-50 border-4 border-slate-100 h-18 rounded-2xl font-black text-xl text-[#0F172A] px-8" 
                     value={formData.lastName}
                     onChange={(e) => setFormData({...formData, lastName: e.target.value})}
                     required 
@@ -123,12 +124,12 @@ export default function DirectorSetupPage() {
                 </div>
               </div>
 
-              <div className="space-y-3">
-                <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Nom de l'établissement d'élite</Label>
+              <div className="space-y-4">
+                <Label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 ml-2">Nom de l'établissement d'élite</Label>
                 <div className="relative">
-                  <Building className="absolute left-4 top-4.5 h-6 w-6 text-slate-400" />
+                  <Building className="absolute left-5 top-1/2 -translate-y-1/2 h-6 w-6 text-slate-400" />
                   <Input 
-                    className="bg-white/5 border-white/10 pl-14 h-16 rounded-2xl text-lg" 
+                    className="bg-slate-50 border-4 border-slate-100 pl-16 h-18 rounded-2xl font-black text-xl text-[#0F172A]" 
                     placeholder="Ex: Complexe Scolaire ACADEX Premium"
                     value={formData.schoolName}
                     onChange={(e) => setFormData({...formData, schoolName: e.target.value})}
@@ -137,26 +138,26 @@ export default function DirectorSetupPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="space-y-3">
-                  <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Email Officiel</Label>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <div className="space-y-4">
+                  <Label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 ml-2">Email Officiel</Label>
                   <div className="relative">
-                    <Mail className="absolute left-4 top-5 h-5 w-5 text-slate-400" />
+                    <Mail className="absolute left-5 top-1/2 -translate-y-1/2 h-6 w-6 text-slate-400" />
                     <Input 
                       type="email"
-                      className="bg-white/5 border-white/10 pl-12 h-16 rounded-2xl" 
+                      className="bg-slate-50 border-4 border-slate-100 pl-16 h-18 rounded-2xl font-black text-lg text-[#0F172A]" 
                       value={formData.email}
                       onChange={(e) => setFormData({...formData, email: e.target.value})}
                       required 
                     />
                   </div>
                 </div>
-                <div className="space-y-3">
-                  <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Téléphone Direct</Label>
+                <div className="space-y-4">
+                  <Label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 ml-2">Téléphone Direct</Label>
                   <div className="relative">
-                    <Phone className="absolute left-4 top-5 h-5 w-5 text-slate-400" />
+                    <Phone className="absolute left-5 top-1/2 -translate-y-1/2 h-6 w-6 text-slate-400" />
                     <Input 
-                      className="bg-white/5 border-white/10 pl-12 h-16 rounded-2xl" 
+                      className="bg-slate-50 border-4 border-slate-100 pl-16 h-18 rounded-2xl font-black text-lg text-[#0F172A]" 
                       value={formData.phone}
                       onChange={(e) => setFormData({...formData, phone: e.target.value})}
                       required 
@@ -165,25 +166,25 @@ export default function DirectorSetupPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8 border-t border-white/5">
-                <div className="space-y-3">
-                  <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Mot de passe Administrateur</Label>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-10 pt-8 border-t-4 border-slate-50">
+                <div className="space-y-4">
+                  <Label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 ml-2">Mot de passe Administrateur</Label>
                   <div className="relative">
-                    <Lock className="absolute left-4 top-5 h-5 w-5 text-slate-400" />
+                    <Lock className="absolute left-5 top-1/2 -translate-y-1/2 h-6 w-6 text-slate-400" />
                     <Input 
                       type="password"
-                      className="bg-white/5 border-white/10 pl-12 h-16 rounded-2xl" 
+                      className="bg-slate-50 border-4 border-slate-100 pl-16 h-18 rounded-2xl font-black text-xl text-[#0F172A]" 
                       value={formData.password}
                       onChange={(e) => setFormData({...formData, password: e.target.value})}
                       required 
                     />
                   </div>
                 </div>
-                <div className="space-y-3">
-                  <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Confirmation de sécurité</Label>
+                <div className="space-y-4">
+                  <Label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 ml-2">Confirmation</Label>
                   <Input 
                     type="password"
-                    className="bg-white/5 border-white/10 h-16 rounded-2xl" 
+                    className="bg-slate-50 border-4 border-slate-100 h-18 rounded-2xl font-black text-xl text-[#0F172A] px-8" 
                     value={formData.confirmPassword}
                     onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
                     required 
@@ -192,12 +193,13 @@ export default function DirectorSetupPage() {
               </div>
 
               <div className="pt-6">
-                <Button className="w-full h-20 bg-[#14532D] hover:bg-[#1a6b3a] text-white font-bold text-xl rounded-[1.5rem] shadow-2xl transition-all active:scale-95 flex gap-4" disabled={isLoading}>
-                  <Save className="w-7 h-7" /> Valider et Générer mon ID (DIR-001)
+                <Button className="w-full h-20 bg-[#14532D] hover:bg-[#1a6b3a] text-white font-black text-2xl rounded-[2rem] shadow-2xl transition-all active:scale-95 flex gap-6 border-4 border-white/10" disabled={isLoading}>
+                  <Save className="w-8 h-8" /> Valider l'Espace (DIR-001)
                 </Button>
-                <p className="text-center mt-6 text-xs text-slate-400 font-bold uppercase tracking-widest">
-                  <Sparkles className="inline-block w-4 h-4 mr-2 text-accent" /> Accès réservé aux directions d'établissements
-                </p>
+                <div className="flex items-center justify-center gap-3 mt-8">
+                   <Sparkles className="w-5 h-5 text-accent animate-pulse" />
+                   <p className="text-[10px] text-slate-400 font-black uppercase tracking-[0.3em]">Accès réservé aux directions d'établissements</p>
+                </div>
               </div>
             </form>
           </CardContent>
