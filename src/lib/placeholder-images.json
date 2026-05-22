@@ -2,9 +2,9 @@
   "placeholderImages": [
     {
       "id": "login-bg",
-      "description": "African students in school uniforms studying together and smiling in a bright classroom",
-      "imageUrl": "https://picsum.photos/seed/acadex-students-uniform/1200/1200",
-      "imageHint": "African students school uniform smiling"
+      "description": "Happy African students in a bright classroom working on laptops and notebooks, smiling",
+      "imageUrl": "https://picsum.photos/seed/edutrack-students/1400/1000",
+      "imageHint": "happy students classroom"
     },
     {
       "id": "dashboard-hero",
