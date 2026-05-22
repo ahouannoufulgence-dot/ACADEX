@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useEffect, useState, useCallback } from "react";
@@ -72,14 +71,14 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 
   if (!isReady || !user || !role) {
     return (
-      <div className="min-h-screen bg-[#F5F7F9] flex items-center justify-center">
-        <div className="w-12 h-12 border-4 border-[#14532D] border-t-transparent rounded-full animate-spin" />
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+        <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#F5F7F9] flex overflow-hidden relative">
+    <div className="min-h-screen bg-slate-50 flex relative max-w-full overflow-x-hidden">
       <Sidebar 
         role={role} 
         userName={user.name} 
@@ -87,16 +86,15 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         onClose={() => setIsSidebarOpen(false)} 
       />
       
-      {/* Mobile Overlay */}
       {isSidebarOpen && (
         <div 
-          className="fixed inset-0 bg-black/50 z-30 lg:hidden backdrop-blur-sm"
+          className="fixed inset-0 bg-black/40 z-30 lg:hidden backdrop-blur-sm"
           onClick={() => setIsSidebarOpen(false)}
         />
       )}
 
       <div className={cn(
-        "flex-1 flex flex-col min-h-screen overflow-hidden transition-all duration-300",
+        "flex-1 flex flex-col min-h-screen transition-all duration-300 w-full",
         "lg:ml-64"
       )}>
         <Topbar 
@@ -104,11 +102,11 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
           userName={user.name} 
           onMenuClick={() => setIsSidebarOpen(true)}
         />
-        <main className="flex-1 overflow-y-auto w-full scroll-smooth">
-          <div className="p-4 md:p-8 lg:p-10 max-w-[1440px] mx-auto">
+        <main className="flex-1 overflow-y-auto w-full">
+          <div className="p-4 md:p-6 lg:p-8 max-w-[1440px] mx-auto w-full">
             {children}
           </div>
-          <footer className="p-8 text-center text-slate-400 text-[10px] font-bold uppercase tracking-widest border-t border-slate-100 bg-white/50">
+          <footer className="p-6 text-center text-slate-400 text-[9px] font-black uppercase tracking-widest border-t border-slate-100 bg-white/50">
             © 2024 ACADEX Premium Systems • Excellence Éducative
           </footer>
         </main>
