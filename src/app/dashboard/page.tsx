@@ -11,7 +11,6 @@ import {
   ArrowUpRight,
   Calendar,
   Sparkles,
-  AlertCircle,
   Activity
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
