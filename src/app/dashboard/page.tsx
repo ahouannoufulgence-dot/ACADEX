@@ -41,16 +41,16 @@ export default function DashboardPage() {
     <DashboardLayout>
       <div className="space-y-12 animate-fade-up">
         {/* Hero Section - Elite Vivid Edition */}
-        <div className="relative h-[450px] md:h-[600px] w-full rounded-[3.5rem] overflow-hidden shadow-[0_40px_120px_rgba(0,0,0,0.2)] group border-4 border-white bg-white">
+        <div className="relative h-[450px] md:h-[600px] w-full rounded-[3.5rem] overflow-hidden shadow-[0_40px_120px_rgba(0,0,0,0.3)] group border-4 border-white bg-slate-100">
           <Image
             src={heroImage?.imageUrl || "https://picsum.photos/seed/acadex-joy-success/1400/600"}
             alt="Joie de l'apprentissage"
             fill
             priority
-            className="object-cover transition-transform duration-1000 group-hover:scale-105 saturate-[1.2]"
+            className="object-cover transition-transform duration-1000 group-hover:scale-105 saturate-[1.5] brightness-110"
             data-ai-hint="happy African students"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-white via-white/40 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-white via-white/20 to-transparent" />
           <div className="absolute inset-0 p-12 md:p-24 flex flex-col justify-center space-y-8 md:space-y-10">
             <div className="flex items-center gap-4 bg-primary text-white w-fit px-10 py-4 rounded-full text-sm md:text-base font-black tracking-[0.25em] uppercase shadow-2xl border-2 border-white/20">
               <Sparkles className="w-6 h-6 text-accent animate-pulse" />
@@ -65,7 +65,7 @@ export default function DashboardPage() {
               </p>
             </div>
             <div className="pt-10">
-              <Button className="bg-primary hover:bg-primary/90 text-white font-black h-20 md:h-24 px-16 md:px-20 rounded-[2.5rem] shadow-[0_30px_80px_rgba(20,83,45,0.5)] transition-all hover:translate-y-[-10px] text-xl md:text-3xl flex items-center gap-8 border-4 border-white/10">
+              <Button className="bg-primary hover:bg-slate-900 text-white font-black h-20 md:h-24 px-16 md:px-20 rounded-[2.5rem] shadow-[0_30px_80px_rgba(20,83,45,0.6)] transition-all hover:translate-y-[-10px] text-xl md:text-3xl flex items-center gap-8 border-4 border-white/10">
                 Lancer la Session <ArrowUpRight className="w-10 h-10" />
               </Button>
             </div>
@@ -95,21 +95,21 @@ export default function DashboardPage() {
               <div className="w-32 h-32 bg-slate-50 rounded-[2.5rem] flex items-center justify-center border-4 border-slate-100 shadow-inner">
                  <Sparkles className="w-16 h-16 text-slate-200" />
               </div>
-              <p className="text-2xl text-[#0F172A] font-black italic max-w-sm">En attente des premières saisies de notes par les enseignants.</p>
+              <p className="text-2xl text-[#0F172A] font-black max-w-sm">En attente des premières saisies de notes.</p>
             </CardContent>
           </Card>
 
           <Card className="vivid-box border-none shadow-2xl bg-white overflow-hidden">
-            <CardHeader className="p-12 md:p-14 pb-8 border-b border-slate-50">
+            <CardHeader className="p-12 md:p-14 pb-8 border-b-4 border-slate-50">
               <CardTitle className="flex items-center gap-6 text-4xl font-black text-[#0F172A] tracking-tighter">
                 <Calendar className="w-10 h-10 text-primary" />
                 Journal de Bord
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-12 p-12 md:p-14 pt-10">
-              <JournalEntry author="Système ACADEX" action="Déploiement de la version 2024" module="Système" time="Maintenant" type="positive" />
-              <JournalEntry author="Administration" action="Veuillez définir les coefficients" module="Gestion" time="En cours" type="neutral" />
-              <JournalEntry author="Sécurité" action="Chiffrement des accès activé" module="Sécurité" time="Actif" type="positive" />
+              <JournalEntry author="Système ACADEX" action="Version 2024 active" module="Système" time="Maintenant" type="positive" />
+              <JournalEntry author="Administration" action="Définissez les coefficients" module="Gestion" time="En cours" type="neutral" />
+              <JournalEntry author="Sécurité" action="Chiffrement activé" module="Sécurité" time="Actif" type="positive" />
             </CardContent>
           </Card>
         </div>
@@ -124,19 +124,19 @@ function StatCard({ title, value, trend, icon: Icon, type, delay }: any) {
       <CardContent className="p-12">
         <div className="flex justify-between items-start">
           <div className="space-y-6">
-            <p className="text-xs font-black text-slate-400 uppercase tracking-[0.3em]">{title}</p>
+            <p className="text-xs font-black text-slate-500 uppercase tracking-[0.3em]">{title}</p>
             <h3 className="text-6xl md:text-7xl font-headline font-black text-[#0F172A] group-hover:text-primary transition-colors tracking-tighter">{value}</h3>
             <div className={cn(
               "text-xs font-black px-6 py-2 rounded-full w-fit uppercase tracking-widest shadow-lg",
               type === "positive" ? "bg-accent text-white" : 
-              type === "warning" ? "bg-destructive text-white" : "bg-slate-900 text-white"
+              type === "warning" ? "bg-[#B91C1C] text-white" : "bg-slate-900 text-white"
             )}>
               {trend}
             </div>
           </div>
           <div className={cn(
             "p-8 rounded-[2rem] text-white shadow-2xl transition-all duration-500 group-hover:rotate-12 group-hover:scale-110",
-            type === "warning" ? "bg-destructive" : "bg-primary"
+            type === "warning" ? "bg-[#B91C1C]" : "bg-primary"
           )}>
             <Icon className="w-10 h-10" />
           </div>
@@ -153,7 +153,7 @@ function JournalEntry({ author, action, module, time, type }: any) {
       <div 
         className={cn(
           "w-8 h-8 rounded-full mt-1.5 shrink-0 border-4 border-white shadow-2xl transition-all group-hover:scale-125",
-          type === "danger" ? "bg-destructive" : type === "positive" ? "bg-primary" : "bg-slate-900"
+          type === "danger" ? "bg-[#B91C1C]" : type === "positive" ? "bg-primary" : "bg-slate-900"
         )} 
       />
       <div className="flex-1 space-y-3">

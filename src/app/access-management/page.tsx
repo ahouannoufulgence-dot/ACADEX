@@ -2,14 +2,12 @@
 
 import React, { useState, useMemo } from "react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
-import { KeyRound, ShieldCheck, Users, Copy, Trash2, Sparkles, Loader2, CheckCircle2 } from "lucide-react";
+import { KeyRound, ShieldCheck, Users, Copy, Trash2, Sparkles, Loader2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogTrigger } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { useFirestore, useCollection } from "@/firebase";
 import { collection, doc, serverTimestamp, writeBatch, deleteDoc, query, where, orderBy } from "firebase/firestore";
@@ -27,7 +25,6 @@ export default function AccessManagementPage() {
     count: 1
   });
 
-  // On ne charge que les accès en attente pour la clarté
   const studentsQuery = useMemo(() => {
     if (!db) return null;
     return query(
@@ -53,7 +50,6 @@ export default function AccessManagementPage() {
     const batch = writeBatch(db);
     const classCode = bulkData.gradeLevel.replace(/\s+/g, '').toUpperCase();
     
-    // Génération de codes aléatoires pour éviter les collisions en masse
     for (let i = 1; i <= bulkData.count; i++) {
       const studentNumber = Math.floor(Math.random() * 900) + 100; 
       const studentId = `ELV-${classCode}-${studentNumber}`;
@@ -100,7 +96,7 @@ export default function AccessManagementPage() {
       
     toast({ 
       title: "Identifiant supprimé", 
-      description: "Le code d'accès a été retiré de la base de données." 
+      description: "Le code d'accès a été retiré." 
     });
   };
 
@@ -116,7 +112,7 @@ export default function AccessManagementPage() {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-10">
           <div>
             <h1 className="text-5xl md:text-8xl font-headline font-black text-[#0F172A] mb-4 tracking-tighter">Gestion des Accès</h1>
-            <p className="text-[#0F172A] text-2xl font-black">Provisionnez les accès élèves par classe avec ACADEX AI.</p>
+            <p className="text-[#0F172A] text-2xl font-black">Provisionnez les accès élèves avec ACADEX AI.</p>
           </div>
           
           <Dialog>
@@ -133,26 +129,25 @@ export default function AccessManagementPage() {
                   </div>
                   <DialogTitle className="text-4xl font-black tracking-tighter">Génération par Lot</DialogTitle>
                 </div>
-                <CardDescription className="text-white font-black text-xl mt-4 opacity-80">Créez massivement des codes d'accès sécurisés.</CardDescription>
               </DialogHeader>
 
               <div className="p-12 space-y-10 bg-white">
                 <div className="space-y-4">
-                  <Label className="text-[12px] font-black text-[#0F172A] uppercase tracking-[0.3em] ml-2">Niveau / Classe (Ex: 3EME A)</Label>
-                  <Input 
+                  <label className="text-[12px] font-black text-[#0F172A] uppercase tracking-[0.3em] ml-2">Niveau / Classe (Ex: 3EME A)</label>
+                  <input 
                     placeholder="3EME A"
-                    className="bg-[#F1F5F9] border-4 border-slate-50 h-16 rounded-2xl font-black text-xl text-[#0F172A] px-6 shadow-inner" 
+                    className="w-full bg-[#F1F5F9] border-4 border-slate-50 h-16 rounded-2xl font-black text-xl text-[#0F172A] px-6 shadow-inner outline-none focus:border-primary/30" 
                     value={bulkData.gradeLevel}
                     onChange={(e) => setBulkData({...bulkData, gradeLevel: e.target.value.toUpperCase()})}
                   />
                 </div>
                 <div className="space-y-4">
-                  <Label className="text-[12px] font-black text-[#0F172A] uppercase tracking-[0.3em] ml-2">Nombre d'élèves</Label>
-                  <Input 
+                  <label className="text-[12px] font-black text-[#0F172A] uppercase tracking-[0.3em] ml-2">Nombre d'élèves</label>
+                  <input 
                     type="number"
                     min="1"
                     max="100"
-                    className="bg-[#F1F5F9] border-4 border-slate-50 h-16 rounded-2xl font-black text-xl text-[#0F172A] px-6 shadow-inner text-center" 
+                    className="w-full bg-[#F1F5F9] border-4 border-slate-50 h-16 rounded-2xl font-black text-xl text-[#0F172A] px-6 shadow-inner text-center outline-none focus:border-primary/30" 
                     value={bulkData.count}
                     onChange={(e) => setBulkData({...bulkData, count: parseInt(e.target.value) || 0})}
                   />
@@ -173,11 +168,9 @@ export default function AccessManagementPage() {
         </div>
 
         <Card className="vivid-box border-none shadow-2xl overflow-hidden bg-white">
-          <CardHeader className="p-12 md:p-14 border-b-4 border-slate-50 bg-slate-50/30">
-            <div>
-              <CardTitle className="text-3xl font-black text-[#0F172A] tracking-tighter">Identifiants en attente d'activation</CardTitle>
-              <CardDescription className="text-xl font-bold mt-2 text-slate-600">Remettez ces codes aux élèves pour qu'ils créent leur compte ACADEX.</CardDescription>
-            </div>
+          <CardHeader className="p-12 md:p-14 border-b-8 border-slate-50 bg-slate-50/50">
+            <CardTitle className="text-4xl font-black text-[#0F172A] tracking-tighter">Codes d'activation en attente</CardTitle>
+            <CardDescription className="text-xl font-black mt-2 text-slate-500 uppercase tracking-widest">Registre de provisionnement Élite</CardDescription>
           </CardHeader>
           <CardContent className="p-0">
             {loading ? (
@@ -192,7 +185,7 @@ export default function AccessManagementPage() {
                     <TableRow className="border-none h-24">
                       <TableHead className="text-white font-black pl-20 text-xs uppercase tracking-[0.3em]">Identifiant Personnel</TableHead>
                       <TableHead className="text-white font-black text-xs uppercase tracking-[0.3em]">Classe Affectée</TableHead>
-                      <TableHead className="text-white font-black text-xs uppercase tracking-[0.3em]">Statut Actuel</TableHead>
+                      <TableHead className="text-white font-black text-xs uppercase tracking-[0.3em]">Statut</TableHead>
                       <TableHead className="text-right pr-20 text-white font-black text-xs uppercase tracking-[0.3em]">Actions</TableHead>
                     </TableRow>
                   </TableHeader>
@@ -201,52 +194,38 @@ export default function AccessManagementPage() {
                       <TableRow key={u.id} className="hover:bg-primary/5 transition-all border-slate-100 group">
                         <TableCell className="pl-20 py-12">
                            <div className="flex items-center gap-10">
-                              <div className="w-16 h-16 rounded-[1.5rem] bg-primary/10 text-primary flex items-center justify-center font-black text-xl shadow-inner border-4 border-primary/5">
+                              <div className="w-16 h-16 rounded-[1.5rem] bg-primary text-white flex items-center justify-center font-black text-xl shadow-2xl border-4 border-white/10">
                                 <KeyRound className="w-8 h-8" />
                               </div>
-                              <span className="font-mono font-black text-primary text-3xl tracking-tighter">{u.id}</span>
+                              <span className="font-mono font-black text-[#0F172A] text-4xl tracking-tighter uppercase">{u.id}</span>
                            </div>
                         </TableCell>
                         <TableCell className="py-12">
-                          <span className="font-black text-[#0F172A] text-2xl tracking-tighter uppercase">{u.gradeLevel}</span>
+                          <span className="font-black text-[#0F172A] text-3xl tracking-tighter uppercase">{u.gradeLevel}</span>
                         </TableCell>
                         <TableCell className="py-12">
-                          <Badge className="bg-primary text-white text-[12px] font-black px-6 py-2.5 h-12 uppercase tracking-[0.2em] border-none shadow-2xl" variant="outline">
+                          <Badge className="bg-primary text-white text-[12px] font-black px-8 py-3 h-12 uppercase tracking-[0.2em] border-none shadow-2xl" variant="outline">
                             {u.status}
                           </Badge>
                         </TableCell>
                         <TableCell className="text-right pr-20 py-12">
-                          <div className="flex justify-end gap-6 opacity-0 group-hover:opacity-100 transition-all translate-x-4 group-hover:translate-x-0">
+                          <div className="flex justify-end gap-6 opacity-0 group-hover:opacity-100 transition-all">
                             <Button 
-                              variant="ghost" 
-                              className="h-16 px-8 bg-slate-50 border-4 border-slate-100 rounded-2xl font-black text-primary hover:bg-primary hover:text-white transition-all shadow-xl"
+                              className="h-16 px-10 bg-white border-4 border-slate-100 rounded-2xl font-black text-[#0F172A] hover:bg-primary hover:text-white transition-all shadow-xl"
                               onClick={() => copyToClipboard(u.id)}
                             >
                               <Copy className="h-6 w-6 mr-3" /> Copier
                             </Button>
                             <Button 
-                              variant="ghost" 
-                              className="h-16 px-8 bg-red-50 border-4 border-red-100 rounded-2xl font-black text-destructive hover:bg-destructive hover:text-white transition-all shadow-xl"
+                              className="h-16 px-10 bg-white border-4 border-slate-100 rounded-2xl font-black text-[#B91C1C] hover:bg-[#B91C1C] hover:text-white transition-all shadow-xl"
                               onClick={() => handleDelete(u.id)}
                             >
-                              <Trash2 className="h-6 w-6 mr-3" /> Supprimer
+                              <Trash2 className="h-6 w-6 mr-3" /> Retirer
                             </Button>
                           </div>
                         </TableCell>
                       </TableRow>
                     ))}
-                    {(!students || students.length === 0) && (
-                      <TableRow>
-                        <TableCell colSpan={4} className="text-center py-64">
-                          <div className="flex flex-col items-center space-y-10">
-                             <div className="p-16 bg-white rounded-[4rem] border-8 border-slate-50 shadow-inner">
-                                <Sparkles className="w-32 h-32 text-slate-100" />
-                             </div>
-                             <p className="text-4xl font-black uppercase text-[#0F172A] tracking-[0.4em] opacity-30">Aucun accès en attente</p>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    )}
                   </TableBody>
                 </Table>
               </div>
