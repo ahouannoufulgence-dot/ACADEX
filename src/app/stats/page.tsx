@@ -9,9 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { 
   ChartContainer, 
   ChartTooltip, 
-  ChartTooltipContent,
-  ChartLegend,
-  ChartLegendContent
+  ChartTooltipContent
 } from "@/components/ui/chart";
 import { 
   Bar, 
@@ -127,7 +125,7 @@ export default function StatisticsPage() {
                 <Users className="w-6 h-6 text-[#111827]" />
                 Répartition des Effectifs
               </CardTitle>
-              <CardDescription>Distribution globale entre Collège et Primaire.</CardDescription>
+              <CardDescription>Distribution globale entre Lycée, Collège et Primaire.</CardDescription>
             </CardHeader>
             <CardContent className="h-[360px] p-8 pt-4 flex items-center justify-center relative">
               <ResponsiveContainer width="100%" height="100%">

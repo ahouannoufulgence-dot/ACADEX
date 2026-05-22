@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState } from "react";
@@ -73,7 +74,7 @@ export default function LoginPage() {
           className="object-cover animate-pulse-slow transition-all duration-1000"
           data-ai-hint="African students school uniform smiling"
         />
-        <div className="absolute inset-0 bg-gradient-to-tr from-[#14532D]/90 via-[#14532D]/40 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-tr from-[#14532D]/95 via-[#14532D]/40 to-transparent" />
         
         <div className="absolute inset-0 p-16 flex flex-col justify-between z-10 animate-fade-up">
           <div className="flex items-center gap-3">
@@ -165,12 +166,15 @@ export default function LoginPage() {
                <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Première connexion ?</span>
                <div className="h-px bg-slate-100 flex-1" />
             </div>
-            <div className="grid grid-cols-2 gap-6">
-              <Link href="/activate/student" className="flex-1">
-                <Button variant="outline" className="w-full h-14 border-slate-200 rounded-[1.25rem] text-xs font-bold uppercase tracking-widest hover:bg-slate-50 transition-colors hover:border-accent">Espace Élève</Button>
+            <div className="grid grid-cols-3 gap-4">
+              <Link href="/activate/student">
+                <Button variant="outline" className="w-full h-14 border-slate-200 rounded-[1.25rem] text-[10px] font-bold uppercase tracking-widest hover:bg-slate-50 transition-colors hover:border-accent p-2">Espace Élève</Button>
               </Link>
-              <Link href="/setup/director" className="flex-1">
-                <Button variant="outline" className="w-full h-14 border-slate-200 rounded-[1.25rem] text-xs font-bold uppercase tracking-widest hover:bg-slate-50 transition-colors hover:border-accent">Portail Direction</Button>
+              <Link href="/setup/teacher">
+                <Button variant="outline" className="w-full h-14 border-slate-200 rounded-[1.25rem] text-[10px] font-bold uppercase tracking-widest hover:bg-slate-50 transition-colors hover:border-accent p-2">Enseignant</Button>
+              </Link>
+              <Link href="/setup/director">
+                <Button variant="outline" className="w-full h-14 border-slate-200 rounded-[1.25rem] text-[10px] font-bold uppercase tracking-widest hover:bg-slate-50 transition-colors hover:border-accent p-2">Direction</Button>
               </Link>
             </div>
           </div>
