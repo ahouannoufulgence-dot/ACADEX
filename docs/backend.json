@@ -24,6 +24,20 @@
       },
       "required": ["id", "role", "password"]
     },
+    "SchoolConfig": {
+      "title": "Configuration École",
+      "description": "Paramètres globaux et identité de l'établissement",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "slogan": { "type": "string" },
+        "academicYear": { "type": "string" },
+        "address": { "type": "string" },
+        "email": { "type": "string" },
+        "phone": { "type": "string" },
+        "logoUrl": { "type": "string" }
+      }
+    },
     "AuditLog": {
       "title": "Journal d'Audit",
       "description": "Enregistrement des événements de sécurité et connexions",
@@ -128,6 +142,10 @@
     "/payments/{paymentId}": {
       "schema": "#/backend/entities/Payment",
       "description": "Versements de scolarité"
+    },
+    "/config/school": {
+      "schema": "#/backend/entities/SchoolConfig",
+      "description": "Configuration globale de l'école"
     }
   }
 }
