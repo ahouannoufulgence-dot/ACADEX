@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState } from "react";
@@ -9,6 +8,7 @@ import { Eye, EyeOff, Lock, User, ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Card, CardContent } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { useFirestore } from "@/firebase";
@@ -64,47 +64,47 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen w-full relative flex items-center justify-center p-6 lg:p-12 overflow-hidden bg-[#111827]">
-      {/* Background Image - Happy Students */}
+      {/* Background Image - Happy Students in school uniform working joyfully */}
       <Image
         src={loginImage?.imageUrl || "https://picsum.photos/seed/acadex-students-uniform/1200/1200"}
         alt="Élèves ACADEX rayonnants"
         fill
         priority
-        className="object-cover opacity-70 animate-pulse-slow"
+        className="object-cover opacity-70 animate-pulse-slow scale-105"
         data-ai-hint="African students school uniform smiling"
       />
-      <div className="absolute inset-0 bg-gradient-to-br from-[#14532D]/90 via-[#111827]/50 to-[#111827]/80" />
+      <div className="absolute inset-0 bg-gradient-to-br from-[#14532D]/90 via-[#111827]/40 to-[#111827]/80" />
       
       <div className="relative z-10 w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         {/* Left Side - Inspirational Content */}
         <div className="hidden lg:flex flex-col space-y-10 animate-fade-up">
           <div className="flex items-center gap-4">
-            <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-2xl transition-transform hover:rotate-6">
-              <span className="text-[#14532D] font-black text-3xl">A</span>
+            <div className="w-20 h-20 bg-white rounded-3xl flex items-center justify-center shadow-2xl transition-transform hover:rotate-6">
+              <span className="text-[#14532D] font-black text-4xl">A</span>
             </div>
-            <h1 className="text-white font-headline font-bold text-5xl tracking-tighter drop-shadow-2xl">ACADEX</h1>
+            <h1 className="text-white font-headline font-bold text-6xl tracking-tighter drop-shadow-2xl">ACADEX</h1>
           </div>
           
           <div className="space-y-6">
-            <div className="flex items-center gap-2 bg-accent/30 backdrop-blur-xl w-fit px-6 py-2.5 rounded-full text-[11px] font-bold tracking-[0.2em] uppercase border border-white/20 text-white animate-pulse">
+            <div className="flex items-center gap-2 bg-accent/40 backdrop-blur-xl w-fit px-8 py-3 rounded-full text-[12px] font-bold tracking-[0.2em] uppercase border border-white/20 text-white animate-pulse">
               <Sparkles className="w-5 h-5 text-white" /> Excellence Éducative
             </div>
-            <h2 className="text-6xl font-headline font-bold text-white leading-[1.1] drop-shadow-2xl">
+            <h2 className="text-7xl font-headline font-bold text-white leading-[1.1] drop-shadow-2xl">
               L'avenir commence <span className="text-accent">ici</span>.
             </h2>
-            <p className="text-2xl text-white/90 font-medium leading-relaxed drop-shadow-xl max-w-lg">
+            <p className="text-2xl text-white/95 font-medium leading-relaxed drop-shadow-xl max-w-lg">
               Pilotez votre réussite avec la plateforme la plus avancée du Bénin. Précision, Joie et Innovation.
             </p>
           </div>
           
           <div className="flex gap-6 items-center">
-            <div className="h-1 w-24 bg-accent rounded-full" />
-            <div className="h-1 w-12 bg-white/20 rounded-full" />
+            <div className="h-1.5 w-32 bg-accent rounded-full" />
+            <div className="h-1.5 w-16 bg-white/20 rounded-full" />
           </div>
         </div>
 
         {/* Right Side - Floating Glass Form */}
-        <Card className="glass-card border-white/10 shadow-2xl rounded-[3rem] overflow-hidden backdrop-blur-3xl bg-white/10 animate-fade-up" style={{ animationDelay: '0.2s' }}>
+        <Card className="glass-card border-white/10 shadow-[0_0_80px_rgba(0,0,0,0.3)] rounded-[3rem] overflow-hidden backdrop-blur-3xl bg-white/10 animate-fade-up" style={{ animationDelay: '0.2s' }}>
           <CardContent className="p-10 lg:p-14 space-y-10">
             <div className="space-y-3">
               <h3 className="text-4xl font-headline font-bold text-white tracking-tight">Accès Institutionnel</h3>
@@ -118,7 +118,7 @@ export default function LoginPage() {
                   <User className="absolute left-5 top-5 h-6 w-6 text-slate-400 group-focus-within:text-accent transition-colors" />
                   <Input
                     placeholder="DIR-001, ENS-..."
-                    className="pl-14 h-16 bg-white/5 border-white/10 rounded-2xl focus-visible:ring-2 focus-visible:ring-accent/20 transition-all text-white text-lg font-medium"
+                    className="pl-14 h-16 bg-white/5 border-white/10 rounded-2xl focus-visible:ring-2 focus-visible:ring-accent/20 transition-all text-white text-lg font-medium placeholder:text-white/20"
                     value={userId}
                     onChange={(e) => setUserId(e.target.value.toUpperCase())}
                     required
@@ -135,7 +135,7 @@ export default function LoginPage() {
                   <Lock className="absolute left-5 top-5 h-6 w-6 text-slate-400 group-focus-within:text-accent transition-colors" />
                   <Input
                     type={showPassword ? "text" : "password"}
-                    className="pl-14 pr-14 h-16 bg-white/5 border-white/10 rounded-2xl focus-visible:ring-2 focus-visible:ring-accent/20 transition-all text-white text-lg font-medium"
+                    className="pl-14 pr-14 h-16 bg-white/5 border-white/10 rounded-2xl focus-visible:ring-2 focus-visible:ring-accent/20 transition-all text-white text-lg font-medium placeholder:text-white/20"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
