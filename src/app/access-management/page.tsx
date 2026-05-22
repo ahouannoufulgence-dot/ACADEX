@@ -1,8 +1,9 @@
+
 "use client";
 
 import React, { useState, useMemo } from "react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
-import { KeyRound, ShieldCheck, Users, Copy, Trash2, Sparkles, Loader2 } from "lucide-react";
+import { KeyRound, ShieldCheck, Users, Copy, Trash2, Sparkles, Loader2, FileDown } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -13,6 +14,8 @@ import { useFirestore, useCollection } from "@/firebase";
 import { collection, doc, serverTimestamp, writeBatch, deleteDoc, query, where, orderBy } from "firebase/firestore";
 import { errorEmitter } from "@/firebase/error-emitter";
 import { FirestorePermissionError } from "@/firebase/errors";
+import { jsPDF } from "jspdf";
+import "jspdf-autotable";
 import { cn } from "@/lib/utils";
 
 export default function AccessManagementPage() {
@@ -82,6 +85,31 @@ export default function AccessManagementPage() {
     setBulkData({ gradeLevel: "", count: 1 });
   };
 
+  const exportAccessPDF = () => {
+    if (!students || students.length === 0) return;
+    
+    const doc = new jsPDF();
+    doc.setFontSize(18);
+    doc.setTextColor(20, 83, 45);
+    doc.text("LISTE DES CODES D'ACCES ELEVES - ACADEX", 14, 20);
+    
+    const tableData = students.map(s => [
+      s.id,
+      s.gradeLevel,
+      "En attente d'activation"
+    ]);
+
+    (doc as any).autoTable({
+      head: [['IDENTIFIANT ACCÈS', 'CLASSE CONCERNÉE', 'ÉTAT']],
+      body: tableData,
+      startY: 30,
+      headStyles: { fillColor: [20, 83, 45] },
+      styles: { fontStyle: "bold" }
+    });
+
+    doc.save("ACADEX_CODES_ACCES.pdf");
+  };
+
   const handleDelete = (id: string) => {
     if (!db) return;
     
@@ -115,56 +143,65 @@ export default function AccessManagementPage() {
             <p className="text-[#0F172A] text-2xl font-black">Provisionnez les accès élèves avec ACADEX AI.</p>
           </div>
           
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button className="bg-primary hover:bg-slate-900 text-white font-black h-20 px-14 rounded-[2.5rem] shadow-2xl transition-all active:scale-95 flex gap-6 text-xl border-4 border-white/10">
-                <Users className="w-8 h-8" /> Provisionner une classe
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="vivid-box border-none shadow-[0_60px_180px_rgba(0,0,0,0.4)] sm:max-w-[550px] p-0 overflow-hidden bg-white">
-              <DialogHeader className="p-12 bg-primary text-white border-b-8 border-accent">
-                <div className="flex items-center gap-6">
-                  <div className="p-4 bg-white rounded-2xl shadow-2xl rotate-6">
-                    <ShieldCheck className="w-10 h-10 text-primary animate-pulse" />
-                  </div>
-                  <DialogTitle className="text-4xl font-black tracking-tighter">Génération par Lot</DialogTitle>
-                </div>
-              </DialogHeader>
-
-              <div className="p-12 space-y-10 bg-white">
-                <div className="space-y-4">
-                  <label className="text-[12px] font-black text-[#0F172A] uppercase tracking-[0.3em] ml-2">Niveau / Classe (Ex: 3EME A)</label>
-                  <input 
-                    placeholder="3EME A"
-                    className="w-full bg-[#F1F5F9] border-4 border-slate-50 h-16 rounded-2xl font-black text-xl text-[#0F172A] px-6 shadow-inner outline-none focus:border-primary/30" 
-                    value={bulkData.gradeLevel}
-                    onChange={(e) => setBulkData({...bulkData, gradeLevel: e.target.value.toUpperCase()})}
-                  />
-                </div>
-                <div className="space-y-4">
-                  <label className="text-[12px] font-black text-[#0F172A] uppercase tracking-[0.3em] ml-2">Nombre d'élèves</label>
-                  <input 
-                    type="number"
-                    min="1"
-                    max="100"
-                    className="w-full bg-[#F1F5F9] border-4 border-slate-50 h-16 rounded-2xl font-black text-xl text-[#0F172A] px-6 shadow-inner text-center outline-none focus:border-primary/30" 
-                    value={bulkData.count}
-                    onChange={(e) => setBulkData({...bulkData, count: parseInt(e.target.value) || 0})}
-                  />
-                </div>
-              </div>
-
-              <DialogFooter className="p-12 pt-0 bg-white">
-                <Button 
-                  className="bg-accent text-white hover:bg-slate-900 font-black w-full h-24 rounded-[2.5rem] shadow-2xl text-2xl border-4 border-white/10" 
-                  onClick={handleBulkGenerate} 
-                  disabled={isGenerating}
-                >
-                  {isGenerating ? <Loader2 className="w-10 h-10 animate-spin" /> : "Générer les identifiants"}
+          <div className="flex flex-wrap gap-6">
+            <Button 
+              onClick={exportAccessPDF}
+              variant="outline"
+              className="bg-white border-4 border-slate-100 text-[#0F172A] font-black h-20 px-10 rounded-[2.5rem] shadow-2xl hover:bg-slate-50 flex gap-4 text-xl"
+            >
+              <FileDown className="w-8 h-8" /> Exporter PDF
+            </Button>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button className="bg-primary hover:bg-slate-900 text-white font-black h-20 px-14 rounded-[2.5rem] shadow-2xl transition-all active:scale-95 flex gap-6 text-xl border-4 border-white/10">
+                  <Users className="w-8 h-8" /> Provisionner une classe
                 </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
+              </DialogTrigger>
+              <DialogContent className="vivid-box border-none shadow-[0_60px_180px_rgba(0,0,0,0.4)] sm:max-w-[550px] p-0 overflow-hidden bg-white">
+                <DialogHeader className="p-12 bg-primary text-white border-b-8 border-accent">
+                  <div className="flex items-center gap-6">
+                    <div className="p-4 bg-white rounded-2xl shadow-2xl rotate-6">
+                      <ShieldCheck className="w-10 h-10 text-primary animate-pulse" />
+                    </div>
+                    <DialogTitle className="text-4xl font-black tracking-tighter">Génération par Lot</DialogTitle>
+                  </div>
+                </DialogHeader>
+
+                <div className="p-12 space-y-10 bg-white">
+                  <div className="space-y-4">
+                    <label className="text-[12px] font-black text-[#0F172A] uppercase tracking-[0.3em] ml-2">Niveau / Classe (Ex: 3EME A)</label>
+                    <input 
+                      placeholder="3EME A"
+                      className="w-full bg-[#F1F5F9] border-4 border-slate-50 h-16 rounded-2xl font-black text-xl text-[#0F172A] px-6 shadow-inner outline-none focus:border-primary/30" 
+                      value={bulkData.gradeLevel}
+                      onChange={(e) => setBulkData({...bulkData, gradeLevel: e.target.value.toUpperCase()})}
+                    />
+                  </div>
+                  <div className="space-y-4">
+                    <label className="text-[12px] font-black text-[#0F172A] uppercase tracking-[0.3em] ml-2">Nombre d'élèves</label>
+                    <input 
+                      type="number"
+                      min="1"
+                      max="100"
+                      className="w-full bg-[#F1F5F9] border-4 border-slate-50 h-16 rounded-2xl font-black text-xl text-[#0F172A] px-6 shadow-inner text-center outline-none focus:border-primary/30" 
+                      value={bulkData.count}
+                      onChange={(e) => setBulkData({...bulkData, count: parseInt(e.target.value) || 0})}
+                    />
+                  </div>
+                </div>
+
+                <DialogFooter className="p-12 pt-0 bg-white">
+                  <Button 
+                    className="bg-accent text-white hover:bg-slate-900 font-black w-full h-24 rounded-[2.5rem] shadow-2xl text-2xl border-4 border-white/10" 
+                    onClick={handleBulkGenerate} 
+                    disabled={isGenerating}
+                  >
+                    {isGenerating ? <Loader2 className="w-10 h-10 animate-spin" /> : "Générer les identifiants"}
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          </div>
         </div>
 
         <Card className="vivid-box border-none shadow-2xl overflow-hidden bg-white">
