@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useMemo, useEffect } from "react";
@@ -68,7 +67,7 @@ export default function SettingsPage() {
         errorEmitter.emit('permission-error', permissionError);
       });
     
-    toast({ title: "Mise à jour spontanée", description: "Les paramètres ont été enregistrés." });
+    toast({ title: "Mise à jour spontanée", description: "Identité visuelle appliquée." });
     setIsSaving(false);
   };
 
@@ -96,7 +95,7 @@ export default function SettingsPage() {
       });
 
     setNewSub({ subject: "", coeff: "", level: "", gradeLevel: "" });
-    toast({ title: "Matière ajoutée", description: "Mise à jour spontanée du registre." });
+    toast({ title: "Matière ajoutée", description: "Registre mis à jour instantanément." });
   };
 
   const handleDeleteSubject = (id: string) => {
@@ -114,9 +113,9 @@ export default function SettingsPage() {
 
   return (
     <DashboardLayout>
-      <div className="space-y-6 md:space-y-10 animate-fade-up">
-        <div className="flex justify-between items-center">
-          <div>
+      <div className="space-y-6 md:space-y-10 animate-fade-up max-w-full overflow-hidden">
+        <div className="flex justify-between items-center px-2">
+          <div className="text-left">
             <h1 className="text-2xl md:text-5xl font-headline font-black text-[#0F172A] tracking-tighter uppercase leading-none">Configuration</h1>
             <p className="text-[#0F172A] text-[9px] md:text-lg font-black opacity-80 uppercase tracking-widest">Gestion Élite 2026-2027</p>
           </div>
@@ -124,78 +123,80 @@ export default function SettingsPage() {
 
         <Tabs defaultValue="school" className="space-y-6">
           <TabsList className="bg-white/80 p-1 h-12 md:h-14 rounded-xl border-4 border-white shadow-xl w-full flex backdrop-blur-xl">
-            <TabsTrigger value="school" className="flex-1 rounded-lg font-black text-[9px] md:text-xs uppercase tracking-widest data-[state=active]:bg-primary data-[state=active]:text-white">
-              <Building2 className="w-4 h-4 mr-2" /> Identité
+            <TabsTrigger value="school" className="flex-1 rounded-lg font-black text-[9px] md:text-xs uppercase tracking-widest data-[state=active]:bg-primary data-[state=active]:text-white transition-all">
+              <Building2 className="w-3.5 h-3.5 md:w-5 md:h-5 mr-2" /> Identité
             </TabsTrigger>
-            <TabsTrigger value="academic" className="flex-1 rounded-lg font-black text-[9px] md:text-xs uppercase tracking-widest data-[state=active]:bg-primary data-[state=active]:text-white">
-              <BookOpen className="w-4 h-4 mr-2" /> Académique
+            <TabsTrigger value="academic" className="flex-1 rounded-lg font-black text-[9px] md:text-xs uppercase tracking-widest data-[state=active]:bg-primary data-[state=active]:text-white transition-all">
+              <BookOpen className="w-3.5 h-3.5 md:w-5 md:h-5 mr-2" /> Académique
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value="school" className="space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <Card className="lg:col-span-2 vivid-box border-none shadow-xl bg-white/95 p-6 rounded-[2rem]">
+              <Card className="lg:col-span-2 vivid-box border-none shadow-xl bg-white/95 p-5 md:p-8 rounded-[2rem]">
                 <div className="flex items-center gap-3 border-b-2 border-slate-50 pb-4 mb-6">
-                  <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center text-primary shadow-inner">
-                    <Sparkles className="w-5 h-5" />
+                  <div className="w-8 h-8 md:w-10 md:h-10 bg-primary/10 rounded-xl flex items-center justify-center text-primary shadow-inner rotate-3">
+                    <Sparkles className="w-4 h-4 md:w-5 md:h-5" />
                   </div>
-                  <CardTitle className="text-lg md:text-2xl font-black text-[#0F172A] uppercase">Branding</CardTitle>
+                  <CardTitle className="text-lg md:text-2xl font-black text-[#0F172A] uppercase tracking-tighter">Branding de l'école</CardTitle>
                 </div>
                 <div className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-1">
-                      <label className="text-[8px] font-black text-[#0F172A] uppercase tracking-[0.2em] ml-1">Nom de l'école</label>
-                      <Input className="h-10 bg-slate-50 border-2 border-slate-100 rounded-xl font-black text-sm text-[#0F172A]" value={schoolData.name} onChange={e => setSchoolData({...schoolData, name: e.target.value})} />
+                    <div className="space-y-1.5">
+                      <label className="text-[8px] md:text-[10px] font-black text-[#0F172A] uppercase tracking-[0.2em] ml-1">Nom Officiel</label>
+                      <Input className="h-10 md:h-12 bg-slate-50 border-2 border-slate-100 rounded-xl font-black text-sm md:text-base text-[#0F172A] shadow-inner" value={schoolData.name} onChange={e => setSchoolData({...schoolData, name: e.target.value})} />
                     </div>
-                    <div className="space-y-1">
-                      <label className="text-[8px] font-black text-[#0F172A] uppercase tracking-[0.2em] ml-1">Slogan</label>
-                      <Input className="h-10 bg-slate-50 border-2 border-slate-100 rounded-xl font-black text-xs italic text-[#0F172A]" value={schoolData.slogan} onChange={e => setSchoolData({...schoolData, slogan: e.target.value})} />
+                    <div className="space-y-1.5">
+                      <label className="text-[8px] md:text-[10px] font-black text-[#0F172A] uppercase tracking-[0.2em] ml-1">Slogan Stratégique</label>
+                      <Input className="h-10 md:h-12 bg-slate-50 border-2 border-slate-100 rounded-xl font-black text-xs md:text-sm italic text-[#0F172A] shadow-inner" value={schoolData.slogan} onChange={e => setSchoolData({...schoolData, slogan: e.target.value})} />
                     </div>
                   </div>
-                  <Button className="bg-primary hover:bg-slate-900 text-white font-black h-11 w-full rounded-xl shadow-lg transition-all text-xs uppercase border-2 border-white/10" onClick={handleSaveSchool} disabled={isSaving}>
-                    <Save className="w-4 h-4 mr-2" /> Appliquer
+                  <Button className="bg-primary hover:bg-slate-900 text-white font-black h-12 md:h-14 w-full rounded-xl shadow-xl transition-all text-xs md:text-base uppercase border-2 border-white/10 mt-2" onClick={handleSaveSchool} disabled={isSaving}>
+                    <Save className="w-4 h-4 md:w-5 md:h-5 mr-2" /> Enregistrer les changements
                   </Button>
                 </div>
               </Card>
 
-              <Card className="vivid-box bg-primary text-white border-none shadow-xl relative p-6 rounded-[2rem]">
-                <div className="flex items-center gap-3 border-b-2 border-white/10 pb-4 mb-4">
-                  <CalendarDays className="w-5 h-5 text-accent" />
-                  <CardTitle className="text-lg font-black uppercase tracking-tighter">Session 2026-2027</CardTitle>
-                </div>
-                <div className="space-y-4">
-                  <Input className="h-12 bg-white/10 border-2 border-white/20 text-white text-xl font-black rounded-xl text-center" value={schoolData.academicYear} onChange={e => setSchoolData({...schoolData, academicYear: e.target.value})} />
-                  <Badge variant="outline" className="border-accent text-accent font-black h-8 px-4 rounded-lg text-[8px] uppercase tracking-widest bg-white/5 w-full justify-center">Trimestre 1 Actif</Badge>
+              <Card className="vivid-box bg-primary text-white border-none shadow-xl relative p-6 rounded-[2rem] flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center gap-3 border-b-2 border-white/10 pb-4 mb-4">
+                    <CalendarDays className="w-4 h-4 md:w-6 md:h-6 text-accent" />
+                    <CardTitle className="text-lg md:text-xl font-black uppercase tracking-tighter">Session Active</CardTitle>
+                  </div>
+                  <div className="space-y-4">
+                    <Input className="h-12 md:h-16 bg-white/10 border-2 border-white/20 text-white text-2xl md:text-4xl font-black rounded-xl text-center outline-none focus:border-accent/40" value={schoolData.academicYear} onChange={e => setSchoolData({...schoolData, academicYear: e.target.value})} />
+                    <Badge variant="outline" className="border-accent text-accent font-black h-9 px-4 rounded-xl text-[9px] md:text-xs uppercase tracking-[0.2em] bg-white/5 w-full justify-center shadow-md">Trimestre 1 En cours</Badge>
+                  </div>
                 </div>
               </Card>
             </div>
           </TabsContent>
 
           <TabsContent value="academic">
-            <Card className="vivid-box border-none shadow-xl bg-white/95 p-6 rounded-[2rem]">
+            <Card className="vivid-box border-none shadow-xl bg-white/95 p-5 md:p-8 rounded-[2rem]">
               <div className="flex items-center justify-between border-b-2 border-slate-50 pb-4 mb-6">
-                <CardTitle className="text-lg md:text-2xl font-black text-[#0F172A] uppercase">Matières Élite</CardTitle>
-                <div className="flex items-center gap-2 bg-slate-50 px-3 py-1.5 rounded-lg border">
+                <CardTitle className="text-lg md:text-2xl font-black text-[#0F172A] uppercase tracking-tighter">Matières Élite</CardTitle>
+                <div className="flex items-center gap-2 bg-slate-50 px-3 py-1.5 rounded-lg border-2 border-slate-100 shadow-inner">
                   <GraduationCap className="w-4 h-4 text-primary" />
-                  <span className="text-xl font-black text-primary">{subjects?.length || 0}</span>
+                  <span className="text-lg md:text-xl font-black text-primary">{subjects?.length || 0}</span>
                 </div>
               </div>
               
-              <div className="grid grid-cols-2 md:grid-cols-5 gap-2 mb-6 p-4 rounded-xl bg-slate-50 border-2 border-slate-100">
-                <input placeholder="Matière" className="h-9 bg-white border-2 border-slate-200 rounded-lg px-3 text-[10px] font-black outline-none focus:border-primary text-[#0F172A]" value={newSub.subject} onChange={e => setNewSub({...newSub, subject: e.target.value})} />
-                <input placeholder="Niveau" className="h-9 bg-white border-2 border-slate-200 rounded-lg px-3 text-[10px] font-bold outline-none text-[#0F172A]" value={newSub.level} onChange={e => setNewSub({...newSub, level: e.target.value})} />
-                <input placeholder="Classe" className="h-9 bg-white border-2 border-slate-200 rounded-lg px-3 text-[10px] font-bold outline-none text-[#0F172A]" value={newSub.gradeLevel} onChange={e => setNewSub({...newSub, gradeLevel: e.target.value.toUpperCase()})} />
-                <input type="number" placeholder="Coeff" className="h-9 bg-white border-2 border-slate-200 rounded-lg text-center font-black text-sm text-primary" value={newSub.coeff} onChange={e => setNewSub({...newSub, coeff: e.target.value})} />
-                <Button onClick={handleAddSubject} className="h-9 bg-accent hover:bg-slate-900 text-white font-black rounded-lg text-[9px] uppercase border-2 border-white/10"><Plus className="w-3.5 h-3.5 mr-1" /> Ajouter</Button>
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-2 md:gap-4 mb-6 p-3 md:p-5 rounded-2xl bg-slate-50 border-2 border-slate-100 shadow-inner">
+                <input placeholder="Matière" className="h-10 bg-white border-2 border-slate-200 rounded-xl px-3 text-[10px] md:text-sm font-black outline-none focus:border-primary text-[#0F172A] shadow-sm" value={newSub.subject} onChange={e => setNewSub({...newSub, subject: e.target.value})} />
+                <input placeholder="Niveau" className="h-10 bg-white border-2 border-slate-200 rounded-xl px-3 text-[10px] md:text-sm font-bold outline-none text-[#0F172A] shadow-sm" value={newSub.level} onChange={e => setNewSub({...newSub, level: e.target.value})} />
+                <input placeholder="Classe" className="h-10 bg-white border-2 border-slate-200 rounded-xl px-3 text-[10px] md:text-sm font-bold outline-none text-[#0F172A] shadow-sm" value={newSub.gradeLevel} onChange={e => setNewSub({...newSub, gradeLevel: e.target.value.toUpperCase()})} />
+                <input type="number" placeholder="Coeff" className="h-10 bg-white border-2 border-slate-200 rounded-xl text-center font-black text-sm md:text-lg text-primary shadow-sm" value={newSub.coeff} onChange={e => setNewSub({...newSub, coeff: e.target.value})} />
+                <Button onClick={handleAddSubject} className="h-10 bg-accent hover:bg-slate-900 text-white font-black rounded-xl text-[9px] md:text-xs uppercase border-2 border-white/10 shadow-lg col-span-2 md:col-span-1"><Plus className="w-4 h-4 mr-1" /> Ajouter</Button>
               </div>
 
-              <div className="rounded-xl border-2 border-slate-50 overflow-hidden bg-white">
+              <div className="rounded-[1.5rem] border-2 border-slate-50 overflow-hidden bg-white shadow-lg">
                 <Table>
                   <TableHeader className="bg-slate-900">
-                    <TableRow className="border-none h-10">
-                      <TableHead className="pl-6 text-white font-black uppercase text-[8px] tracking-widest">Matière</TableHead>
-                      <TableHead className="text-center text-white font-black uppercase text-[8px] tracking-widest">Coeff</TableHead>
-                      <TableHead className="text-right pr-6 text-white font-black uppercase text-[8px] tracking-widest">Action</TableHead>
+                    <TableRow className="border-none h-12">
+                      <TableHead className="pl-6 text-white font-black uppercase text-[9px] md:text-xs tracking-widest">Matière</TableHead>
+                      <TableHead className="text-center text-white font-black uppercase text-[9px] md:text-xs tracking-widest">Coeff</TableHead>
+                      <TableHead className="text-right pr-6 text-white font-black uppercase text-[9px] md:text-xs tracking-widest">Action</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -204,11 +205,11 @@ export default function SettingsPage() {
                     ) : (
                       subjects?.map((item: any) => (
                         <TableRow key={item.id} className="hover:bg-primary/5 transition-all border-b border-slate-50">
-                          <TableCell className="pl-6 py-3 font-black text-[#0F172A] text-xs uppercase">{item.name}</TableCell>
-                          <TableCell className="text-center py-3"><Badge className="bg-white text-primary font-black text-sm border-2 px-3">{item.coefficient}</Badge></TableCell>
-                          <TableCell className="text-right pr-6 py-3">
-                            <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-300 hover:text-destructive" onClick={() => handleDeleteSubject(item.id)}>
-                              <Trash2 className="w-3.5 h-3.5" />
+                          <TableCell className="pl-6 py-4 font-black text-[#0F172A] text-[10px] md:text-base uppercase tracking-tighter">{item.name}</TableCell>
+                          <TableCell className="text-center py-4"><Badge className="bg-white text-primary font-black text-xs md:text-base border-2 border-slate-100 px-3 shadow-sm">{item.coefficient}</Badge></TableCell>
+                          <TableCell className="text-right pr-6 py-4">
+                            <Button variant="ghost" size="icon" className="h-8 w-8 md:h-10 md:w-10 text-slate-300 hover:text-destructive hover:bg-destructive/5 transition-all" onClick={() => handleDeleteSubject(item.id)}>
+                              <Trash2 className="w-3.5 h-3.5 md:w-5 md:h-5" />
                             </Button>
                           </TableCell>
                         </TableRow>
