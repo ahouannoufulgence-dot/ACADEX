@@ -46,7 +46,7 @@ export default function DashboardPage() {
 
   return (
     <DashboardLayout>
-      <div className="space-y-6 md:space-y-10 animate-fade-up">
+      <div className="space-y-6 md:space-y-10 animate-fade-up max-w-[1440px] mx-auto">
         {/* Hero Section */}
         <div className="relative h-[250px] md:h-[400px] w-full rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white bg-slate-100">
           <Image
@@ -79,7 +79,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Stats Grid */}
-        <div className="stats-grid">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
           <StatCard title="Effectif Total" value="0" trend="Initial" icon={Users} delay="0s" />
           <StatCard title="Enseignants" value="0" trend="À inscrire" icon={GraduationCap} delay="0.1s" />
           <StatCard title="Performance" value="--" trend="T1" icon={TrendingUp} delay="0.2s" />
@@ -87,7 +87,7 @@ export default function DashboardPage() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-10">
-          <Card className="lg:col-span-2 vivid-box border-none shadow-2xl overflow-hidden p-0">
+          <Card className="lg:col-span-2 vivid-box border-none shadow-2xl overflow-hidden p-0 rounded-[2.5rem]">
             <CardHeader className="p-6 md:p-10 flex flex-row items-center justify-between border-b-2 border-slate-50/50 bg-slate-50/30">
               <div>
                 <CardTitle className="text-xl md:text-4xl font-black text-[#0F172A] tracking-tighter uppercase">Suivi Académique</CardTitle>
@@ -108,7 +108,7 @@ export default function DashboardPage() {
             </CardContent>
           </Card>
 
-          <Card className="vivid-box border-none shadow-2xl overflow-hidden p-0 h-fit">
+          <Card className="vivid-box border-none shadow-2xl overflow-hidden p-0 h-fit rounded-[2.5rem]">
             <CardHeader className="p-6 md:p-8 border-b-4 border-primary/10 bg-primary/5">
               <CardTitle className="flex items-center gap-3 text-lg md:text-2xl font-black text-[#0F172A] tracking-tighter uppercase">
                 <Calendar className="w-5 h-5 md:w-6 md:h-6 text-primary" />
@@ -129,11 +129,11 @@ export default function DashboardPage() {
 
 function StatCard({ title, value, trend, icon: Icon, type = "neutral", delay }: any) {
   return (
-    <Card className="vivid-box group cursor-pointer animate-fade-up border-none p-5 md:p-8 shadow-2xl" style={{ animationDelay: delay }}>
+    <Card className="vivid-box group cursor-pointer animate-fade-up border-none p-5 md:p-8 shadow-2xl rounded-[2rem]" style={{ animationDelay: delay }}>
       <div className="flex justify-between items-start">
         <div className="space-y-2 md:space-y-4 flex-1">
           <p className="text-[8px] md:text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">{title}</p>
-          <h3 className="text-3xl md:text-5xl font-headline font-black text-[#0F172A] tracking-tighter leading-none">{value}</h3>
+          <h3 className="text-2xl md:text-5xl font-headline font-black text-[#0F172A] tracking-tighter leading-none">{value}</h3>
           <div className={cn(
             "text-[7px] md:text-[9px] font-black px-3 py-1 rounded-full w-fit uppercase tracking-[0.2em] shadow-md border-2 border-white/20",
             type === "warning" ? "bg-red-500 text-white" : "bg-slate-900 text-white"
@@ -142,10 +142,10 @@ function StatCard({ title, value, trend, icon: Icon, type = "neutral", delay }: 
           </div>
         </div>
         <div className={cn(
-          "w-8 h-8 md:w-12 md:h-12 rounded-xl md:rounded-[1rem] flex items-center justify-center text-white shadow-xl shrink-0 rotate-6 border-2 border-white/10 transition-transform group-hover:rotate-12",
+          "w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-[1rem] flex items-center justify-center text-white shadow-xl shrink-0 rotate-6 border-2 border-white/10 transition-transform group-hover:rotate-12",
           type === "warning" ? "bg-red-500" : "bg-primary"
         )}>
-          <Icon className="w-4 h-4 md:w-6 md:h-6" />
+          <Icon className="w-5 h-5 md:w-6 md:h-6" />
         </div>
       </div>
     </Card>

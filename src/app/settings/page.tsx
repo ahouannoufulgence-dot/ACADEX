@@ -58,7 +58,6 @@ export default function SettingsPage() {
     if (!db || !schoolConfigRef) return;
     setIsSaving(true);
     
-    // Spontané : pas de await
     setDoc(schoolConfigRef, schoolData, { merge: true })
       .catch(async () => {
         const permissionError = new FirestorePermissionError({
@@ -137,22 +136,24 @@ export default function SettingsPage() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               <Card className="lg:col-span-2 vivid-box border-none shadow-xl bg-white/95 p-6 rounded-[2rem]">
                 <div className="flex items-center gap-3 border-b-2 border-slate-50 pb-4 mb-6">
-                  <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center text-primary"><Sparkles className="w-4 h-4" /></div>
+                  <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center text-primary shadow-inner">
+                    <Sparkles className="w-5 h-5" />
+                  </div>
                   <CardTitle className="text-lg md:text-2xl font-black text-[#0F172A] uppercase">Branding</CardTitle>
                 </div>
                 <div className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-1">
                       <label className="text-[8px] font-black text-[#0F172A] uppercase tracking-[0.2em] ml-1">Nom de l'école</label>
-                      <Input className="h-10 bg-slate-50 border-2 border-slate-100 rounded-xl font-black text-sm" value={schoolData.name} onChange={e => setSchoolData({...schoolData, name: e.target.value})} />
+                      <Input className="h-10 bg-slate-50 border-2 border-slate-100 rounded-xl font-black text-sm text-[#0F172A]" value={schoolData.name} onChange={e => setSchoolData({...schoolData, name: e.target.value})} />
                     </div>
                     <div className="space-y-1">
                       <label className="text-[8px] font-black text-[#0F172A] uppercase tracking-[0.2em] ml-1">Slogan</label>
-                      <Input className="h-10 bg-slate-50 border-2 border-slate-100 rounded-xl font-black text-xs italic" value={schoolData.slogan} onChange={e => setSchoolData({...schoolData, slogan: e.target.value})} />
+                      <Input className="h-10 bg-slate-50 border-2 border-slate-100 rounded-xl font-black text-xs italic text-[#0F172A]" value={schoolData.slogan} onChange={e => setSchoolData({...schoolData, slogan: e.target.value})} />
                     </div>
                   </div>
-                  <Button className="bg-primary hover:bg-slate-900 text-white font-black h-11 w-full rounded-xl shadow-lg transition-all text-xs uppercase" onClick={handleSaveSchool} disabled={isSaving}>
-                    <Save className="w-4 h-4 mr-2" /> Appliquer les changements
+                  <Button className="bg-primary hover:bg-slate-900 text-white font-black h-11 w-full rounded-xl shadow-lg transition-all text-xs uppercase border-2 border-white/10" onClick={handleSaveSchool} disabled={isSaving}>
+                    <Save className="w-4 h-4 mr-2" /> Appliquer
                   </Button>
                 </div>
               </Card>
@@ -160,11 +161,11 @@ export default function SettingsPage() {
               <Card className="vivid-box bg-primary text-white border-none shadow-xl relative p-6 rounded-[2rem]">
                 <div className="flex items-center gap-3 border-b-2 border-white/10 pb-4 mb-4">
                   <CalendarDays className="w-5 h-5 text-accent" />
-                  <CardTitle className="text-lg font-black uppercase tracking-tighter">Session Active</CardTitle>
+                  <CardTitle className="text-lg font-black uppercase tracking-tighter">Session 2026-2027</CardTitle>
                 </div>
                 <div className="space-y-4">
                   <Input className="h-12 bg-white/10 border-2 border-white/20 text-white text-xl font-black rounded-xl text-center" value={schoolData.academicYear} onChange={e => setSchoolData({...schoolData, academicYear: e.target.value})} />
-                  <Badge variant="outline" className="border-accent text-accent font-black h-8 px-4 rounded-lg text-[8px] uppercase tracking-widest bg-white/5 w-full justify-center">Trimestre 1</Badge>
+                  <Badge variant="outline" className="border-accent text-accent font-black h-8 px-4 rounded-lg text-[8px] uppercase tracking-widest bg-white/5 w-full justify-center">Trimestre 1 Actif</Badge>
                 </div>
               </Card>
             </div>
@@ -173,7 +174,7 @@ export default function SettingsPage() {
           <TabsContent value="academic">
             <Card className="vivid-box border-none shadow-xl bg-white/95 p-6 rounded-[2rem]">
               <div className="flex items-center justify-between border-b-2 border-slate-50 pb-4 mb-6">
-                <CardTitle className="text-lg md:text-2xl font-black text-[#0F172A] uppercase">Registre des Matières</CardTitle>
+                <CardTitle className="text-lg md:text-2xl font-black text-[#0F172A] uppercase">Matières Élite</CardTitle>
                 <div className="flex items-center gap-2 bg-slate-50 px-3 py-1.5 rounded-lg border">
                   <GraduationCap className="w-4 h-4 text-primary" />
                   <span className="text-xl font-black text-primary">{subjects?.length || 0}</span>
@@ -181,11 +182,11 @@ export default function SettingsPage() {
               </div>
               
               <div className="grid grid-cols-2 md:grid-cols-5 gap-2 mb-6 p-4 rounded-xl bg-slate-50 border-2 border-slate-100">
-                <input placeholder="Matière" className="h-9 bg-white border-2 border-slate-200 rounded-lg px-3 text-[10px] font-black outline-none focus:border-primary" value={newSub.subject} onChange={e => setNewSub({...newSub, subject: e.target.value})} />
-                <input placeholder="Niveau" className="h-9 bg-white border-2 border-slate-200 rounded-lg px-3 text-[10px] font-bold outline-none" value={newSub.level} onChange={e => setNewSub({...newSub, level: e.target.value})} />
-                <input placeholder="Classe" className="h-9 bg-white border-2 border-slate-200 rounded-lg px-3 text-[10px] font-bold outline-none" value={newSub.gradeLevel} onChange={e => setNewSub({...newSub, gradeLevel: e.target.value.toUpperCase()})} />
+                <input placeholder="Matière" className="h-9 bg-white border-2 border-slate-200 rounded-lg px-3 text-[10px] font-black outline-none focus:border-primary text-[#0F172A]" value={newSub.subject} onChange={e => setNewSub({...newSub, subject: e.target.value})} />
+                <input placeholder="Niveau" className="h-9 bg-white border-2 border-slate-200 rounded-lg px-3 text-[10px] font-bold outline-none text-[#0F172A]" value={newSub.level} onChange={e => setNewSub({...newSub, level: e.target.value})} />
+                <input placeholder="Classe" className="h-9 bg-white border-2 border-slate-200 rounded-lg px-3 text-[10px] font-bold outline-none text-[#0F172A]" value={newSub.gradeLevel} onChange={e => setNewSub({...newSub, gradeLevel: e.target.value.toUpperCase()})} />
                 <input type="number" placeholder="Coeff" className="h-9 bg-white border-2 border-slate-200 rounded-lg text-center font-black text-sm text-primary" value={newSub.coeff} onChange={e => setNewSub({...newSub, coeff: e.target.value})} />
-                <Button onClick={handleAddSubject} className="h-9 bg-accent hover:bg-slate-900 text-white font-black rounded-lg text-[9px] uppercase"><Plus className="w-3.5 h-3.5 mr-1" /> Ajouter</Button>
+                <Button onClick={handleAddSubject} className="h-9 bg-accent hover:bg-slate-900 text-white font-black rounded-lg text-[9px] uppercase border-2 border-white/10"><Plus className="w-3.5 h-3.5 mr-1" /> Ajouter</Button>
               </div>
 
               <div className="rounded-xl border-2 border-slate-50 overflow-hidden bg-white">
@@ -200,17 +201,19 @@ export default function SettingsPage() {
                   <TableBody>
                     {loadingSubjects ? (
                       <TableRow><TableCell colSpan={3} className="text-center py-10"><Loader2 className="w-6 h-6 animate-spin mx-auto text-primary" /></TableCell></TableRow>
-                    ) : subjects?.map((item: any) => (
-                      <TableRow key={item.id} className="hover:bg-primary/5 transition-all border-b border-slate-50">
-                        <TableCell className="pl-6 py-3 font-black text-[#0F172A] text-xs uppercase">{item.name}</TableCell>
-                        <TableCell className="text-center py-3"><Badge className="bg-white text-primary font-black text-sm border-2 px-3">{item.coefficient}</Badge></TableCell>
-                        <TableCell className="text-right pr-6 py-3">
-                          <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-300 hover:text-destructive" onClick={() => handleDeleteSubject(item.id)}>
-                            <Trash2 className="w-3.5 h-3.5" />
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))}
+                    ) : (
+                      subjects?.map((item: any) => (
+                        <TableRow key={item.id} className="hover:bg-primary/5 transition-all border-b border-slate-50">
+                          <TableCell className="pl-6 py-3 font-black text-[#0F172A] text-xs uppercase">{item.name}</TableCell>
+                          <TableCell className="text-center py-3"><Badge className="bg-white text-primary font-black text-sm border-2 px-3">{item.coefficient}</Badge></TableCell>
+                          <TableCell className="text-right pr-6 py-3">
+                            <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-300 hover:text-destructive" onClick={() => handleDeleteSubject(item.id)}>
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    )}
                   </TableBody>
                 </Table>
               </div>
