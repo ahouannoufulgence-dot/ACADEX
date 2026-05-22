@@ -1,9 +1,10 @@
+
 "use client";
 
 import React, { useState, useMemo, useCallback } from "react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
-import { Search, Filter, MoreVertical, Mail, UserPlus, Sparkles, Copy, CheckCircle } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Search, MoreVertical, UserPlus, Sparkles, Copy, CheckCircle } from "lucide-react";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -56,10 +57,12 @@ export default function StudentsPage() {
     return result.sort((a: any, b: any) => {
       const nameA = `${a.lastName || ""} ${a.firstName || ""}`.toLowerCase().trim();
       const nameB = `${b.lastName || ""} ${b.firstName || ""}`.toLowerCase().trim();
+      
       if (!nameA && !nameB) return a.id.localeCompare(b.id);
       if (!nameA) return 1;
       if (!nameB) return -1;
-      return nameA.compare(nameB, 'fr');
+      
+      return nameA.localeCompare(nameB, 'fr');
     });
   }, [students, searchQuery]);
 
@@ -139,24 +142,24 @@ export default function StudentsPage() {
       <div className="space-y-6">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h1 className="text-3xl font-headline font-bold text-white mb-1">Gestion des Élèves</h1>
-            <p className="text-muted-foreground text-sm">Effectif actuel: {students?.length || 0} enregistrés.</p>
+            <h1 className="text-3xl font-headline font-bold text-[#1F2937] mb-1">Gestion des Élèves</h1>
+            <p className="text-slate-500 text-sm">Effectif actuel: {students?.length || 0} enregistrés.</p>
           </div>
           <div className="flex gap-2">
              <Dialog onOpenChange={(open) => !open && setAiResult(null)}>
               <DialogTrigger asChild>
-                <Button className="bg-primary hover:bg-primary/90 text-white font-bold h-10 px-6">
+                <Button className="bg-[#1A6B4A] hover:bg-[#1A6B4A]/90 text-white font-bold h-10 px-6">
                   <UserPlus className="w-4 h-4 mr-2" /> Nouvel Élève
                 </Button>
               </DialogTrigger>
-              <DialogContent className="glass-card border-white/10 text-white sm:max-w-[500px]">
+              <DialogContent className="premium-card border-none sm:max-w-[500px]">
                 <DialogHeader>
-                  <DialogTitle className="flex items-center gap-2">
-                    <Sparkles className="w-5 h-5 text-accent" />
+                  <DialogTitle className="flex items-center gap-2 text-[#1F2937]">
+                    <Sparkles className="w-5 h-5 text-[#1A6B4A]" />
                     Provisionnement IA
                   </DialogTitle>
-                  <DialogDescription className="text-white/60">
-                    Générez automatiquement un compte élève optimisé.
+                  <DialogDescription>
+                    Générez automatiquement un compte élève optimisé selon les standards ACADEX.
                   </DialogDescription>
                 </DialogHeader>
                 
@@ -164,30 +167,30 @@ export default function StudentsPage() {
                   <div className="grid gap-4 py-4">
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label htmlFor="fname">Prénom</Label>
+                        <Label htmlFor="fname" className="text-slate-500 font-bold text-[10px] uppercase">Prénom</Label>
                         <Input 
                           id="fname" 
-                          className="bg-white/5 border-white/10 h-11" 
+                          className="bg-slate-50 border-slate-100 h-11" 
                           value={formData.firstName}
                           onChange={(e) => setFormData({...formData, firstName: e.target.value})}
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="lname">Nom</Label>
+                        <Label htmlFor="lname" className="text-slate-500 font-bold text-[10px] uppercase">Nom</Label>
                         <Input 
                           id="lname" 
-                          className="bg-white/5 border-white/10 h-11" 
+                          className="bg-slate-50 border-slate-100 h-11" 
                           value={formData.lastName}
                           onChange={(e) => setFormData({...formData, lastName: e.target.value})}
                         />
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="class">Classe / Niveau</Label>
+                      <Label htmlFor="class" className="text-slate-500 font-bold text-[10px] uppercase">Classe / Niveau</Label>
                       <Input 
                         id="class" 
                         placeholder="Ex: 3ème D" 
-                        className="bg-white/5 border-white/10 h-11" 
+                        className="bg-slate-50 border-slate-100 h-11" 
                         value={formData.gradeLevel}
                         onChange={(e) => setFormData({...formData, gradeLevel: e.target.value})}
                       />
@@ -195,11 +198,11 @@ export default function StudentsPage() {
                   </div>
                 ) : (
                   <div className="space-y-4 py-4 animate-in fade-in zoom-in duration-200">
-                    <div className="p-4 rounded-xl bg-accent/10 border border-accent/20">
-                      <p className="text-[10px] font-bold text-accent uppercase mb-1">Identifiant Suggéré</p>
+                    <div className="p-4 rounded-xl bg-[#1A6B4A]/5 border border-[#1A6B4A]/10">
+                      <p className="text-[10px] font-bold text-[#1A6B4A] uppercase mb-1">Identifiant Suggéré</p>
                       <div className="flex items-center justify-between">
-                        <span className="text-xl font-mono font-bold text-white tracking-wider">{aiResult.suggestedId}</span>
-                        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => copyToClipboard(aiResult.suggestedId)}>
+                        <span className="text-xl font-mono font-bold text-[#1F2937] tracking-wider">{aiResult.suggestedId}</span>
+                        <Button variant="ghost" size="icon" className="h-8 w-8 text-[#1A6B4A]" onClick={() => copyToClipboard(aiResult.suggestedId)}>
                           <Copy className="w-4 h-4" />
                         </Button>
                       </div>
@@ -210,14 +213,14 @@ export default function StudentsPage() {
                 <DialogFooter>
                   {!aiResult ? (
                     <Button 
-                      className="bg-accent text-black font-bold w-full h-11" 
+                      className="bg-[#1A6B4A] text-white font-bold w-full h-11" 
                       onClick={handleAiProvision}
                       disabled={isAiLoading}
                     >
                       {isAiLoading ? "Génération..." : "Générer avec ACADEX AI"}
                     </Button>
                   ) : (
-                    <Button className="bg-primary text-white font-bold w-full h-11" onClick={saveStudent}>
+                    <Button className="bg-[#1A6B4A] text-white font-bold w-full h-11" onClick={saveStudent}>
                       <CheckCircle className="w-4 h-4 mr-2" /> Confirmer l'enregistrement
                     </Button>
                   )}
@@ -227,14 +230,14 @@ export default function StudentsPage() {
           </div>
         </div>
 
-        <Card className="glass-card border-none shadow-xl">
+        <Card className="premium-card">
           <CardHeader className="pb-2">
             <div className="flex flex-col md:flex-row justify-between gap-4">
               <div className="relative w-full max-w-sm">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-300" />
                 <Input 
-                  placeholder="Rechercher..." 
-                  className="pl-10 bg-white/5 border-white/10 h-10" 
+                  placeholder="Rechercher par nom ou identifiant..." 
+                  className="pl-10 bg-slate-50 border-none h-10" 
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
@@ -244,52 +247,59 @@ export default function StudentsPage() {
           <CardContent>
             {loading ? (
               <div className="flex justify-center p-12">
-                <div className="w-6 h-6 border-2 border-accent border-t-transparent rounded-full animate-spin" />
+                <div className="w-6 h-6 border-2 border-[#1A6B4A] border-t-transparent rounded-full animate-spin" />
               </div>
             ) : (
-              <div className="rounded-xl border border-white/10 overflow-hidden">
+              <div className="rounded-xl border border-slate-100 overflow-hidden">
                 <Table>
-                  <TableHeader className="bg-white/5">
-                    <TableRow className="border-white/5">
-                      <TableHead className="text-white text-xs uppercase font-bold">Élève</TableHead>
-                      <TableHead className="text-white text-xs uppercase font-bold">Identifiant</TableHead>
-                      <TableHead className="text-white text-xs uppercase font-bold">Classe</TableHead>
-                      <TableHead className="text-white text-xs uppercase font-bold">Scolarité</TableHead>
-                      <TableHead className="text-right text-white text-xs uppercase font-bold">Actions</TableHead>
+                  <TableHeader className="bg-slate-50">
+                    <TableRow className="border-slate-100">
+                      <TableHead className="text-[#1F2937] text-xs uppercase font-bold">Élève</TableHead>
+                      <TableHead className="text-[#1F2937] text-xs uppercase font-bold">Identifiant</TableHead>
+                      <TableHead className="text-[#1F2937] text-xs uppercase font-bold">Classe</TableHead>
+                      <TableHead className="text-[#1F2937] text-xs uppercase font-bold">Statut</TableHead>
+                      <TableHead className="text-right text-[#1F2937] text-xs uppercase font-bold">Actions</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {filteredAndSortedStudents.map((s: any) => (
-                      <TableRow key={s.id} className="hover:bg-white/5 border-white/5 group">
+                      <TableRow key={s.id} className="hover:bg-slate-50/50 border-slate-50 group transition-colors">
                         <TableCell>
                           <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-xs shrink-0">
-                              {(s.lastName?.[0] || s.id?.[4] || "?")}
+                            <div className="w-8 h-8 rounded-full bg-[#1A6B4A]/10 flex items-center justify-center text-[#1A6B4A] font-bold text-xs shrink-0">
+                              {(s.lastName?.[0] || s.id?.[4] || "?").toUpperCase()}
                             </div>
-                            <span className="font-medium text-white text-sm">
+                            <span className="font-semibold text-[#1F2937] text-sm">
                               {s.lastName ? `${s.lastName.toUpperCase()} ${s.firstName || ""}` : (
-                                <span className="text-muted-foreground italic text-xs">Accès généré (en attente)</span>
+                                <span className="text-slate-400 italic text-xs">Accès généré</span>
                               )}
                             </span>
                           </div>
                         </TableCell>
-                        <TableCell className="font-mono text-[11px] text-accent">{s.id}</TableCell>
-                        <TableCell className="text-white text-sm">{s.gradeLevel}</TableCell>
+                        <TableCell className="font-mono text-[11px] text-[#1A6B4A] font-bold">{s.id}</TableCell>
+                        <TableCell className="text-slate-600 text-sm font-medium">{s.gradeLevel}</TableCell>
                         <TableCell>
                           <Badge className={cn(
-                            "text-[10px] font-bold px-2 py-0.5",
-                            s.status === "Actif" ? "bg-accent/20 text-accent border-accent/20" : "bg-amber-400/20 text-amber-400 border-amber-400/20"
+                            "text-[10px] font-bold px-2 py-0.5 border-none",
+                            s.status === "Actif" ? "bg-[#1A6B4A]/10 text-[#1A6B4A]" : "bg-amber-400/10 text-amber-500"
                           )} variant="outline">
                             {s.status === "Actif" ? "Activé" : "En attente"}
                           </Badge>
                         </TableCell>
                         <TableCell className="text-right">
-                          <Button variant="ghost" size="icon" className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <MoreVertical className="w-4 h-4 text-muted-foreground" />
+                          <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-300 hover:text-[#1A6B4A]">
+                            <MoreVertical className="w-4 h-4" />
                           </Button>
                         </TableCell>
                       </TableRow>
                     ))}
+                    {filteredAndSortedStudents.length === 0 && (
+                      <TableRow>
+                        <TableCell colSpan={5} className="text-center py-12 text-slate-400 italic">
+                          Aucun élève trouvé.
+                        </TableCell>
+                      </TableRow>
+                    )}
                   </TableBody>
                 </Table>
               </div>
