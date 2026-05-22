@@ -1,12 +1,14 @@
 "use client";
 
 import React, { useEffect, useState, useCallback } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Sidebar } from "./Sidebar";
 import { Topbar } from "./Topbar";
 import { getRoleFromId } from "@/lib/auth-utils";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import { PlaceHolderImages } from "@/lib/placeholder-images";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -68,6 +70,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   }, [handleLogout, toast, isReady]);
 
   const role = user ? getRoleFromId(user.id) : null;
+  const backgroundImage = PlaceHolderImages.find(img => img.id === "login-bg");
 
   if (!isReady || !user || !role) {
     return (
@@ -78,7 +81,19 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 flex relative w-full overflow-x-hidden">
+    <div className="min-h-screen relative flex w-full overflow-hidden">
+      {/* GLOBAL VIVID BACKGROUND */}
+      <div className="fixed inset-0 z-0">
+        <Image
+          src={backgroundImage?.imageUrl || "https://picsum.photos/seed/acadex-joy-study/1400/1000"}
+          alt="Élèves ACADEX"
+          fill
+          priority
+          className="object-cover opacity-90 saturate-[1.8] brightness-105"
+        />
+        <div className="absolute inset-0 bg-white/40 backdrop-blur-[2px]" />
+      </div>
+
       <Sidebar 
         role={role} 
         userName={user.name} 
@@ -94,7 +109,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
       )}
 
       <div className={cn(
-        "flex-1 flex flex-col min-h-screen transition-all duration-300 w-full",
+        "flex-1 flex flex-col min-h-screen transition-all duration-300 w-full relative z-10",
         "lg:ml-64"
       )}>
         <Topbar 
@@ -106,8 +121,8 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
           <div className="p-4 md:p-6 lg:p-8 max-w-[1440px] mx-auto w-full box-border">
             {children}
           </div>
-          <footer className="p-4 md:p-6 text-center text-slate-400 text-[9px] font-black uppercase tracking-widest border-t border-slate-100 bg-white/50">
-            © 2024 ACADEX Premium Systems • Excellence Éducative
+          <footer className="p-4 md:p-6 text-center text-[#0F172A] text-[9px] font-black uppercase tracking-widest border-t border-black/5 bg-white/30 backdrop-blur-md mt-10">
+            © 2024 ACADEX Premium Systems • Excellence Éducative au Bénin
           </footer>
         </main>
       </div>
