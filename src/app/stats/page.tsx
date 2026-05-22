@@ -1,4 +1,3 @@
-
 "use client";
 
 import React from "react";
@@ -72,7 +71,7 @@ export default function StatisticsPage() {
           <Card className="premium-card">
             <CardHeader className="p-6 md:p-8 pb-4">
               <CardTitle className="text-lg md:text-xl font-bold flex items-center gap-2">
-                <TrendingUp className="w-5 h-5 text-[#14532D]" /> Évolution
+                <TrendingUp className="w-5 h-5 text-[#14532D]" /> Évolution des Moyennes
               </CardTitle>
             </CardHeader>
             <CardContent className="h-[250px] md:h-[360px] p-4 md:p-8 pt-4">
@@ -93,7 +92,7 @@ export default function StatisticsPage() {
           <Card className="premium-card">
             <CardHeader className="p-6 md:p-8 pb-4">
               <CardTitle className="text-lg md:text-xl font-bold flex items-center gap-2">
-                <Users className="w-5 h-5" /> Effectifs par Cycle
+                <Users className="w-5 h-5 text-[#14532D]" /> Effectifs par Cycle
               </CardTitle>
             </CardHeader>
             <CardContent className="h-[250px] md:h-[360px] p-4 md:p-8 pt-4 flex items-center justify-center relative">
@@ -128,6 +127,7 @@ export default function StatisticsPage() {
             <CardTitle className="text-lg md:text-xl font-bold flex items-center gap-2">
               <PieIcon className="w-5 h-5 text-[#B91C1C]" /> Performance Trimestrielle
             </CardTitle>
+            <CardDescription>Répartition des résultats par catégorie d'excellence.</CardDescription>
           </CardHeader>
           <CardContent className="min-h-[300px] p-6 md:p-8 pt-4 flex flex-col md:flex-row items-center gap-8">
             <div className="flex-1 h-[250px] md:h-[350px] w-full">
@@ -156,7 +156,7 @@ export default function StatisticsPage() {
                     <div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }} />
                     <span className="text-xs font-bold text-[#111827]">{item.name}</span>
                   </div>
-                  <span className="font-mono text-xs font-bold">{item.value} éléves</span>
+                  <span className="font-mono text-xs font-bold">{item.value} élèves</span>
                 </div>
               ))}
             </div>

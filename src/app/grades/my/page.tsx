@@ -1,9 +1,8 @@
-
 "use client";
 
 import React from "react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
-import { FileText, Trophy, Target, AlertCircle, TrendingUp, Star } from "lucide-react";
+import { FileText, Trophy, Target, AlertCircle, TrendingUp, Star, Award } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
@@ -44,13 +43,13 @@ export default function MyGradesPage() {
             <p className="text-slate-500 text-lg font-medium">Trimestre 2 • Session 2023 / 2024</p>
           </div>
           <Card className="premium-card p-2 flex items-center border-none bg-white shadow-2xl">
-            <div className="px-8 py-4 border-r border-slate-100 flex flex-col items-center">
+            <div className="px-10 py-6 border-r border-slate-100 flex flex-col items-center">
               <p className="text-[10px] text-slate-400 uppercase font-bold mb-1 tracking-widest">Moyenne Générale</p>
-              <p className="text-4xl font-headline font-bold text-[#14532D]">{generalAvg}</p>
+              <p className="text-5xl font-headline font-bold text-[#14532D]">{generalAvg}</p>
             </div>
-            <div className="px-8 py-4 flex flex-col items-center">
+            <div className="px-10 py-6 flex flex-col items-center">
               <p className="text-[10px] text-slate-400 uppercase font-bold mb-1 tracking-widest">Mention Finale</p>
-              <Badge className={cn("text-white font-bold h-7 px-4", mention.color)}>{mention.text}</Badge>
+              <Badge className={cn("text-white font-bold h-8 px-6 rounded-xl text-xs uppercase tracking-widest", mention.color)}>{mention.text}</Badge>
             </div>
           </Card>
         </div>
@@ -61,46 +60,50 @@ export default function MyGradesPage() {
           <StatMiniCard icon={TrendingUp} label="Progression" value="+1.2 pts" color="text-[#16A34A]" />
         </div>
 
-        <Card className="premium-card border-none shadow-2xl">
-          <CardHeader className="p-10 pb-4">
-            <CardTitle className="flex items-center gap-3 text-2xl font-bold text-[#111827]">
-              <FileText className="w-6 h-6 text-[#14532D]" />
-              Détails des Évaluations
-            </CardTitle>
-            <CardDescription className="text-lg">Consultez vos performances détaillées par matière.</CardDescription>
+        <Card className="premium-card">
+          <CardHeader className="p-10 pb-6 border-b border-slate-50">
+            <div className="flex items-center gap-4">
+              <div className="p-3 rounded-2xl bg-accent/10">
+                <Award className="w-8 h-8 text-accent" />
+              </div>
+              <div>
+                <CardTitle className="text-2xl font-bold text-[#111827]">Détails des Évaluations</CardTitle>
+                <CardDescription className="text-lg">Performance détaillée par matière et comparaison avec la classe.</CardDescription>
+              </div>
+            </div>
           </CardHeader>
-          <CardContent className="p-10 pt-4">
-            <div className="rounded-[1.5rem] border border-slate-100 overflow-hidden shadow-inner bg-slate-50/30">
+          <CardContent className="p-10 pt-8">
+            <div className="rounded-[1.5rem] border border-slate-100 overflow-hidden shadow-inner bg-slate-50/20">
               <Table>
                 <TableHeader className="bg-slate-50">
                   <TableRow className="border-slate-100">
-                    <TableHead className="text-[#111827] font-bold h-14">Matière</TableHead>
-                    <TableHead className="text-[#111827] font-bold h-14 text-center">Note / 20</TableHead>
-                    <TableHead className="text-[#111827] font-bold h-14 text-center">Coeff</TableHead>
-                    <TableHead className="text-[#111827] font-bold h-14 text-center">Moy. Classe</TableHead>
-                    <TableHead className="text-[#111827] font-bold h-14 text-center">Min/Max</TableHead>
-                    <TableHead className="text-right text-[#111827] font-bold h-14 pr-8">Rang</TableHead>
+                    <TableHead className="text-[#111827] font-bold h-16 pl-8">Matière</TableHead>
+                    <TableHead className="text-[#111827] font-bold h-16 text-center">Note / 20</TableHead>
+                    <TableHead className="text-[#111827] font-bold h-16 text-center">Coeff</TableHead>
+                    <TableHead className="text-[#111827] font-bold h-16 text-center">Moy. Classe</TableHead>
+                    <TableHead className="text-[#111827] font-bold h-16 text-center">Min/Max</TableHead>
+                    <TableHead className="text-right text-[#111827] font-bold h-16 pr-8">Rang</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {grades.map((item, idx) => (
                     <TableRow key={idx} className="hover:bg-white transition-all duration-200 border-slate-50 group">
-                      <TableCell className="font-bold text-[#111827] text-base py-5">{item.subject}</TableCell>
+                      <TableCell className="font-bold text-[#111827] text-lg py-6 pl-8">{item.subject}</TableCell>
                       <TableCell className="text-center">
-                        <Badge variant="outline" className={cn("text-sm font-bold w-14 h-8 justify-center border-none shadow-sm", getNoteColor(item.note))}>
+                        <Badge variant="outline" className={cn("text-base font-black w-16 h-10 justify-center border-none shadow-sm rounded-xl", getNoteColor(item.note))}>
                           {item.note}
                         </Badge>
                       </TableCell>
                       <TableCell className="text-center font-bold text-slate-500">{item.coeff}</TableCell>
                       <TableCell className="text-center font-bold text-slate-500">{item.avg}</TableCell>
                       <TableCell className="text-center">
-                        <div className="flex items-center justify-center gap-1.5 text-[11px] font-bold">
-                          <span className="text-[#B91C1C] bg-red-50 px-2 py-0.5 rounded">{item.low}</span>
+                        <div className="flex items-center justify-center gap-2 text-[11px] font-bold">
+                          <span className="text-[#B91C1C] bg-red-50 px-3 py-1 rounded-lg">{item.low}</span>
                           <span className="text-slate-300">/</span>
-                          <span className="text-[#16A34A] bg-green-50 px-2 py-0.5 rounded">{item.high}</span>
+                          <span className="text-[#16A34A] bg-green-50 px-3 py-1 rounded-lg">{item.high}</span>
                         </div>
                       </TableCell>
-                      <TableCell className="text-right font-black text-[#111827] pr-8 text-lg">{item.rank}</TableCell>
+                      <TableCell className="text-right font-black text-[#111827] pr-8 text-xl">{item.rank}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -115,12 +118,12 @@ export default function MyGradesPage() {
 
 function StatMiniCard({ icon: Icon, label, value, color }: any) {
   return (
-    <Card className="premium-card p-8 flex items-center gap-6 border-none shadow-xl hover:translate-y-[-4px] transition-transform">
-      <div className={cn("p-4 rounded-[1.25rem] bg-slate-50 shadow-inner", color)}>
-        <Icon className="w-8 h-8" />
+    <Card className="premium-card p-10 flex items-center gap-8 border-none shadow-xl hover:translate-y-[-6px] transition-transform">
+      <div className={cn("p-5 rounded-2xl bg-slate-50 shadow-inner group-hover:bg-white transition-colors", color)}>
+        <Icon className="w-10 h-10" />
       </div>
       <div>
-        <p className="text-[10px] text-slate-400 uppercase font-bold tracking-[0.15em] mb-1">{label}</p>
+        <p className="text-[11px] text-slate-400 uppercase font-bold tracking-[0.2em] mb-2">{label}</p>
         <p className="text-3xl font-headline font-bold text-[#111827]">{value}</p>
       </div>
     </Card>

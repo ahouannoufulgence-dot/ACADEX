@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -65,64 +64,66 @@ export default function DashboardPage() {
   return (
     <DashboardLayout>
       <div className="space-y-6 md:space-y-12 animate-fade-up">
-        {/* Hero Section - Responsive */}
-        <div className="relative h-[350px] md:h-[480px] w-full rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-2xl border border-white/50 group">
+        {/* Hero Section */}
+        <div className="relative h-[350px] md:h-[480px] w-full rounded-[2.5rem] overflow-hidden shadow-2xl group border border-slate-200/50">
           <Image
             src={heroImage?.imageUrl || "https://picsum.photos/seed/acadex-joy-success/1400/600"}
             alt="Joie de l'apprentissage"
             fill
             priority
-            className="object-cover transition-transform duration-1000 group-hover:scale-110"
+            className="object-cover transition-transform duration-1000 group-hover:scale-105"
             data-ai-hint="happy African students"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#14532D]/95 via-[#14532D]/40 to-transparent" />
-          <div className="absolute inset-0 p-6 md:p-16 lg:p-20 flex flex-col justify-center text-white space-y-4 md:space-y-8">
-            <div className="flex items-center gap-2 md:gap-3 bg-accent/20 backdrop-blur-2xl w-fit px-4 md:px-6 py-1.5 md:py-2.5 rounded-full text-[9px] md:text-[11px] font-bold tracking-[0.2em] uppercase border border-white/30 animate-pulse">
-              <Sparkles className="w-3 md:w-5 h-3 md:h-5 text-white" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#14532D]/95 via-[#14532D]/30 to-transparent" />
+          <div className="absolute inset-0 p-8 md:p-20 flex flex-col justify-center text-white space-y-4 md:space-y-8">
+            <div className="flex items-center gap-3 bg-white/10 backdrop-blur-xl w-fit px-6 py-2.5 rounded-full text-[10px] md:text-[11px] font-bold tracking-[0.2em] uppercase border border-white/20 animate-pulse">
+              <Sparkles className="w-4 md:w-5 h-4 md:h-5 text-accent" />
               Excellence & Joie d'Apprendre
             </div>
-            <div className="space-y-2 md:space-y-4">
-              <h1 className="text-3xl md:text-6xl lg:text-8xl font-headline font-bold text-white leading-tight drop-shadow-2xl">
+            <div className="space-y-3">
+              <h1 className="text-4xl md:text-7xl lg:text-8xl font-headline font-bold text-white leading-[1.1] drop-shadow-2xl">
                 Bienvenue sur <span className="text-accent">ACADEX</span>
               </h1>
-              <p className="text-sm md:text-2xl text-white/95 font-medium max-w-2xl leading-relaxed drop-shadow-xl">
-                "Apprendre aujourd’hui, réussir demain". Précision institutionnelle.
+              <p className="text-base md:text-2xl text-white/90 font-medium max-w-2xl leading-relaxed drop-shadow-xl">
+                "Apprendre aujourd’hui, réussir demain". Précision institutionnelle pour une éducation d'élite au Bénin.
               </p>
             </div>
-            <div className="pt-2 md:pt-8">
-              <Button className="bg-white hover:bg-slate-100 text-[#14532D] font-bold h-10 md:h-16 px-6 md:px-12 rounded-[1rem] md:rounded-[1.5rem] shadow-2xl transition-all hover:scale-105 text-xs md:text-lg">
-                Rapport du Jour <ArrowUpRight className="ml-2 md:ml-3 w-4 md:w-6 h-4 md:h-6" />
+            <div className="pt-4 md:pt-10">
+              <Button className="bg-white hover:bg-slate-100 text-[#14532D] font-bold h-12 md:h-18 px-8 md:px-14 rounded-2xl shadow-2xl transition-all hover:translate-y-[-4px] text-sm md:text-xl flex items-center gap-4">
+                Rapport du Jour <ArrowUpRight className="w-5 md:w-7 h-5 md:h-7" />
               </Button>
             </div>
           </div>
         </div>
 
-        {/* Stats Grid - Responsive */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
+        {/* Stats Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-10">
           <StatCard title="Effectif Total" value="842" trend="+12%" icon={Users} type="neutral" delay="0s" />
           <StatCard title="Enseignants" value="48" trend="Connectés" icon={GraduationCap} type="neutral" delay="0.1s" />
           <StatCard title="Taux Réussite" value="88%" trend="+5.2 pts" icon={TrendingUp} type="positive" delay="0.2s" />
           <StatCard title="Paiements" value="72%" trend="T2" icon={CreditCard} type="warning" delay="0.3s" />
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-10">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-12">
           <Card className="lg:col-span-2 premium-card">
-            <CardHeader className="p-6 md:p-10 pb-4 flex flex-row items-center justify-between">
+            <CardHeader className="p-8 md:p-12 pb-4 flex flex-row items-center justify-between">
               <div>
-                <CardTitle className="text-lg md:text-2xl font-bold text-[#111827]">Performance</CardTitle>
-                <CardDescription>Répartition des moyennes</CardDescription>
+                <CardTitle className="text-xl md:text-3xl font-bold text-[#111827]">Performance Globale</CardTitle>
+                <CardDescription className="text-base">Répartition des moyennes trimestrielles</CardDescription>
               </div>
-              <Activity className="w-5 h-5 text-accent" />
+              <div className="p-4 rounded-2xl bg-accent/10">
+                <Activity className="w-6 h-6 text-accent" />
+              </div>
             </CardHeader>
-            <CardContent className="h-[250px] md:h-[380px] p-4 md:p-10 pt-0">
+            <CardContent className="h-[280px] md:h-[400px] p-6 md:p-12 pt-0">
               <ChartContainer config={chartConfig} className="h-full w-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={distributionData}>
                     <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
-                    <XAxis dataKey="range" axisLine={false} tickLine={false} tick={{fill: '#64748B', fontSize: 11}} />
-                    <YAxis axisLine={false} tickLine={false} tick={{fill: '#64748B', fontSize: 11}} />
+                    <XAxis dataKey="range" axisLine={false} tickLine={false} tick={{fill: '#64748B', fontSize: 12, fontWeight: 600}} />
+                    <YAxis axisLine={false} tickLine={false} tick={{fill: '#64748B', fontSize: 12, fontWeight: 600}} />
                     <ChartTooltip content={<ChartTooltipContent />} />
-                    <Bar dataKey="count" radius={[6, 6, 0, 0]} barSize={40}>
+                    <Bar dataKey="count" radius={[8, 8, 0, 0]} barSize={50}>
                       {distributionData.map((entry, index) => (
                         <rect key={`cell-${index}`} fill={entry.color} />
                       ))}
@@ -134,16 +135,17 @@ export default function DashboardPage() {
           </Card>
 
           <Card className="premium-card">
-            <CardHeader className="p-6 md:p-10 pb-4">
-              <CardTitle className="flex items-center gap-3 text-lg md:text-2xl font-bold text-[#111827]">
-                <Calendar className="w-5 h-5 text-[#16A34A]" />
+            <CardHeader className="p-8 md:p-12 pb-4">
+              <CardTitle className="flex items-center gap-4 text-xl md:text-3xl font-bold text-[#111827]">
+                <Calendar className="w-7 h-7 text-[#16A34A]" />
                 Journal de Bord
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-6 md:space-y-8 p-6 md:p-10 pt-6">
-              <JournalEntry author="Conseil de Classe" action="Tle D - Salle réunion" module="Urgent" time="15:00" type="danger" />
+            <CardContent className="space-y-8 md:space-y-10 p-8 md:p-12 pt-8">
+              <JournalEntry author="Conseil de Classe" action="Tle D - Salle de réunion" module="Urgent" time="15:00" type="danger" />
               <JournalEntry author="M. Kouassi" action="Saisie des notes MATH" module="Notes" time="09:42" type="neutral" />
               <JournalEntry author="Administration" action="Clôture inscriptions T2" module="Finance" time="Hier" type="danger" />
+              <JournalEntry author="Direction" action="Mise à jour Emploi du temps" module="System" time="Hier" type="positive" />
             </CardContent>
           </Card>
         </div>
@@ -155,25 +157,25 @@ export default function DashboardPage() {
 function StatCard({ title, value, trend, icon: Icon, type, delay }: any) {
   return (
     <Card className="premium-card group cursor-pointer animate-fade-up" style={{ animationDelay: delay }}>
-      <CardContent className="p-5 md:p-8">
+      <CardContent className="p-8 md:p-10">
         <div className="flex justify-between items-start">
-          <div className="space-y-2 md:space-y-3">
-            <p className="text-[9px] md:text-[11px] font-bold text-slate-400 uppercase tracking-widest">{title}</p>
-            <h3 className="text-2xl md:text-4xl font-headline font-bold text-[#111827] group-hover:text-accent transition-colors">{value}</h3>
-            <p className={cn(
-              "text-[10px] md:text-xs font-bold px-2 py-0.5 rounded-full w-fit",
+          <div className="space-y-3">
+            <p className="text-[10px] md:text-[11px] font-bold text-slate-400 uppercase tracking-[0.2em]">{title}</p>
+            <h3 className="text-3xl md:text-5xl font-headline font-bold text-[#111827] group-hover:text-accent transition-colors">{value}</h3>
+            <div className={cn(
+              "text-[10px] md:text-xs font-bold px-3 py-1 rounded-full w-fit flex items-center gap-1",
               type === "positive" ? "bg-green-100 text-[#14532D]" : 
               type === "warning" ? "bg-red-100 text-[#B91C1C]" : "bg-slate-100 text-slate-500"
             )}>
               {trend}
-            </p>
+            </div>
           </div>
           <div className={cn(
-            "p-3 md:p-4 rounded-xl md:rounded-2xl text-white shadow-xl transition-all duration-500",
+            "p-4 md:p-5 rounded-2xl text-white shadow-2xl transition-all duration-500 group-hover:rotate-6",
             type === "positive" ? "bg-[#16A34A]" : 
             type === "warning" ? "bg-[#B91C1C]" : "bg-[#111827]"
           )}>
-            <Icon className="w-5 md:w-6 h-5 md:h-6" />
+            <Icon className="w-6 md:w-8 h-6 md:h-8" />
           </div>
         </div>
       </CardContent>
@@ -183,20 +185,20 @@ function StatCard({ title, value, trend, icon: Icon, type, delay }: any) {
 
 function JournalEntry({ author, action, module, time, type }: any) {
   return (
-    <div className="flex gap-4 md:gap-6 items-start relative pb-6 md:pb-8 last:pb-0 group">
-      <div className="absolute left-[9px] top-7 bottom-0 w-[2px] bg-slate-100 last:hidden" />
+    <div className="flex gap-6 items-start relative pb-10 last:pb-0 group">
+      <div className="absolute left-[11px] top-8 bottom-0 w-[2px] bg-slate-100 last:hidden" />
       <div 
         className={cn(
-          "w-4 h-4 md:w-5 md:h-5 rounded-full mt-1.5 shrink-0 border-4 border-white shadow-xl transition-all",
+          "w-5 h-5 md:w-6 md:h-6 rounded-full mt-1.5 shrink-0 border-4 border-white shadow-xl transition-all group-hover:scale-125",
           type === "danger" ? "bg-[#B91C1C]" : type === "positive" ? "bg-[#16A34A]" : "bg-slate-400"
         )} 
       />
-      <div className="flex-1 space-y-1">
+      <div className="flex-1 space-y-2">
         <div className="flex justify-between items-center">
-          <p className={cn("text-sm md:text-base font-bold", type === "danger" ? "text-[#B91C1C]" : "text-[#111827]")}>{author}</p>
-          <span className="text-[10px] text-slate-400 font-bold">{time}</span>
+          <p className={cn("text-base md:text-lg font-bold", type === "danger" ? "text-[#B91C1C]" : "text-[#111827]")}>{author}</p>
+          <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{time}</span>
         </div>
-        <p className="text-xs md:text-sm text-slate-500 font-medium">{action}</p>
+        <p className="text-sm text-slate-500 font-medium leading-relaxed">{action}</p>
       </div>
     </div>
   );
