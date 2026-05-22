@@ -79,13 +79,13 @@ export default function TeacherSetupPage() {
        {/* Background Image with Overlay */}
        <Image
         src={registrationImage?.imageUrl || "https://picsum.photos/seed/acadex-students-uniform/1200/1200"}
-        alt="Enseignement Joyeux"
+        alt="Enseignants joyeux"
         fill
         priority
-        className="object-cover opacity-40 animate-pulse-slow"
+        className="object-cover opacity-60 animate-pulse-slow"
         data-ai-hint="happy African students classroom"
       />
-      <div className="absolute inset-0 bg-gradient-to-tr from-[#14532D]/95 via-[#111827]/80 to-[#111827]/95" />
+      <div className="absolute inset-0 bg-gradient-to-tr from-[#14532D]/95 via-[#111827]/60 to-[#111827]/90" />
 
       <div className="relative z-10 w-full max-w-2xl animate-fade-up">
         <Link href="/login" className="mb-8 inline-flex items-center text-accent hover:text-white transition-colors gap-2 font-bold uppercase tracking-widest text-[10px]">

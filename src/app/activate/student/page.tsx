@@ -130,17 +130,17 @@ export default function StudentActivationPage() {
         alt="Élèves souriants"
         fill
         priority
-        className="object-cover opacity-40 animate-pulse-slow"
+        className="object-cover opacity-60 animate-pulse-slow"
         data-ai-hint="happy African students school"
       />
-      <div className="absolute inset-0 bg-gradient-to-br from-[#14532D]/90 via-[#111827]/80 to-[#111827]/95" />
+      <div className="absolute inset-0 bg-gradient-to-br from-[#14532D]/95 via-[#111827]/60 to-[#111827]/90" />
 
       <div className="relative z-10 w-full max-w-md animate-fade-up">
         <Link href="/login" className="mb-8 inline-flex items-center text-accent hover:text-white transition-colors gap-2 font-bold uppercase tracking-widest text-[10px]">
           <ArrowLeft className="w-4 h-4" /> Retour à la connexion
         </Link>
 
-        <Card className="glass-card border-white/10 shadow-2xl overflow-hidden rounded-[2rem]">
+        <Card className="glass-card border-white/10 shadow-2xl overflow-hidden rounded-[2.5rem]">
           <CardHeader className="text-center pb-8 pt-10">
             <div className="mx-auto w-16 h-16 bg-accent rounded-2xl flex items-center justify-center mb-6 shadow-2xl rotate-3">
               <GraduationCap className="w-10 h-10 text-black" />

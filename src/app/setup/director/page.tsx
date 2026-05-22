@@ -29,7 +29,7 @@ export default function DirectorSetupPage() {
   const { toast } = useToast();
   const db = useFirestore();
 
-  const registrationImage = PlaceHolderImages.find(img => img.id === "dashboard-hero");
+  const registrationImage = PlaceHolderImages.find(img => img.id === "login-bg");
 
   const handleSetup = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -75,21 +75,21 @@ export default function DirectorSetupPage() {
     <div className="min-h-screen relative flex items-center justify-center p-6 lg:p-12 overflow-hidden bg-[#111827]">
       {/* Background Image with Overlay */}
       <Image
-        src={registrationImage?.imageUrl || "https://picsum.photos/seed/acadex-joy-success/1400/600"}
-        alt="Direction Visionnaire"
+        src={registrationImage?.imageUrl || "https://picsum.photos/seed/acadex-joy-success/1400/1000"}
+        alt="Élèves rayonnants"
         fill
         priority
-        className="object-cover opacity-40 animate-pulse-slow"
+        className="object-cover opacity-60 animate-pulse-slow"
         data-ai-hint="happy African students school"
       />
-      <div className="absolute inset-0 bg-gradient-to-br from-[#14532D]/95 via-[#111827]/80 to-[#111827]/95" />
+      <div className="absolute inset-0 bg-gradient-to-br from-[#14532D]/95 via-[#111827]/60 to-[#111827]/90" />
 
       <div className="relative z-10 w-full max-w-3xl animate-fade-up">
         <Link href="/login" className="mb-8 inline-flex items-center text-accent hover:text-white transition-colors gap-2 font-bold uppercase tracking-widest text-[10px]">
           <ArrowLeft className="w-4 h-4" /> Retour à la connexion
         </Link>
 
-        <Card className="glass-card border-white/10 shadow-2xl rounded-[3rem] overflow-hidden">
+        <Card className="glass-card border-white/10 shadow-2xl rounded-[2.5rem] overflow-hidden">
           <CardHeader className="text-center pt-12 pb-10">
             <div className="mx-auto w-20 h-20 bg-[#14532D] rounded-[1.5rem] flex items-center justify-center mb-6 shadow-2xl transition-transform hover:scale-110">
               <ShieldCheck className="w-12 h-12 text-white" />
