@@ -94,7 +94,7 @@ export default function TeacherSetupPage() {
 
         <Card className="bg-white/95 backdrop-blur-3xl border-none shadow-[0_40px_120px_-15px_rgba(0,0,0,0.4)] rounded-[3rem] overflow-hidden flex flex-col lg:flex-row">
             <div className="lg:w-[35%] bg-primary p-12 lg:p-16 text-white flex flex-col justify-between relative overflow-hidden">
-               <div className="absolute top-0 right-0 p-10 opacity-10 rotate-12">
+               <div className="absolute top-0 right-0 p-10 opacity-10 rotate-12 text-white/20">
                   <GraduationCap size={250} />
                </div>
                <div className="relative z-10 space-y-8">
