@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { 
   Calendar as CalendarIcon, 
@@ -8,64 +8,182 @@ import {
   ChevronLeft, 
   ChevronRight,
   MapPin,
-  Sparkles
+  Sparkles,
+  Plus,
+  Trash2,
+  Edit3,
+  Loader2
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useFirestore, useCollection } from "@/firebase";
+import { collection, doc, setDoc, deleteDoc, query, orderBy, serverTimestamp } from "firebase/firestore";
+import { useToast } from "@/hooks/use-toast";
+import { errorEmitter } from "@/firebase/error-emitter";
+import { FirestorePermissionError } from "@/firebase/errors";
+import { getRoleFromId } from "@/lib/auth-utils";
 import { cn } from "@/lib/utils";
 
 export default function SchedulePage() {
+  const { toast } = useToast();
+  const db = useFirestore();
+  const [user, setUser] = useState<any>(null);
+  const [role, setRole] = useState<any>(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [selectedSlot, setSelectedSlot] = useState<any>(null);
+  const [formData, setFormData] = useState({
+    day: "Lun",
+    hour: "08h00",
+    subject: "",
+    room: "",
+    teacher: ""
+  });
+
   const hours = ["08h00", "09h00", "10h00", "11h00", "12h00", "14h00", "15h00", "16h00", "17h00"];
   const days = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"];
 
-  const scheduleData = [
-    { day: "Lun", hour: "08h00", subject: "Maths", room: "S01", teacher: "Kouassi", color: "bg-emerald-50 text-emerald-700 border-emerald-200" },
-    { day: "Lun", hour: "10h00", subject: "Français", room: "S05", teacher: "Soglo", color: "bg-blue-50 text-blue-700 border-blue-200" },
-    { day: "Mar", hour: "09h00", subject: "Physique", room: "L1", teacher: "Amoussou", color: "bg-purple-50 text-purple-700 border-purple-200" },
-    { day: "Mer", hour: "08h00", subject: "Anglais", room: "S03", teacher: "Dossou", color: "bg-amber-50 text-amber-700 border-amber-200" },
-    { day: "Jeu", hour: "14h00", subject: "SVT", room: "S12", teacher: "Kossou", color: "bg-rose-50 text-rose-700 border-rose-200" },
-    { day: "Ven", hour: "11h00", subject: "Philo", room: "S01", teacher: "Akpo", color: "bg-indigo-50 text-indigo-700 border-indigo-200" },
-  ];
+  useEffect(() => {
+    const userStr = localStorage.getItem("acadex_user");
+    if (userStr) {
+      const u = JSON.parse(userStr);
+      setUser(u);
+      setRole(getRoleFromId(u.id));
+    }
+  }, []);
+
+  const schedulesQuery = useMemo(() => {
+    if (!db) return null;
+    return query(collection(db, "schedules"), orderBy("createdAt", "asc"));
+  }, [db]);
+
+  const { data: schedules, loading } = useCollection(schedulesQuery);
 
   const getCourse = (day: string, hour: string) => {
-    return scheduleData.find(c => c.day === day && c.hour === hour);
+    return schedules?.find((c: any) => c.day === day && c.hour === hour);
   };
+
+  const handleSaveSlot = () => {
+    if (!db || !formData.subject || !formData.room) return;
+
+    const slotId = `${formData.day}-${formData.hour}`.replace(/\s+/g, '-');
+    const slotRef = doc(db, "schedules", slotId);
+    
+    const data = {
+      ...formData,
+      id: slotId,
+      updatedBy: user.name,
+      createdAt: serverTimestamp(),
+      color: "bg-emerald-50 text-emerald-700 border-emerald-200"
+    };
+
+    setDoc(slotRef, data, { merge: true })
+      .catch(async () => {
+        const permissionError = new FirestorePermissionError({
+          path: slotRef.path,
+          operation: 'write',
+          requestResourceData: data,
+        });
+        errorEmitter.emit('permission-error', permissionError);
+      });
+
+    toast({ title: "Horaire mis à jour", description: "Le créneau a été enregistré spontanément." });
+    setIsEditing(false);
+    setFormData({ day: "Lun", hour: "08h00", subject: "", room: "", teacher: "" });
+  };
+
+  const handleDeleteSlot = (id: string) => {
+    if (!db) return;
+    deleteDoc(doc(db, "schedules", id))
+      .catch(async () => {
+        const permissionError = new FirestorePermissionError({
+          path: `schedules/${id}`,
+          operation: 'delete',
+        });
+        errorEmitter.emit('permission-error', permissionError);
+      });
+    toast({ variant: "destructive", title: "Créneau supprimé" });
+  };
+
+  const canEdit = role === 'DIRECTOR' || role === 'TEACHER';
 
   return (
     <DashboardLayout>
-      <div className="space-y-8 md:space-y-16 animate-fade-up max-w-full overflow-hidden">
+      <div className="space-y-6 md:space-y-12 animate-fade-up max-w-full overflow-hidden">
         {/* Header - High Contrast */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
-          <div className="w-full text-left">
-            <h1 className="text-4xl md:text-8xl font-headline font-black text-[#0F172A] mb-2 tracking-tighter uppercase leading-none">Planning</h1>
-            <p className="text-[#0F172A] text-sm md:text-3xl font-black opacity-80 uppercase tracking-[0.4em]">Hebdomadaire Élite</p>
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 px-2">
+          <div className="text-left w-full">
+            <h1 className="text-3xl md:text-7xl font-headline font-black text-[#0F172A] mb-1 tracking-tighter uppercase leading-none">Planning Élite</h1>
+            <p className="text-[#0F172A] text-[9px] md:text-2xl font-black opacity-80 uppercase tracking-[0.4em]">Hebdomadaire • 2026-2027</p>
           </div>
-          <div className="flex items-center gap-4 bg-white/90 p-3 md:p-6 rounded-[1.5rem] md:rounded-[2.5rem] shadow-2xl border-4 border-white w-full md:w-auto justify-between backdrop-blur-xl">
-            <Button variant="ghost" size="icon" className="h-10 w-10 md:h-18 md:w-18 hover:bg-slate-50 rounded-xl md:rounded-2xl">
-              <ChevronLeft className="w-6 h-6 md:w-10 md:h-10 text-slate-400" />
-            </Button>
-            <div className="px-4 md:px-12 flex flex-col items-center text-center">
-              <span className="text-[9px] md:text-[14px] font-black text-slate-400 uppercase tracking-[0.3em]">Semaine Élite</span>
-              <span className="text-[12px] md:text-3xl font-black text-[#0F172A] tracking-tighter">11 — 16 Mars</span>
-            </div>
-            <Button variant="ghost" size="icon" className="h-10 w-10 md:h-18 md:w-18 hover:bg-slate-50 rounded-xl md:rounded-2xl">
-              <ChevronRight className="w-6 h-6 md:w-10 md:h-10 text-slate-400" />
-            </Button>
-          </div>
+          
+          {canEdit && (
+            <Dialog open={isEditing} onOpenChange={setIsEditing}>
+              <DialogTrigger asChild>
+                <Button className="bg-primary hover:bg-slate-900 text-white font-black h-11 md:h-14 px-6 md:px-8 rounded-xl md:rounded-2xl shadow-xl transition-all border-2 border-white/10 w-full md:w-auto text-[10px] md:text-base uppercase tracking-tighter">
+                  <Plus className="w-3.5 h-3.5 md:w-5 md:h-5 mr-2" /> Nouveau Créneau
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="vivid-box border-none bg-white p-0 overflow-hidden rounded-[2rem] sm:max-w-[400px]">
+                <DialogHeader className="p-6 bg-primary text-white border-b-2 border-accent">
+                   <div className="flex items-center gap-3">
+                      <div className="p-2 bg-white rounded-xl shadow-lg rotate-3">
+                        <Clock className="w-4 h-4 text-primary" />
+                      </div>
+                      <DialogTitle className="text-lg font-black tracking-tighter uppercase">Planification</DialogTitle>
+                   </div>
+                </DialogHeader>
+                <div className="p-6 space-y-4">
+                   <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-1">
+                        <Label className="text-[8px] font-black uppercase text-[#0F172A] ml-1">Jour</Label>
+                        <Select value={formData.day} onValueChange={(v) => setFormData({...formData, day: v})}>
+                          <SelectTrigger className="h-10 bg-slate-50 border-2 border-slate-100 rounded-xl font-black text-xs"><SelectValue /></SelectTrigger>
+                          <SelectContent>{days.map(d => <SelectItem key={d} value={d}>{d}</SelectItem>)}</SelectContent>
+                        </Select>
+                      </div>
+                      <div className="space-y-1">
+                        <Label className="text-[8px] font-black uppercase text-[#0F172A] ml-1">Heure</Label>
+                        <Select value={formData.hour} onValueChange={(v) => setFormData({...formData, hour: v})}>
+                          <SelectTrigger className="h-10 bg-slate-50 border-2 border-slate-100 rounded-xl font-black text-xs"><SelectValue /></SelectTrigger>
+                          <SelectContent>{hours.map(h => <SelectItem key={h} value={h}>{h}</SelectItem>)}</SelectContent>
+                        </Select>
+                      </div>
+                   </div>
+                   <div className="space-y-1">
+                      <Label className="text-[8px] font-black uppercase text-[#0F172A] ml-1">Matière</Label>
+                      <Input className="h-10 bg-slate-50 border-2 border-slate-100 rounded-xl font-black text-xs" value={formData.subject} onChange={e => setFormData({...formData, subject: e.target.value})} />
+                   </div>
+                   <div className="space-y-1">
+                      <Label className="text-[8px] font-black uppercase text-[#0F172A] ml-1">Salle / Prof</Label>
+                      <Input className="h-10 bg-slate-50 border-2 border-slate-100 rounded-xl font-black text-xs" placeholder="Ex: Salle S01 - M. Kouassi" value={formData.room} onChange={e => setFormData({...formData, room: e.target.value})} />
+                   </div>
+                </div>
+                <DialogFooter className="p-6 pt-0">
+                  <Button className="w-full h-12 bg-primary text-white font-black rounded-xl uppercase shadow-lg" onClick={handleSaveSlot}>
+                    Enregistrer Spontanément
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          )}
         </div>
 
-        {/* Schedule Grid - Small Quadrants for Mobile */}
-        <Card className="vivid-box border-none shadow-[0_40px_120px_rgba(0,0,0,0.25)] overflow-hidden bg-white/95 p-0 rounded-[2.5rem] md:rounded-[4rem]">
+        {/* Schedule Grid */}
+        <Card className="vivid-box border-none shadow-2xl overflow-hidden bg-white/95 p-0 rounded-[2rem] md:rounded-[4rem]">
           <div className="overflow-x-auto no-scrollbar">
-            <div className="min-w-full">
+            <div className="min-w-[800px] md:min-w-full">
               {/* Header Days */}
               <div className="grid grid-cols-7 bg-slate-900 border-b-4 border-white/5">
-                <div className="p-3 md:p-12 text-center border-r-2 border-white/5 flex items-center justify-center">
-                   <Clock className="w-4 h-4 md:w-12 md:h-12 text-white/30" />
+                <div className="p-4 md:p-8 text-center border-r-2 border-white/5 flex items-center justify-center">
+                   <Clock className="w-4 h-4 md:w-8 md:h-8 text-white/30" />
                 </div>
                 {days.map(day => (
-                  <div key={day} className="p-3 md:p-12 text-center border-r-2 border-white/5 last:border-r-0">
-                    <p className="text-[10px] md:text-4xl font-headline font-black text-white uppercase tracking-tighter">{day}</p>
+                  <div key={day} className="p-4 md:p-8 text-center border-r-2 border-white/5 last:border-r-0">
+                    <p className="text-[10px] md:text-2xl font-headline font-black text-white uppercase tracking-tighter">{day}</p>
                   </div>
                 ))}
               </div>
@@ -73,30 +191,36 @@ export default function SchedulePage() {
               {/* Grid Body */}
               <div className="divide-y-2 divide-slate-100">
                 {hours.map(hour => (
-                  <div key={hour} className="grid grid-cols-7 min-h-[60px] md:min-h-[220px]">
+                  <div key={hour} className="grid grid-cols-7 min-h-[80px] md:min-h-[160px]">
                     {/* Time Column */}
                     <div className="flex items-center justify-center border-r-2 border-slate-100 bg-slate-50/50">
-                      <span className="text-[9px] md:text-2xl font-black text-[#0F172A] font-mono tracking-tighter opacity-50">{hour}</span>
+                      <span className="text-[9px] md:text-xl font-black text-[#0F172A] font-mono tracking-tighter opacity-40">{hour}</span>
                     </div>
 
                     {/* Day Slots */}
                     {days.map(day => {
                       const course = getCourse(day, hour);
                       return (
-                        <div key={`${day}-${hour}`} className="p-1 md:p-5 border-r-2 border-slate-100 last:border-r-0 relative group">
+                        <div key={`${day}-${hour}`} className="p-1 md:p-3 border-r-2 border-slate-100 last:border-r-0 relative group">
                           {course ? (
                             <div className={cn(
-                              "h-full w-full rounded-xl md:rounded-[2.5rem] p-2 md:p-10 border-4 shadow-xl flex flex-col justify-between overflow-hidden transition-all group-hover:scale-[1.05] group-hover:rotate-1",
-                              course.color
+                              "h-full w-full rounded-xl md:rounded-[1.5rem] p-2 md:p-4 border-2 shadow-lg flex flex-col justify-between overflow-hidden transition-all group-hover:scale-[1.02] bg-white border-slate-100",
                             )}>
-                              <p className="text-[8px] md:text-3xl font-black uppercase tracking-tighter leading-none truncate">{course.subject}</p>
-                              <div className="hidden md:flex items-center gap-3 text-xl font-black opacity-80 pt-6 border-t-2 border-current/10 mt-4">
-                                <MapPin className="w-6 h-6 shrink-0" />
-                                <span className="truncate">SALLE {course.room}</span>
+                              <div className="flex justify-between items-start">
+                                <p className="text-[7px] md:text-sm font-black uppercase text-[#0F172A] leading-tight truncate">{course.subject}</p>
+                                {canEdit && (
+                                  <button onClick={() => handleDeleteSlot(course.id)} className="text-slate-300 hover:text-red-500 transition-colors">
+                                    <Trash2 className="w-2.5 h-2.5 md:w-3.5 md:h-3.5" />
+                                  </button>
+                                )}
+                              </div>
+                              <div className="flex items-center gap-1 text-[6px] md:text-[10px] font-black text-slate-400 uppercase tracking-widest mt-2">
+                                <MapPin className="w-2 h-2 md:w-3 md:h-3 shrink-0" />
+                                <span className="truncate">{course.room}</span>
                               </div>
                             </div>
                           ) : (
-                            <div className="h-full w-full rounded-xl md:rounded-[2.5rem] border-4 border-dashed border-slate-50/50 flex items-center justify-center opacity-5" />
+                            <div className="h-full w-full rounded-xl border-2 border-dashed border-slate-50/50" />
                           )}
                         </div>
                       );
@@ -107,28 +231,6 @@ export default function SchedulePage() {
             </div>
           </div>
         </Card>
-
-        {/* Quick Stats Quadrants */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-12">
-          <Card className="vivid-box border-none bg-primary text-white p-6 md:p-14 shadow-2xl relative overflow-hidden group rounded-[2.5rem]">
-            <div className="relative z-10 space-y-2 md:space-y-6">
-              <p className="text-[10px] md:text-xl font-black uppercase tracking-[0.3em] text-accent">Prochain Cours</p>
-              <h4 className="text-xl md:text-6xl font-black tracking-tighter leading-none">Mathématiques</h4>
-              <p className="text-[10px] md:text-2xl text-emerald-100 font-black opacity-80">08:00 • Salle S01</p>
-            </div>
-            <Clock className="absolute right-[-10px] bottom-[-10px] w-16 h-16 md:w-56 md:h-56 text-white/5 rotate-12 transition-transform group-hover:rotate-0" />
-          </Card>
-          
-          <Card className="vivid-box p-6 md:p-14 flex items-center gap-4 md:gap-12 shadow-2xl bg-white/95 rounded-[2.5rem]">
-            <div className="w-10 h-10 md:w-28 md:h-28 rounded-2xl md:rounded-[2rem] bg-slate-50 flex items-center justify-center shadow-inner shrink-0 rotate-3 border-4 border-slate-100">
-              <CalendarIcon className="w-6 h-6 md:w-14 md:h-14 text-primary" />
-            </div>
-            <div>
-              <p className="text-[10px] md:text-xl font-black text-slate-400 uppercase tracking-[0.3em]">Charge Hebdo</p>
-              <p className="text-3xl md:text-8xl font-headline font-black text-[#0F172A] tracking-tighter leading-none">28H</p>
-            </div>
-          </Card>
-        </div>
       </div>
     </DashboardLayout>
   );

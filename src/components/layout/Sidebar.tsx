@@ -20,7 +20,7 @@ import {
   FileCheck, 
   LogOut, 
   X,
-  BookOpen
+  Clock
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { UserRole } from "@/lib/auth-utils";
@@ -52,6 +52,7 @@ export const Sidebar = ({ role, userName, isOpen, onClose, schoolName = "ACADEX"
     { name: "Accueil", href: "/dashboard", icon: Home, roles: ['DIRECTOR', 'TEACHER', 'STUDENT_PARENT'] },
     { name: "Messagerie", href: "/messages", icon: MessageSquare, roles: ['DIRECTOR', 'TEACHER', 'STUDENT_PARENT'] },
     { name: "Agenda", href: "/agenda", icon: Calendar, roles: ['DIRECTOR', 'TEACHER', 'STUDENT_PARENT'] },
+    { name: "Horaire de cours", href: "/schedule", icon: Clock, roles: ['DIRECTOR', 'TEACHER', 'STUDENT_PARENT'] },
     { name: "Élèves", href: "/students", icon: GraduationCap, roles: ['DIRECTOR'] },
     { name: "Enseignants", href: "/teachers", icon: Users, roles: ['DIRECTOR'] },
     { name: "Classes", href: "/classes", icon: ClipboardList, roles: ['DIRECTOR'] },
@@ -61,12 +62,10 @@ export const Sidebar = ({ role, userName, isOpen, onClose, schoolName = "ACADEX"
     { name: "Génération Accès", href: "/access-management", icon: KeyRound, roles: ['DIRECTOR'] },
     { name: "Sécurité", href: "/security", icon: ShieldAlert, roles: ['DIRECTOR'] },
     { name: "Mes Classes", href: "/my-classes", icon: ClipboardList, roles: ['TEACHER'] },
-    { name: "Programme", href: "/course-program", icon: BookOpen, roles: ['TEACHER'] },
     { name: "Saisie Notes", href: "/grades/entry", icon: FileText, roles: ['TEACHER'] },
     { name: "Mes Notes", href: "/grades/my", icon: FileText, roles: ['STUDENT_PARENT'] },
     { name: "Bulletin", href: "/report-card", icon: FileCheck, roles: ['STUDENT_PARENT'] },
     { name: "Mes Paiements", href: "/payments/my", icon: CreditCard, roles: ['STUDENT_PARENT'] },
-    { name: "Emploi du temps", href: "/schedule", icon: Calendar, roles: ['DIRECTOR', 'STUDENT_PARENT'] },
     { name: "Absences", href: "/absences", icon: ShieldAlert, roles: ['DIRECTOR', 'TEACHER', 'STUDENT_PARENT'] },
     { name: "Paramètres", href: "/settings", icon: Settings, roles: ['DIRECTOR'] },
   ].filter(item => item.roles.includes(role));
@@ -87,7 +86,7 @@ export const Sidebar = ({ role, userName, isOpen, onClose, schoolName = "ACADEX"
           </div>
         </div>
         <button className="lg:hidden text-white/60 hover:text-white" onClick={onClose}>
-          <X className="w-5 h-5" />
+          <X className="w-4 h-4" />
         </button>
       </div>
 
