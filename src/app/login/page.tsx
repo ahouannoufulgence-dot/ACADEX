@@ -1,11 +1,10 @@
-
 "use client";
 
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Eye, EyeOff, Lock, User, ShieldCheck, KeyRound, GraduationCap, Users } from "lucide-react";
+import { Eye, EyeOff, Lock, User, ShieldCheck, KeyRound, GraduationCap, Users, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -16,7 +15,7 @@ import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { useFirestore } from "@/firebase";
 import { doc, getDoc, collection, addDoc, serverTimestamp, updateDoc } from "firebase/firestore";
 import { errorEmitter } from "@/firebase/error-emitter";
-import { FirestorePermissionError } from "@/firebase/errors";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export default function LoginPage() {
   const [userId, setUserId] = useState("DIR-001");
@@ -33,7 +32,6 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      // Pour les tests du directeur DIR-001
       if (userId === "DIR-001" && password === "Admin2026") {
         const userData = { 
           id: userId, 
@@ -42,7 +40,6 @@ export default function LoginPage() {
         };
         localStorage.setItem("acadex_user", JSON.stringify(userData));
         
-        // Log de sécurité
         addDoc(collection(db, "auditLogs"), {
           userId,
           userName: "Directeur Acadex",
@@ -56,7 +53,6 @@ export default function LoginPage() {
         return;
       }
 
-      // Recherche de l'utilisateur par son identifiant personnalisé
       const userDoc = await getDoc(doc(db, "users", userId));
       
       if (userDoc.exists()) {
@@ -73,10 +69,8 @@ export default function LoginPage() {
           };
           localStorage.setItem("acadex_user", JSON.stringify(sessionData));
           
-          // Mise à jour de la dernière connexion
           updateDoc(doc(db, "users", userId), { lastLogin: serverTimestamp() }).catch(() => {});
 
-          // Log de sécurité
           addDoc(collection(db, "auditLogs"), {
             userId,
             userName: sessionData.name,
@@ -88,7 +82,6 @@ export default function LoginPage() {
           toast({ title: "Connexion réussie", description: `Bienvenue, ${userData.name || userData.firstName}.` });
           router.push("/dashboard");
         } else {
-          // Log échec
           addDoc(collection(db, "auditLogs"), {
             userId,
             action: "Échec de connexion",
@@ -114,79 +107,77 @@ export default function LoginPage() {
   const bgImage = PlaceHolderImages.find(img => img.id === "login-bg");
 
   return (
-    <div className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-background">
+    <div className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-[#F5F7F9]">
       <div className="absolute inset-0 z-0">
         <Image
           src={bgImage?.imageUrl || "https://picsum.photos/seed/acadex/1920/1080"}
           alt="School ambiance"
           fill
           priority
-          className="object-cover scale-105 animate-pulse-slow opacity-40"
+          className="object-cover opacity-10"
           data-ai-hint="African students classroom"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-br from-white via-[#F5F7F9]/90 to-transparent" />
       </div>
 
-      <div className="relative z-10 w-full max-w-[900px] flex flex-col md:flex-row gap-8 px-4">
-        <div className="flex-1 flex flex-col justify-center space-y-8 animate-in slide-in-from-left duration-300">
+      <div className="relative z-10 w-full max-w-[1000px] flex flex-col md:flex-row items-center gap-12 px-6">
+        <div className="flex-1 space-y-8 animate-in slide-in-from-left duration-300">
           <div className="space-y-4">
-            <div className="w-20 h-20 bg-primary rounded-3xl flex items-center justify-center shadow-2xl shadow-primary/30">
-              <ShieldCheck className="w-12 h-12 text-white" />
+            <div className="w-16 h-16 bg-[#1A6B4A] rounded-2xl flex items-center justify-center shadow-xl shadow-[#1A6B4A]/20">
+              <ShieldCheck className="w-10 h-10 text-white" />
             </div>
-            <h1 className="text-5xl font-headline font-bold text-white tracking-tight">ACADEX</h1>
-            <p className="text-xl text-accent font-medium max-w-md">
-              La gestion scolaire moderne, sécurisée et intelligente.
+            <h1 className="text-6xl font-headline font-bold text-[#1F2937] tracking-tighter leading-none">ACADEX</h1>
+            <p className="text-xl text-slate-500 font-medium max-w-sm">
+              La gestion scolaire moderne, sécurisée et premium.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-4 sm:max-w-md">
+          <Alert className="bg-[#1A6B4A]/5 border-[#1A6B4A]/10 text-[#1A6B4A] max-w-sm">
+            <Info className="h-4 w-4" />
+            <AlertDescription className="text-xs font-bold">
+              Utilisez DIR-001 / Admin2026 pour tester l'espace Directeur.
+            </AlertDescription>
+          </Alert>
+
+          <div className="grid grid-cols-1 gap-3 sm:max-w-sm">
             <Link href="/setup/director">
-              <Button variant="outline" className="w-full justify-start h-14 bg-white/5 border-white/10 hover:bg-primary/20 hover:border-primary text-white">
-                <KeyRound className="w-5 h-5 mr-3 text-accent" />
-                <div className="text-left">
-                  <p className="text-sm font-bold">Créer mon espace Directeur</p>
-                  <p className="text-[10px] text-white/50">Configuration initiale de l'établissement</p>
-                </div>
+              <Button variant="outline" className="w-full justify-start h-14 bg-white border-slate-200 hover:border-[#1A6B4A] hover:bg-slate-50 text-[#1F2937]">
+                <KeyRound className="w-5 h-5 mr-3 text-[#1A6B4A]" />
+                <span className="font-bold">Espace Directeur</span>
               </Button>
             </Link>
 
             <Link href="/setup/teacher">
-              <Button variant="outline" className="w-full justify-start h-14 bg-white/5 border-white/10 hover:bg-blue-500/20 hover:border-blue-500 text-white">
-                <Users className="w-5 h-5 mr-3 text-blue-400" />
-                <div className="text-left">
-                  <p className="text-sm font-bold">Créer mon espace Enseignant</p>
-                  <p className="text-[10px] text-white/50">Activation de compte professeur</p>
-                </div>
+              <Button variant="outline" className="w-full justify-start h-14 bg-white border-slate-200 hover:border-[#1A6B4A] hover:bg-slate-50 text-[#1F2937]">
+                <Users className="w-5 h-5 mr-3 text-[#1A6B4A]" />
+                <span className="font-bold">Espace Enseignant</span>
               </Button>
             </Link>
 
             <Link href="/activate/student">
-              <Button variant="outline" className="w-full justify-start h-14 bg-white/5 border-white/10 hover:bg-accent/20 hover:border-accent text-white">
-                <GraduationCap className="w-5 h-5 mr-3 text-accent" />
-                <div className="text-left">
-                  <p className="text-sm font-bold">Activer mon espace élève</p>
-                  <p className="text-[10px] text-white/50">Pour élèves et parents (via ID direction)</p>
-                </div>
+              <Button variant="outline" className="w-full justify-start h-14 bg-white border-slate-200 hover:border-[#1A6B4A] hover:bg-slate-50 text-[#1F2937]">
+                <GraduationCap className="w-5 h-5 mr-3 text-[#1A6B4A]" />
+                <span className="font-bold">Espace Élève / Parent</span>
               </Button>
             </Link>
           </div>
         </div>
 
-        <Card className="w-full max-w-md glass-card border-white/10 animate-in slide-in-from-right duration-300">
-          <CardHeader className="text-center">
-            <CardTitle className="text-2xl font-headline font-bold text-white">Connexion</CardTitle>
-            <CardDescription className="text-white/60 italic">Saisissez vos accès ACADEX</CardDescription>
+        <Card className="w-full max-w-md premium-card animate-in slide-in-from-right duration-300">
+          <CardHeader className="text-center pb-8">
+            <CardTitle className="text-2xl font-headline font-bold text-[#1F2937]">Connexion</CardTitle>
+            <CardDescription className="font-medium">Identifiants sécurisés ACADEX</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <form onSubmit={handleLogin} className="space-y-6">
               <div className="space-y-2">
-                <Label htmlFor="userId">Identifiant Unique</Label>
+                <Label htmlFor="userId" className="text-slate-500 font-bold uppercase text-[10px] tracking-widest">Identifiant Unique</Label>
                 <div className="relative">
-                  <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <User className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
                   <Input
                     id="userId"
-                    placeholder="Ex: DIR-001, ENS-MATH-001..."
-                    className="pl-10 bg-white/5 border-white/10 text-white h-11"
+                    placeholder="DIR-001, ENS-..., ELV-..."
+                    className="pl-10 bg-[#F5F7F9] border-none text-[#1F2937] font-bold h-12"
                     value={userId}
                     onChange={(e) => setUserId(e.target.value.toUpperCase())}
                     required
@@ -196,15 +187,15 @@ export default function LoginPage() {
               
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <Label htmlFor="password">Mot de passe</Label>
-                  <button type="button" className="text-[10px] text-accent hover:underline">Mot de passe oublié ?</button>
+                  <Label htmlFor="password" className="text-slate-500 font-bold uppercase text-[10px] tracking-widest">Mot de passe</Label>
+                  <button type="button" className="text-[10px] text-[#1A6B4A] font-bold hover:underline">Oublié ?</button>
                 </div>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <Lock className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
                   <Input
                     id="password"
                     type={showPassword ? "text" : "password"}
-                    className="pl-10 pr-10 bg-white/5 border-white/10 text-white h-11"
+                    className="pl-10 pr-10 bg-[#F5F7F9] border-none text-[#1F2937] h-12"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
@@ -212,7 +203,7 @@ export default function LoginPage() {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-3 text-muted-foreground hover:text-white"
+                    className="absolute right-3 top-3 text-slate-400 hover:text-[#1F2937]"
                   >
                     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                   </button>
@@ -220,22 +211,22 @@ export default function LoginPage() {
               </div>
 
               <div className="flex items-center space-x-2">
-                <Checkbox id="remember" className="border-white/20" />
-                <Label htmlFor="remember" className="text-xs text-white/60">Rester connecté</Label>
+                <Checkbox id="remember" className="border-slate-300 data-[state=checked]:bg-[#1A6B4A]" />
+                <Label htmlFor="remember" className="text-xs text-slate-500 font-medium">Rester connecté</Label>
               </div>
 
               <Button 
                 type="submit" 
-                className="w-full h-11 text-base font-bold bg-primary hover:bg-primary/90 text-white shadow-xl shadow-primary/20 transition-all active:scale-[0.98]"
+                className="w-full h-12 text-base font-bold bg-[#1A6B4A] hover:bg-[#1A6B4A]/90 text-white shadow-lg shadow-[#1A6B4A]/20 transition-all active:scale-[0.98]"
                 disabled={isLoading}
               >
-                {isLoading ? "Connexion..." : "Se connecter"}
+                {isLoading ? "Vérification..." : "Se connecter"}
               </Button>
             </form>
 
-            <div className="pt-6 border-t border-white/5 text-center">
-              <p className="text-white/40 text-[10px] italic">
-                Système sécurisé ACADEX v2.5 - Bénin
+            <div className="pt-8 border-t border-slate-100 text-center">
+              <p className="text-slate-300 text-[10px] font-bold uppercase tracking-widest">
+                Premium Education Systems
               </p>
             </div>
           </CardContent>

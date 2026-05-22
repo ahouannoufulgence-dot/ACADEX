@@ -14,20 +14,21 @@ export default function MyGradesPage() {
     { subject: "Français", note: 14.0, avg: 11.2, high: 17, low: 4.5, rank: "8/42", coeff: 4 },
     { subject: "Physique-Chimie", note: 18.0, avg: 10.8, high: 20, low: 3.0, rank: "1/42", coeff: 3 },
     { subject: "Anglais", note: 9.5, avg: 13.5, high: 18.5, low: 8, rank: "35/42", coeff: 2 },
+    { subject: "SVT", note: 11.5, avg: 10.5, high: 16, low: 6, rank: "12/42", coeff: 2 },
   ];
 
   const getNoteColor = (note: number) => {
-    if (note >= 14) return "text-accent bg-accent/10 border-accent/20";
-    if (note >= 10) return "text-amber-400 bg-amber-400/10 border-amber-400/20";
-    return "text-destructive bg-destructive/10 border-destructive/20";
+    if (note >= 14) return "text-[#1A6B4A] bg-[#1A6B4A]/10 border-[#1A6B4A]/20";
+    if (note >= 10) return "text-orange-500 bg-orange-500/10 border-orange-500/20";
+    return "text-[#DC2626] bg-[#DC2626]/10 border-[#DC2626]/20";
   };
 
   const getMention = (avg: number) => {
-    if (avg >= 16) return { text: "Très Bien", color: "bg-accent" };
-    if (avg >= 14) return { text: "Bien", color: "bg-accent/80" };
-    if (avg >= 12) return { text: "Assez Bien", color: "bg-blue-500" };
-    if (avg >= 10) return { text: "Passable", color: "bg-amber-500" };
-    return { text: "Insuffisant", color: "bg-destructive" };
+    if (avg >= 16) return { text: "Très Bien", color: "bg-[#1A6B4A]" };
+    if (avg >= 14) return { text: "Bien", color: "bg-[#1A6B4A]/80" };
+    if (avg >= 12) return { text: "Assez Bien", color: "bg-blue-600" };
+    if (avg >= 10) return { text: "Passable", color: "bg-orange-500" };
+    return { text: "Insuffisant", color: "bg-[#DC2626]" };
   };
 
   const generalAvg = 14.85;
@@ -35,68 +36,68 @@ export default function MyGradesPage() {
 
   return (
     <DashboardLayout>
-      <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+      <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-300">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
-            <h1 className="text-3xl font-headline font-bold text-white mb-2">Mes Résultats Scolaires</h1>
-            <p className="text-muted-foreground">Trimestre 2 - Session 2023/2024</p>
+            <h1 className="text-3xl font-headline font-bold text-[#1F2937] mb-2">Mes Résultats Scolaires</h1>
+            <p className="text-slate-500 font-medium">Trimestre 2 - Session 2023/2024</p>
           </div>
-          <div className="p-4 rounded-2xl glass-card flex items-center gap-6 border-none shadow-xl">
-            <div className="text-center px-4 border-r border-white/10">
-              <p className="text-xs text-muted-foreground uppercase font-bold mb-1">Moyenne</p>
-              <p className="text-3xl font-headline font-bold text-accent">{generalAvg}</p>
+          <Card className="p-4 premium-card flex items-center gap-6 border-none">
+            <div className="text-center px-4 border-r border-slate-100">
+              <p className="text-[10px] text-slate-400 uppercase font-bold mb-1 tracking-wider">Moyenne</p>
+              <p className="text-3xl font-headline font-bold text-[#1A6B4A]">{generalAvg}</p>
             </div>
             <div className="text-center pr-4">
-              <p className="text-xs text-muted-foreground uppercase font-bold mb-1">Mention</p>
-              <Badge className={cn("text-white font-bold", mention.color)}>{mention.text}</Badge>
+              <p className="text-[10px] text-slate-400 uppercase font-bold mb-1 tracking-wider">Mention</p>
+              <Badge className={cn("text-white font-bold h-6", mention.color)}>{mention.text}</Badge>
             </div>
-          </div>
+          </Card>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <StatMiniCard icon={Trophy} label="Rang Global" value="4ème / 42" color="text-accent" />
-          <StatMiniCard icon={Target} label="Points Totaux" value="214.5" color="text-blue-400" />
-          <StatMiniCard icon={AlertCircle} label="Progression" value="+1.2 pts" color="text-purple-400" />
+          <StatMiniCard icon={Trophy} label="Rang Global" value="4ème / 42" color="text-[#1A6B4A]" />
+          <StatMiniCard icon={Target} label="Points Totaux" value="214.5" color="text-blue-600" />
+          <StatMiniCard icon={AlertCircle} label="Progression" value="+1.2 pts" color="text-purple-600" />
         </div>
 
-        <Card className="glass-card border-none shadow-xl">
+        <Card className="premium-card">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <FileText className="w-5 h-5 text-primary" />
+            <CardTitle className="flex items-center gap-2 text-[#1F2937] text-lg">
+              <FileText className="w-5 h-5 text-[#1A6B4A]" />
               Détail par Matière
             </CardTitle>
             <CardDescription>Consultez vos notes et votre position par rapport à la classe.</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="rounded-xl border border-white/10 overflow-hidden">
+            <div className="rounded-xl border border-slate-100 overflow-hidden">
               <Table>
-                <TableHeader className="bg-white/5">
+                <TableHeader className="bg-[#F5F7F9]">
                   <TableRow>
-                    <TableHead className="text-white">Matière</TableHead>
-                    <TableHead className="text-white">Note / 20</TableHead>
-                    <TableHead className="text-white">Coeff</TableHead>
-                    <TableHead className="text-white">Moy. Classe</TableHead>
-                    <TableHead className="text-white">Min/Max</TableHead>
-                    <TableHead className="text-right text-white">Rang</TableHead>
+                    <TableHead className="text-[#1F2937] font-bold">Matière</TableHead>
+                    <TableHead className="text-[#1F2937] font-bold">Note / 20</TableHead>
+                    <TableHead className="text-[#1F2937] font-bold">Coeff</TableHead>
+                    <TableHead className="text-[#1F2937] font-bold">Moy. Classe</TableHead>
+                    <TableHead className="text-[#1F2937] font-bold">Min/Max</TableHead>
+                    <TableHead className="text-right text-[#1F2937] font-bold">Rang</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {grades.map((item, idx) => (
-                    <TableRow key={idx} className="hover:bg-white/5 border-white/5">
-                      <TableCell className="font-medium text-white">{item.subject}</TableCell>
+                    <TableRow key={idx} className="hover:bg-[#F5F7F9] transition-colors">
+                      <TableCell className="font-semibold text-[#1F2937]">{item.subject}</TableCell>
                       <TableCell>
-                        <Badge variant="outline" className={cn("text-sm font-bold w-12 justify-center", getNoteColor(item.note))}>
+                        <Badge variant="outline" className={cn("text-sm font-bold w-12 justify-center border-none", getNoteColor(item.note))}>
                           {item.note}
                         </Badge>
                       </TableCell>
-                      <TableCell className="text-white/60">{item.coeff}</TableCell>
-                      <TableCell className="text-white/60">{item.avg}</TableCell>
-                      <TableCell className="text-xs text-muted-foreground">
-                        <span className="text-destructive">{item.low}</span>
-                        <span className="mx-1">/</span>
-                        <span className="text-accent">{item.high}</span>
+                      <TableCell className="text-slate-600 font-medium">{item.coeff}</TableCell>
+                      <TableCell className="text-slate-600 font-medium">{item.avg}</TableCell>
+                      <TableCell className="text-[11px] font-medium">
+                        <span className="text-[#DC2626]">{item.low}</span>
+                        <span className="mx-1 text-slate-300">/</span>
+                        <span className="text-[#1A6B4A]">{item.high}</span>
                       </TableCell>
-                      <TableCell className="text-right font-bold text-white">{item.rank}</TableCell>
+                      <TableCell className="text-right font-bold text-[#1F2937]">{item.rank}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -111,14 +112,14 @@ export default function MyGradesPage() {
 
 function StatMiniCard({ icon: Icon, label, value, color }: any) {
   return (
-    <div className="p-4 rounded-xl glass-card flex items-center gap-4 border-none">
-      <div className={cn("p-2.5 rounded-lg bg-white/5", color)}>
+    <Card className="p-4 premium-card flex items-center gap-4">
+      <div className={cn("p-2.5 rounded-lg bg-slate-50", color)}>
         <Icon className="w-5 h-5" />
       </div>
       <div>
-        <p className="text-xs text-muted-foreground uppercase font-bold">{label}</p>
-        <p className="text-xl font-headline font-bold text-white">{value}</p>
+        <p className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">{label}</p>
+        <p className="text-xl font-headline font-bold text-[#1F2937]">{value}</p>
       </div>
-    </div>
+    </Card>
   );
 }

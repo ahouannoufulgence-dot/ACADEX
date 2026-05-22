@@ -88,15 +88,15 @@ export const Sidebar = ({ role, userName }: SidebarProps) => {
   const navItems = getNavItems();
 
   return (
-    <aside className="w-64 h-screen bg-sidebar flex flex-col border-r border-sidebar-border fixed left-0 top-0 z-40">
+    <aside className="w-64 h-screen bg-[#1A6B4A] flex flex-col border-r border-white/10 fixed left-0 top-0 z-40">
       <div className="p-6 pb-2 shrink-0">
-        <Link href="/dashboard" className="flex items-center gap-3 mb-6 hover:opacity-80 transition-opacity">
-          <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center shadow-lg shadow-primary/20">
-            <span className="text-white font-bold text-xl">A</span>
+        <Link href="/dashboard" className="flex items-center gap-3 mb-6 hover:opacity-90 transition-opacity">
+          <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-lg">
+            <span className="text-[#1A6B4A] font-bold text-xl">A</span>
           </div>
           <div>
-            <h1 className="text-white font-headline font-bold text-xl tracking-tight">ACADEX</h1>
-            <p className="text-accent text-[10px] font-bold uppercase tracking-widest">Premium School</p>
+            <h1 className="text-white font-headline font-bold text-xl tracking-tight leading-tight">ACADEX</h1>
+            <p className="text-white/70 text-[10px] font-bold uppercase tracking-widest">Premium School</p>
           </div>
         </Link>
       </div>
@@ -112,34 +112,34 @@ export const Sidebar = ({ role, userName }: SidebarProps) => {
                 className={cn(
                   "group flex items-center justify-between px-3 py-2.5 rounded-lg transition-all duration-200",
                   isActive 
-                    ? "bg-primary text-white shadow-md shadow-primary/10" 
-                    : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                    ? "bg-white/15 text-white shadow-sm" 
+                    : "text-white/70 hover:bg-white/10 hover:text-white"
                 )}
               >
                 <div className="flex items-center gap-3">
-                  <item.icon className={cn("w-5 h-5", isActive ? "text-white" : "text-muted-foreground group-hover:text-accent")} />
+                  <item.icon className={cn("w-5 h-5 transition-colors", isActive ? "text-white" : "text-white/50 group-hover:text-white")} />
                   <span className="text-sm font-medium">{item.name}</span>
                 </div>
-                {isActive && <ChevronRight className="w-4 h-4" />}
+                {isActive && <ChevronRight className="w-4 h-4 opacity-50" />}
               </Link>
             );
           })}
         </nav>
       </div>
 
-      <div className="p-4 border-t border-sidebar-border bg-sidebar-accent/30 shrink-0">
+      <div className="p-4 border-t border-white/10 bg-black/10 shrink-0">
         <div className="flex items-center gap-3 mb-4 px-2">
-          <div className="w-8 h-8 rounded-full bg-accent flex items-center justify-center text-accent-foreground font-bold text-xs">
+          <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-[#1A6B4A] font-bold text-xs shadow-sm">
             {userName.substring(0, 2).toUpperCase()}
           </div>
           <div className="flex-1 overflow-hidden">
             <p className="text-sm font-bold text-white truncate">{userName}</p>
-            <p className="text-[10px] text-muted-foreground uppercase tracking-tighter">{role}</p>
+            <p className="text-[10px] text-white/50 uppercase tracking-tighter">{role}</p>
           </div>
         </div>
         <button 
           onClick={handleLogout}
-          className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-destructive hover:bg-destructive/10 transition-colors"
+          className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-white/80 hover:bg-red-500/20 hover:text-white transition-colors"
         >
           <LogOut className="w-4 h-4" />
           <span className="text-sm font-medium">Déconnexion</span>
