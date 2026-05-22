@@ -3,10 +3,9 @@
 
 import React, { useState, useMemo } from "react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
-import { KeyRound, ShieldCheck, Users, Copy, Trash2, Sparkles, Loader2, FileDown } from "lucide-react";
+import { KeyRound, ShieldCheck, Users, Copy, Trash2, Loader2, FileDown } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogTrigger } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
@@ -90,20 +89,20 @@ export default function AccessManagementPage() {
     
     const doc = new jsPDF();
     doc.setFontSize(18);
-    doc.setTextColor(20, 83, 45);
+    doc.setTextColor(15, 23, 42);
     doc.text("LISTE DES CODES D'ACCES ELEVES - ACADEX", 14, 20);
     
     const tableData = students.map(s => [
       s.id,
       s.gradeLevel,
-      "En attente d'activation"
+      "En attente"
     ]);
 
     (doc as any).autoTable({
-      head: [['IDENTIFIANT ACCÈS', 'CLASSE CONCERNÉE', 'ÉTAT']],
+      head: [['IDENTIFIANT ACCÈS', 'CLASSE', 'ÉTAT']],
       body: tableData,
       startY: 30,
-      headStyles: { fillColor: [20, 83, 45] },
+      headStyles: { fillColor: [15, 23, 42] },
       styles: { fontStyle: "bold" }
     });
 
@@ -135,68 +134,66 @@ export default function AccessManagementPage() {
 
   return (
     <DashboardLayout>
-      <div className="space-y-12 animate-fade-up">
-        {/* Header - Vivid Premium */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-10">
-          <div>
-            <h1 className="text-5xl md:text-8xl font-headline font-black text-[#0F172A] mb-4 tracking-tighter">Gestion des Accès</h1>
-            <p className="text-[#0F172A] text-2xl font-black">Provisionnez les accès élèves avec ACADEX AI.</p>
+      <div className="space-y-6 md:space-y-12 animate-fade-up max-w-full overflow-hidden">
+        {/* Header - Optimized for Mobile */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+          <div className="w-full">
+            <h1 className="text-3xl md:text-7xl font-headline font-black text-[#0F172A] mb-2 tracking-tighter uppercase">Gestion des Accès</h1>
+            <p className="text-[#0F172A] text-sm md:text-2xl font-black opacity-80 uppercase tracking-widest">Provisionnement Élite</p>
           </div>
           
-          <div className="flex flex-wrap gap-6">
+          <div className="grid grid-cols-1 sm:flex gap-3 w-full md:w-auto">
             <Button 
               onClick={exportAccessPDF}
               variant="outline"
-              className="bg-white border-4 border-slate-100 text-[#0F172A] font-black h-20 px-10 rounded-[2.5rem] shadow-2xl hover:bg-slate-50 flex gap-4 text-xl"
+              className="bg-white border-2 border-slate-100 text-[#0F172A] font-black h-12 md:h-16 px-6 rounded-xl shadow-lg hover:bg-slate-50 flex gap-2 text-xs md:text-lg"
             >
-              <FileDown className="w-8 h-8" /> Exporter PDF
+              <FileDown className="w-4 h-4 md:w-6 md:h-6" /> <span className="uppercase">Exporter PDF</span>
             </Button>
             <Dialog>
               <DialogTrigger asChild>
-                <Button className="bg-primary hover:bg-slate-900 text-white font-black h-20 px-14 rounded-[2.5rem] shadow-2xl transition-all active:scale-95 flex gap-6 text-xl border-4 border-white/10">
-                  <Users className="w-8 h-8" /> Provisionner une classe
+                <Button className="bg-primary hover:bg-slate-900 text-white font-black h-12 md:h-16 px-6 rounded-xl shadow-lg transition-all flex gap-2 text-xs md:text-lg border-2 border-white/10">
+                  <Users className="w-4 h-4 md:w-6 md:h-6" /> <span className="uppercase">Provisionner Classe</span>
                 </Button>
               </DialogTrigger>
-              <DialogContent className="vivid-box border-none shadow-[0_60px_180px_rgba(0,0,0,0.4)] sm:max-w-[550px] p-0 overflow-hidden bg-white">
-                <DialogHeader className="p-12 bg-primary text-white border-b-8 border-accent">
-                  <div className="flex items-center gap-6">
-                    <div className="p-4 bg-white rounded-2xl shadow-2xl rotate-6">
-                      <ShieldCheck className="w-10 h-10 text-primary animate-pulse" />
+              <DialogContent className="vivid-box border-none sm:max-w-[500px] p-0 overflow-hidden bg-white shadow-2xl">
+                <DialogHeader className="p-8 bg-primary text-white border-b-4 border-accent">
+                  <div className="flex items-center gap-4">
+                    <div className="p-3 bg-white rounded-xl shadow-lg shrink-0">
+                      <ShieldCheck className="w-6 h-6 text-primary" />
                     </div>
-                    <DialogTitle className="text-4xl font-black tracking-tighter">Génération par Lot</DialogTitle>
+                    <DialogTitle className="text-xl md:text-2xl font-black tracking-tighter uppercase">Génération par Lot</DialogTitle>
                   </div>
                 </DialogHeader>
 
-                <div className="p-12 space-y-10 bg-white">
-                  <div className="space-y-4">
-                    <label className="text-[12px] font-black text-[#0F172A] uppercase tracking-[0.3em] ml-2">Niveau / Classe (Ex: 3EME A)</label>
+                <div className="p-8 space-y-6 bg-white">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black text-[#0F172A] uppercase tracking-[0.2em] ml-2">Niveau (Ex: 3EME A)</label>
                     <input 
                       placeholder="3EME A"
-                      className="w-full bg-[#F1F5F9] border-4 border-slate-50 h-16 rounded-2xl font-black text-xl text-[#0F172A] px-6 shadow-inner outline-none focus:border-primary/30" 
+                      className="w-full bg-slate-50 border-2 border-slate-100 h-12 rounded-xl font-black text-[#0F172A] px-4 outline-none focus:border-primary/30" 
                       value={bulkData.gradeLevel}
                       onChange={(e) => setBulkData({...bulkData, gradeLevel: e.target.value.toUpperCase()})}
                     />
                   </div>
-                  <div className="space-y-4">
-                    <label className="text-[12px] font-black text-[#0F172A] uppercase tracking-[0.3em] ml-2">Nombre d'élèves</label>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black text-[#0F172A] uppercase tracking-[0.2em] ml-2">Nombre d'élèves</label>
                     <input 
                       type="number"
-                      min="1"
-                      max="100"
-                      className="w-full bg-[#F1F5F9] border-4 border-slate-50 h-16 rounded-2xl font-black text-xl text-[#0F172A] px-6 shadow-inner text-center outline-none focus:border-primary/30" 
+                      className="w-full bg-slate-50 border-2 border-slate-100 h-12 rounded-xl font-black text-[#0F172A] px-4 outline-none text-center" 
                       value={bulkData.count}
                       onChange={(e) => setBulkData({...bulkData, count: parseInt(e.target.value) || 0})}
                     />
                   </div>
                 </div>
 
-                <DialogFooter className="p-12 pt-0 bg-white">
+                <DialogFooter className="p-8 pt-0 bg-white">
                   <Button 
-                    className="bg-accent text-white hover:bg-slate-900 font-black w-full h-24 rounded-[2.5rem] shadow-2xl text-2xl border-4 border-white/10" 
+                    className="bg-primary text-white hover:bg-slate-900 font-black w-full h-14 md:h-16 rounded-xl shadow-lg text-sm md:text-lg uppercase border-2 border-white/10" 
                     onClick={handleBulkGenerate} 
                     disabled={isGenerating}
                   >
-                    {isGenerating ? <Loader2 className="w-10 h-10 animate-spin" /> : "Générer les identifiants"}
+                    {isGenerating ? <Loader2 className="w-6 h-6 animate-spin" /> : "Générer les accès"}
                   </Button>
                 </DialogFooter>
               </DialogContent>
@@ -204,71 +201,65 @@ export default function AccessManagementPage() {
           </div>
         </div>
 
-        <Card className="vivid-box border-none shadow-2xl overflow-hidden bg-white">
-          <CardHeader className="p-12 md:p-14 border-b-8 border-slate-50 bg-slate-50/50">
-            <CardTitle className="text-4xl font-black text-[#0F172A] tracking-tighter">Codes d'activation en attente</CardTitle>
-            <CardDescription className="text-xl font-black mt-2 text-slate-500 uppercase tracking-widest">Registre de provisionnement Élite</CardDescription>
-          </CardHeader>
-          <CardContent className="p-0">
-            {loading ? (
-              <div className="flex flex-col items-center justify-center py-56">
-                <Loader2 className="w-24 h-24 animate-spin text-primary mb-8" />
-                <p className="text-[#0F172A] font-black uppercase tracking-[0.4em] text-xl">Accès au registre...</p>
-              </div>
-            ) : (
-              <div className="overflow-x-auto">
-                <Table>
-                  <TableHeader className="bg-slate-900">
-                    <TableRow className="border-none h-24">
-                      <TableHead className="text-white font-black pl-20 text-xs uppercase tracking-[0.3em]">Identifiant Personnel</TableHead>
-                      <TableHead className="text-white font-black text-xs uppercase tracking-[0.3em]">Classe Affectée</TableHead>
-                      <TableHead className="text-white font-black text-xs uppercase tracking-[0.3em]">Statut</TableHead>
-                      <TableHead className="text-right pr-20 text-white font-black text-xs uppercase tracking-[0.3em]">Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {students?.map((u: any) => (
-                      <TableRow key={u.id} className="hover:bg-primary/5 transition-all border-slate-100 group">
-                        <TableCell className="pl-20 py-12">
-                           <div className="flex items-center gap-10">
-                              <div className="w-16 h-16 rounded-[1.5rem] bg-primary text-white flex items-center justify-center font-black text-xl shadow-2xl border-4 border-white/10">
-                                <KeyRound className="w-8 h-8" />
-                              </div>
-                              <span className="font-mono font-black text-[#0F172A] text-4xl tracking-tighter uppercase">{u.id}</span>
-                           </div>
-                        </TableCell>
-                        <TableCell className="py-12">
-                          <span className="font-black text-[#0F172A] text-3xl tracking-tighter uppercase">{u.gradeLevel}</span>
-                        </TableCell>
-                        <TableCell className="py-12">
-                          <Badge className="bg-primary text-white text-[12px] font-black px-8 py-3 h-12 uppercase tracking-[0.2em] border-none shadow-2xl" variant="outline">
-                            {u.status}
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="text-right pr-20 py-12">
-                          <div className="flex justify-end gap-6 opacity-0 group-hover:opacity-100 transition-all">
-                            <Button 
-                              className="h-16 px-10 bg-white border-4 border-slate-100 rounded-2xl font-black text-[#0F172A] hover:bg-primary hover:text-white transition-all shadow-xl"
-                              onClick={() => copyToClipboard(u.id)}
-                            >
-                              <Copy className="h-6 w-6 mr-3" /> Copier
-                            </Button>
-                            <Button 
-                              className="h-16 px-10 bg-white border-4 border-slate-100 rounded-2xl font-black text-[#B91C1C] hover:bg-[#B91C1C] hover:text-white transition-all shadow-xl"
-                              onClick={() => handleDelete(u.id)}
-                            >
-                              <Trash2 className="h-6 w-6 mr-3" /> Retirer
-                            </Button>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-            )}
-          </CardContent>
-        </Card>
+        {/* Access Cards Grid - Small Quadrants for Mobile */}
+        <div className="space-y-4">
+          <h2 className="text-[10px] md:text-sm font-black text-[#0F172A] uppercase tracking-[0.4em] px-2">Identifiants Actifs</h2>
+          
+          {loading ? (
+            <div className="flex flex-col items-center justify-center py-32 md:py-48">
+              <Loader2 className="w-12 h-12 md:w-20 md:h-20 animate-spin text-primary mb-6" />
+              <p className="text-[#0F172A] font-black uppercase tracking-[0.3em] text-xs md:text-xl">Lecture du registre...</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+              {students?.map((u: any) => (
+                <Card key={u.id} className="vivid-box border-none shadow-xl bg-white p-4 md:p-6 group relative overflow-hidden transition-all hover:scale-[1.02]">
+                  <div className="flex justify-between items-start mb-4">
+                    <div className="p-2 md:p-3 bg-primary/10 rounded-xl text-primary shrink-0">
+                      <KeyRound className="w-5 h-5 md:w-7 md:h-7" />
+                    </div>
+                    <Badge className="bg-primary text-white text-[8px] md:text-[10px] font-black px-2 md:px-4 py-1 uppercase tracking-widest border-none">
+                      {u.status}
+                    </Badge>
+                  </div>
+                  
+                  <div className="space-y-1">
+                    <p className="text-[9px] md:text-[10px] font-black text-slate-400 uppercase tracking-widest">Code Personnel</p>
+                    <p className="text-xl md:text-3xl font-mono font-black text-[#0F172A] tracking-tighter uppercase">{u.id}</p>
+                  </div>
+                  
+                  <div className="mt-4 flex items-center justify-between border-t border-slate-50 pt-4">
+                    <span className="text-xs md:text-lg font-black text-[#0F172A] uppercase tracking-tighter">{u.gradeLevel}</span>
+                    <div className="flex gap-2">
+                      <Button 
+                        size="icon" 
+                        variant="ghost" 
+                        className="h-8 w-8 md:h-10 md:w-10 rounded-lg text-slate-400 hover:text-primary transition-colors"
+                        onClick={() => copyToClipboard(u.id)}
+                      >
+                        <Copy className="h-4 w-4 md:h-5 md:h-5" />
+                      </Button>
+                      <Button 
+                        size="icon" 
+                        variant="ghost" 
+                        className="h-8 w-8 md:h-10 md:w-10 rounded-lg text-slate-400 hover:text-destructive transition-colors"
+                        onClick={() => handleDelete(u.id)}
+                      >
+                        <Trash2 className="h-4 w-4 md:h-5 md:h-5" />
+                      </Button>
+                    </div>
+                  </div>
+                </Card>
+              ))}
+              
+              {(students?.length === 0 || !students) && !loading && (
+                <div className="col-span-full p-20 text-center bg-white/50 rounded-[2rem] border-4 border-dashed border-slate-100">
+                  <p className="text-xl md:text-2xl font-black text-slate-300 uppercase tracking-widest">Aucun identifiant en attente</p>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
       </div>
     </DashboardLayout>
   );
