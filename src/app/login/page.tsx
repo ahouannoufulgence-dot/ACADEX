@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState } from "react";
@@ -67,18 +68,18 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen w-full relative flex items-center justify-center p-4 overflow-hidden bg-[#F0F7FF]">
       <Image
-        src={loginImage?.imageUrl || "https://picsum.photos/seed/acadex-joy-success/1400/1000"}
-        alt="Élèves ACADEX"
+        src={loginImage?.imageUrl || "https://picsum.photos/seed/acadex-study-group/1400/1000"}
+        alt="Élèves ACADEX au travail"
         fill
         priority
-        className="object-cover transition-opacity duration-1000 opacity-70 saturate-[1.4]"
-        data-ai-hint="happy students classroom"
+        className="object-cover transition-opacity duration-1000 opacity-80 saturate-[1.6]"
+        data-ai-hint="students studying"
       />
       
-      <div className="absolute inset-0 bg-gradient-to-r from-white/80 via-transparent to-white/80" />
+      <div className="absolute inset-0 bg-gradient-to-r from-white/60 via-transparent to-white/60" />
 
       <div className="relative z-10 w-full max-w-[480px] animate-fade-up">
-        <Card className="bg-white/95 backdrop-blur-xl border-none shadow-[0_40px_120px_rgba(0,0,0,0.2)] rounded-[3rem] overflow-hidden">
+        <Card className="bg-white/95 backdrop-blur-2xl border-none shadow-[0_40px_120px_rgba(0,0,0,0.3)] rounded-[3rem] overflow-hidden">
           <CardContent className="p-10 lg:p-14 text-center space-y-10">
             
             <div className="space-y-6">

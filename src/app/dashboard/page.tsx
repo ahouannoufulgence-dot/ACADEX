@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -41,16 +42,16 @@ export default function DashboardPage() {
     <DashboardLayout>
       <div className="space-y-12 animate-fade-up">
         {/* Hero Section - Elite Vivid Edition */}
-        <div className="relative h-[450px] md:h-[600px] w-full rounded-[3.5rem] overflow-hidden shadow-[0_40px_120px_rgba(0,0,0,0.3)] group border-4 border-white bg-slate-100">
+        <div className="relative h-[450px] md:h-[600px] w-full rounded-[3.5rem] overflow-hidden shadow-[0_40px_120px_rgba(0,0,0,0.4)] group border-4 border-white bg-slate-100">
           <Image
-            src={heroImage?.imageUrl || "https://picsum.photos/seed/acadex-joy-success/1400/600"}
-            alt="Joie de l'apprentissage"
+            src={heroImage?.imageUrl || "https://picsum.photos/seed/acadex-classroom-working/1400/600"}
+            alt="Élèves travaillant ensemble"
             fill
             priority
-            className="object-cover transition-transform duration-1000 group-hover:scale-105 saturate-[1.5] brightness-110"
-            data-ai-hint="happy African students"
+            className="object-cover transition-transform duration-1000 group-hover:scale-105 saturate-[1.6] brightness-110"
+            data-ai-hint="students classroom"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-white via-white/20 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-white via-white/30 to-transparent" />
           <div className="absolute inset-0 p-12 md:p-24 flex flex-col justify-center space-y-8 md:space-y-10">
             <div className="flex items-center gap-4 bg-primary text-white w-fit px-10 py-4 rounded-full text-sm md:text-base font-black tracking-[0.25em] uppercase shadow-2xl border-2 border-white/20">
               <Sparkles className="w-6 h-6 text-accent animate-pulse" />

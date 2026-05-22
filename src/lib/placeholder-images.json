@@ -2,15 +2,15 @@
   "placeholderImages": [
     {
       "id": "login-bg",
-      "description": "Happy African students in a bright classroom working on laptops and notebooks, smiling",
-      "imageUrl": "https://picsum.photos/seed/edutrack-students/1400/1000",
-      "imageHint": "happy students classroom"
+      "description": "Happy African students working together in a bright classroom with notebooks and laptops",
+      "imageUrl": "https://picsum.photos/seed/acadex-study-group/1400/1000",
+      "imageHint": "students studying"
     },
     {
       "id": "dashboard-hero",
-      "description": "Happy African students in a bright, modern school environment, working together with smiles and books",
-      "imageUrl": "https://picsum.photos/seed/acadex-joy-success/1400/600",
-      "imageHint": "happy African students"
+      "description": "Enthusiastic students raising hands and working in a modern classroom",
+      "imageUrl": "https://picsum.photos/seed/acadex-classroom-working/1400/600",
+      "imageHint": "students classroom"
     },
     {
       "id": "school-logo",
