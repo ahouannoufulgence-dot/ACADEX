@@ -75,7 +75,7 @@ export const Sidebar = ({ role, userName, isOpen, onClose, schoolName = "ACADEX"
       "w-64 h-screen bg-[#14532D] flex flex-col fixed left-0 top-0 z-40 border-r border-slate-200 transition-transform duration-300 ease-in-out lg:translate-x-0",
       isOpen ? "translate-x-0" : "-translate-x-full"
     )}>
-      <div className="p-6 pb-8 flex items-center justify-between">
+      <div className="p-6 pb-6 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
           <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center shadow-lg shrink-0">
             <span className="text-[#14532D] font-bold text-base">{schoolName[0].toUpperCase()}</span>
@@ -100,7 +100,7 @@ export const Sidebar = ({ role, userName, isOpen, onClose, schoolName = "ACADEX"
                 href={item.href}
                 onClick={() => onClose()}
                 className={cn(
-                  "group flex items-center justify-between px-3 py-2 rounded-xl transition-all duration-200",
+                  "group flex items-center justify-between px-3 py-1.5 rounded-xl transition-all duration-200",
                   isActive 
                     ? "bg-white/15 text-white shadow-sm ring-1 ring-white/10" 
                     : "text-white/60 hover:bg-white/5 hover:text-white"
@@ -108,31 +108,31 @@ export const Sidebar = ({ role, userName, isOpen, onClose, schoolName = "ACADEX"
               >
                 <div className="flex items-center gap-2.5">
                   <item.icon className={cn("w-3.5 h-3.5 transition-colors", isActive ? "text-white" : "text-white/40 group-hover:text-white")} />
-                  <span className="text-[13px] font-bold uppercase tracking-tighter">{item.name}</span>
+                  <span className="text-[12px] font-bold uppercase tracking-tighter">{item.name}</span>
                 </div>
-                {isActive && <div className="w-1 h-3 bg-white/30 rounded-full" />}
+                {isActive && <div className="w-0.5 h-3 bg-white/30 rounded-full" />}
               </Link>
             );
           })}
         </nav>
       </div>
 
-      <div className="p-5 border-t border-white/5 bg-black/10">
-        <div className="flex items-center gap-2.5 mb-5 px-1">
+      <div className="p-4 border-t border-white/5 bg-black/10">
+        <div className="flex items-center gap-2.5 mb-4 px-1">
           <div className="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center text-white font-bold text-[10px] shrink-0">
             {userName.substring(0, 1).toUpperCase()}
           </div>
           <div className="flex-1 overflow-hidden">
-            <p className="text-[11px] font-black text-white truncate uppercase tracking-tighter">{userName}</p>
-            <p className="text-[8px] text-white/40 uppercase font-black tracking-tighter">{role}</p>
+            <p className="text-[10px] font-black text-white truncate uppercase tracking-tighter">{userName}</p>
+            <p className="text-[7px] text-white/40 uppercase font-black tracking-tighter">{role}</p>
           </div>
         </div>
         <button 
           onClick={handleLogout}
-          className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-white/50 hover:bg-red-500/10 hover:text-red-400 transition-all group"
+          className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-xl text-white/50 hover:bg-red-500/10 hover:text-red-400 transition-all group"
         >
           <LogOut className="w-3.5 h-3.5" />
-          <span className="text-[11px] font-black uppercase tracking-widest">Quitter</span>
+          <span className="text-[10px] font-black uppercase tracking-widest">Quitter</span>
         </button>
       </div>
     </aside>
