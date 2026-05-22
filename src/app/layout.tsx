@@ -5,6 +5,7 @@ import { FirebaseClientProvider } from "@/firebase";
 import Script from 'next/script';
 
 export const metadata: Metadata = {
+  manifest: "/manifest.json",
   title: 'ACADEX - Gestion Scolaire Moderne',
   description: 'Apprendre aujourd\'hui, réussir demain',
   appleWebApp: {
