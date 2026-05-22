@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useMemo, useCallback } from "react";
@@ -86,19 +87,18 @@ export default function StudentsPage() {
   const downloadStudentPDF = (id: string, firstName: string, lastName: string, grade: string) => {
     const doc = new jsPDF();
     doc.setFillColor(20, 83, 45); 
-    doc.rect(0, 0, 210, 40, 'F');
+    doc.rect(0, 0, 210, 30, 'F');
     doc.setTextColor(255, 255, 255);
-    doc.setFontSize(22);
-    doc.text("ACADEX - FICHE D'ACCES ELEVE", 105, 25, { align: "center" });
+    doc.setFontSize(18);
+    doc.text("ACADEX - FICHE D'ACCES ELEVE", 105, 20, { align: "center" });
     doc.setTextColor(15, 23, 42); 
-    doc.setFontSize(14);
-    doc.text(`Élève : ${lastName.toUpperCase()} ${firstName}`, 20, 60);
-    doc.text(`Classe : ${grade}`, 20, 70);
-    doc.rect(20, 85, 170, 40);
     doc.setFontSize(12);
-    doc.text("VOTRE IDENTIFIANT PERSONNEL :", 105, 100, { align: "center" });
-    doc.setFontSize(24);
-    doc.text(id, 105, 115, { align: "center" });
+    doc.text(`Élève : ${lastName.toUpperCase()} ${firstName}`, 20, 50);
+    doc.text(`Classe : ${grade}`, 20, 60);
+    doc.rect(20, 75, 170, 30);
+    doc.text("VOTRE IDENTIFIANT PERSONNEL :", 105, 85, { align: "center" });
+    doc.setFontSize(20);
+    doc.text(id, 105, 95, { align: "center" });
     doc.save(`ACADEX_ACCES_${id}.pdf`);
   };
 
@@ -114,6 +114,8 @@ export default function StudentsPage() {
       status: "En attente",
       createdAt: serverTimestamp()
     };
+    
+    // Spontané : pas de await
     setDoc(studentRef, studentData).catch(async () => {
         const permissionError = new FirestorePermissionError({
           path: studentRef.path,
@@ -122,7 +124,8 @@ export default function StudentsPage() {
         });
         errorEmitter.emit('permission-error', permissionError);
     });
-    toast({ title: "Accès provisionné", description: `L'ID ${studentId} a été ajouté.` });
+    
+    toast({ title: "Accès provisionné", description: `L'ID ${studentId} est prêt.` });
     setAiResult(null);
     setFormData({ firstName: "", lastName: "", gradeLevel: "" });
   }, [db, aiResult, formData, toast]);
@@ -131,175 +134,118 @@ export default function StudentsPage() {
 
   return (
     <DashboardLayout>
-      <div className="relative -m-4 md:-m-8 p-4 md:p-8 min-h-screen overflow-x-hidden">
-        <Image 
-          src={joyBackground?.imageUrl || "https://picsum.photos/seed/acadex-joy-study/1400/1000"} 
-          alt="Fond Joie et Concentration" 
-          fill 
-          className="object-cover opacity-90 saturate-[1.8] blur-[2px]"
-          priority
-        />
-        <div className="absolute inset-0 bg-white/50" />
-        
-        <div className="relative z-10 space-y-6 md:space-y-10 animate-fade-up">
-          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
-            <div className="max-w-full">
-              <h1 className="text-3xl md:text-6xl font-headline font-black text-[#0F172A] tracking-tighter">Registre Élèves</h1>
-              <p className="text-[#0F172A] text-sm md:text-xl font-black opacity-80">Gestion des effectifs ACADEX.</p>
-            </div>
-            <Dialog onOpenChange={(open) => !open && setAiResult(null)}>
-              <DialogTrigger asChild>
-                <Button className="bg-primary hover:bg-slate-900 text-white font-black h-12 md:h-16 px-6 md:px-10 rounded-2xl shadow-xl transition-all w-full md:w-auto flex gap-4 text-sm md:text-lg border-2 border-white/10">
-                  <UserPlus className="w-5 h-5 md:w-6 md:h-6 shrink-0" /> Nouvel Élève
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="vivid-box border-none max-w-[95vw] sm:max-w-[500px] bg-white p-0 overflow-hidden shadow-2xl">
-                <DialogHeader className="p-6 md:p-8 bg-primary text-white border-b-4 border-accent">
-                  <div className="flex items-center gap-4">
-                    <div className="p-3 bg-white rounded-xl shadow-lg shrink-0">
-                      <Sparkles className="w-6 h-6 text-primary animate-pulse" />
-                    </div>
-                    <DialogTitle className="text-xl md:text-2xl font-black tracking-tighter">Provisionnement IA</DialogTitle>
-                  </div>
-                </DialogHeader>
-                
-                <div className="p-6 md:p-8 space-y-6 bg-white">
-                  {!aiResult ? (
-                    <div className="space-y-4">
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <Label className="text-[10px] font-black text-[#0F172A] uppercase tracking-widest">Prénom</Label>
-                          <Input 
-                            className="bg-slate-50 border-2 border-slate-100 h-12 rounded-xl font-black text-[#0F172A]" 
-                            value={formData.firstName}
-                            onChange={(e) => setFormData({...formData, firstName: e.target.value})}
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label className="text-[10px] font-black text-[#0F172A] uppercase tracking-widest">Nom</Label>
-                          <Input 
-                            className="bg-slate-50 border-2 border-slate-100 h-12 rounded-xl font-black text-[#0F172A]" 
-                            value={formData.lastName}
-                            onChange={(e) => setFormData({...formData, lastName: e.target.value})}
-                          />
-                        </div>
-                      </div>
-                      <div className="space-y-2">
-                        <Label className="text-[10px] font-black text-[#0F172A] uppercase tracking-widest">Classe / Niveau</Label>
-                        <Input 
-                          placeholder="Ex: 3EME A" 
-                          className="bg-slate-50 border-2 border-slate-100 h-12 rounded-xl font-black text-[#0F172A]" 
-                          value={formData.gradeLevel}
-                          onChange={(e) => setFormData({...formData, gradeLevel: e.target.value.toUpperCase()})}
-                        />
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="space-y-6 animate-in zoom-in duration-500">
-                      <div className="p-6 rounded-2xl bg-primary text-white border-4 border-white/20 space-y-4 shadow-lg text-center">
-                        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-accent">ID Suggéré</p>
-                        <div className="bg-white p-4 rounded-xl shadow-inner">
-                          <span className="text-2xl md:text-3xl font-headline font-black text-primary tracking-tighter">{aiResult.suggestedId}</span>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                <DialogFooter className="p-6 md:p-8 pt-0 flex flex-col gap-3">
-                  {!aiResult ? (
-                    <Button 
-                      className="bg-primary hover:bg-slate-900 text-white font-black w-full h-14 md:h-16 rounded-2xl shadow-lg text-sm md:text-lg border-2 border-white/10" 
-                      onClick={handleAiProvision}
-                      disabled={isAiLoading}
-                    >
-                      {isAiLoading ? <Loader2 className="w-5 h-5 md:w-6 md:h-6 animate-spin" /> : "Générer avec ACADEX AI"}
-                    </Button>
-                  ) : (
-                    <div className="flex flex-col gap-3 w-full">
-                      <Button 
-                        onClick={() => downloadStudentPDF(aiResult.suggestedId, formData.firstName, formData.lastName, formData.gradeLevel)}
-                        variant="outline" 
-                        className="w-full h-12 rounded-xl border-2 border-slate-100 text-[#0F172A] font-black flex gap-2 text-xs"
-                      >
-                        <FileDown className="w-5 h-5 shrink-0" /> Télécharger Fiche
-                      </Button>
-                      <Button className="bg-accent text-white hover:bg-slate-900 font-black w-full h-14 md:h-16 rounded-2xl shadow-lg text-sm md:text-lg border-2 border-white/10" onClick={saveStudent}>
-                        <CheckCircle className="w-5 h-5 md:w-6 md:h-6 mr-2 shrink-0" /> Inscrire l'Élève
-                      </Button>
-                    </div>
-                  )}
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
+      <div className="space-y-6 md:space-y-10 animate-fade-up">
+        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
+          <div>
+            <h1 className="text-2xl md:text-4xl font-headline font-black text-[#0F172A] tracking-tighter uppercase leading-none">Registre Élèves</h1>
+            <p className="text-[#0F172A] text-[9px] md:text-lg font-black opacity-80 uppercase tracking-widest">Effectifs ACADEX 2026-2027</p>
           </div>
-
-          <Card className="vivid-box border-none shadow-xl overflow-hidden bg-white/95 p-0">
-            <CardHeader className="p-4 md:p-8 border-b-2 border-slate-50">
-              <div className="relative w-full max-w-xl group">
-                <Search className="absolute left-4 md:left-6 top-1/2 -translate-y-1/2 w-4 h-4 md:w-5 md:h-5 text-[#0F172A] opacity-30" />
-                <Input 
-                  placeholder="Rechercher..." 
-                  className="pl-10 md:pl-14 h-11 md:h-14 bg-white border-2 border-slate-100 rounded-xl focus-visible:ring-4 focus-visible:ring-primary/10 font-black text-[#0F172A] shadow-md text-sm md:text-base" 
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
+          <Dialog onOpenChange={(open) => !open && setAiResult(null)}>
+            <DialogTrigger asChild>
+              <Button className="bg-primary hover:bg-slate-900 text-white font-black h-10 md:h-12 px-6 rounded-xl shadow-xl transition-all flex gap-3 text-[10px] md:text-sm uppercase tracking-tighter border-2 border-white/10 shrink-0">
+                <UserPlus className="w-4 h-4" /> Nouvel Élève
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="vivid-box border-none bg-white p-0 overflow-hidden shadow-2xl sm:max-w-[400px] rounded-[2rem]">
+              <DialogHeader className="p-6 bg-primary text-white border-b-2 border-accent">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-white rounded-lg shadow-md shrink-0">
+                    <Sparkles className="w-4 h-4 text-primary" />
+                  </div>
+                  <DialogTitle className="text-lg font-black tracking-tighter uppercase">Provisionnement</DialogTitle>
+                </div>
+              </DialogHeader>
+              
+              <div className="p-6 space-y-4">
+                {!aiResult ? (
+                  <>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-1">
+                        <Label className="text-[8px] font-black text-[#0F172A] uppercase tracking-widest">Prénom</Label>
+                        <Input className="h-10 bg-slate-50 border-2 border-slate-100 rounded-xl font-black text-xs" value={formData.firstName} onChange={(e) => setFormData({...formData, firstName: e.target.value})} />
+                      </div>
+                      <div className="space-y-1">
+                        <Label className="text-[8px] font-black text-[#0F172A] uppercase tracking-widest">Nom</Label>
+                        <Input className="h-10 bg-slate-50 border-2 border-slate-100 rounded-xl font-black text-xs" value={formData.lastName} onChange={(e) => setFormData({...formData, lastName: e.target.value})} />
+                      </div>
+                    </div>
+                    <div className="space-y-1">
+                      <Label className="text-[8px] font-black text-[#0F172A] uppercase tracking-widest">Classe</Label>
+                      <Input placeholder="3EME A" className="h-10 bg-slate-50 border-2 border-slate-100 rounded-xl font-black text-xs" value={formData.gradeLevel} onChange={(e) => setFormData({...formData, gradeLevel: e.target.value.toUpperCase()})} />
+                    </div>
+                  </>
+                ) : (
+                  <div className="p-4 rounded-xl bg-primary text-white space-y-3 text-center shadow-inner">
+                    <p className="text-[8px] font-black uppercase text-accent tracking-widest">ID Suggéré</p>
+                    <div className="bg-white p-3 rounded-lg"><span className="text-xl font-black text-primary">{aiResult.suggestedId}</span></div>
+                  </div>
+                )}
               </div>
-            </CardHeader>
-            <CardContent className="p-0">
-              {loading ? (
-                <div className="flex flex-col items-center justify-center py-24 md:py-32">
-                  <Loader2 className="w-10 h-10 md:w-12 md:h-12 animate-spin text-primary mb-4" />
-                  <p className="text-[#0F172A] font-black uppercase tracking-[0.2em] text-[10px] md:text-xs">Accès au registre...</p>
-                </div>
-              ) : (
-                <div className="overflow-x-auto">
-                  <Table>
-                    <TableHeader className="bg-slate-900">
-                      <TableRow className="border-none h-12 md:h-16">
-                        <TableHead className="text-white font-black pl-4 md:pl-8 text-[9px] md:text-[10px] uppercase tracking-widest">Élève</TableHead>
-                        <TableHead className="text-white font-black text-[9px] md:text-[10px] uppercase tracking-widest hidden sm:table-cell">Identifiant</TableHead>
-                        <TableHead className="text-white font-black text-[9px] md:text-[10px] uppercase tracking-widest">Classe</TableHead>
-                        <TableHead className="text-right pr-4 md:pr-8 text-white font-black text-[9px] md:text-[10px] uppercase tracking-widest">Actions</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {filteredStudents.map((s: any) => (
-                        <TableRow key={s.id} className="hover:bg-primary/5 transition-all border-slate-50">
-                          <TableCell className="pl-4 md:pl-8 py-4 md:py-6">
-                             <div className="flex items-center gap-3 md:gap-4">
-                                <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl bg-primary text-white flex items-center justify-center font-black text-sm md:text-lg shadow-md shrink-0">
-                                  {(s.lastName?.[0] || "?").toUpperCase()}
-                                </div>
-                                <div className="min-w-0">
-                                  <p className="font-black text-[#0F172A] text-xs md:text-lg tracking-tight uppercase truncate">{(s.lastName || "").toUpperCase()} {s.firstName || ""}</p>
-                                  <Badge className="bg-slate-100 text-slate-500 text-[7px] md:text-[8px] font-black border-none px-1.5 h-3.5 md:h-4 sm:hidden">{s.id}</Badge>
-                                </div>
-                             </div>
-                          </TableCell>
-                          <TableCell className="py-4 md:py-6 hidden sm:table-cell">
-                             <span className="font-mono text-[10px] md:text-xs font-black text-primary bg-slate-50 px-2 md:px-3 py-1 rounded-md">{s.id}</span>
-                          </TableCell>
-                          <TableCell className="py-4 md:py-6 font-black text-[#0F172A] text-xs md:text-lg whitespace-nowrap">{s.gradeLevel}</TableCell>
-                          <TableCell className="text-right pr-4 md:pr-8 py-4 md:py-6">
-                            <Button 
-                              variant="ghost" 
-                              size="icon" 
-                              className="h-8 w-8 md:h-10 md:w-10 text-primary hover:bg-primary hover:text-white transition-all rounded-lg md:rounded-xl"
-                              onClick={() => downloadStudentPDF(s.id, s.firstName || "", s.lastName || "", s.gradeLevel)}
-                            >
-                              <FileDown className="w-4 h-4 md:w-5 md:h-5 shrink-0" />
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </div>
-              )}
-            </CardContent>
-          </Card>
+
+              <DialogFooter className="p-6 pt-0 flex flex-col gap-2">
+                {!aiResult ? (
+                  <Button className="bg-primary hover:bg-slate-900 text-white font-black w-full h-12 rounded-xl text-xs uppercase" onClick={handleAiProvision} disabled={isAiLoading}>
+                    {isAiLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Générer avec IA"}
+                  </Button>
+                ) : (
+                  <>
+                    <Button onClick={() => downloadStudentPDF(aiResult.suggestedId, formData.firstName, formData.lastName, formData.gradeLevel)} variant="outline" className="h-10 text-[9px] uppercase font-black border-2"><FileDown className="w-3.5 h-3.5 mr-2" /> Télécharger</Button>
+                    <Button className="bg-accent text-white h-12 rounded-xl text-xs uppercase font-black" onClick={saveStudent}>Valider l'Inscription</Button>
+                  </>
+                )}
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </div>
+
+        <Card className="vivid-box border-none shadow-xl overflow-hidden bg-white/95 p-0 rounded-[2rem]">
+          <CardHeader className="p-4 md:p-6 border-b-2 border-slate-50">
+            <div className="relative w-full max-w-sm">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-300" />
+              <Input placeholder="Rechercher..." className="pl-10 h-10 bg-slate-50 border-2 border-slate-100 rounded-xl font-black text-xs text-[#0F172A]" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
+            </div>
+          </CardHeader>
+          <CardContent className="p-0">
+            {loading ? (
+              <div className="flex justify-center py-20"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>
+            ) : (
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader className="bg-slate-900">
+                    <TableRow className="border-none h-10">
+                      <TableHead className="text-white font-black pl-6 text-[8px] uppercase tracking-widest">Élève</TableHead>
+                      <TableHead className="text-white font-black text-[8px] uppercase tracking-widest">Classe</TableHead>
+                      <TableHead className="text-right pr-6 text-white font-black text-[8px] uppercase tracking-widest">Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredStudents.map((s: any) => (
+                      <TableRow key={s.id} className="hover:bg-primary/5 transition-all border-slate-50">
+                        <TableCell className="pl-6 py-3">
+                           <div className="flex items-center gap-3">
+                              <div className="w-8 h-8 rounded-lg bg-primary text-white flex items-center justify-center font-black text-xs shrink-0">
+                                {s.lastName?.[0]}
+                              </div>
+                              <div className="min-w-0">
+                                <p className="font-black text-[#0F172A] text-[11px] md:text-sm uppercase truncate">{s.lastName} {s.firstName}</p>
+                                <p className="text-[7px] font-mono text-primary opacity-60 uppercase">{s.id}</p>
+                              </div>
+                           </div>
+                        </TableCell>
+                        <TableCell className="py-3 font-black text-[#0F172A] text-xs">{s.gradeLevel}</TableCell>
+                        <TableCell className="text-right pr-6 py-3">
+                          <Button variant="ghost" size="icon" className="h-8 w-8 text-primary hover:bg-primary hover:text-white rounded-lg" onClick={() => downloadStudentPDF(s.id, s.firstName || "", s.lastName || "", s.gradeLevel)}>
+                            <FileDown className="w-4 h-4" />
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            )}
+          </CardContent>
+        </Card>
       </div>
     </DashboardLayout>
   );

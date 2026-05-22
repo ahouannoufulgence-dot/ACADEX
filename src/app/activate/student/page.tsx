@@ -4,7 +4,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { GraduationCap, ArrowLeft, CheckCircle2, User, Lock, HelpCircle, Sparkles } from "lucide-react";
+import { GraduationCap, ArrowLeft, CheckCircle2, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -20,7 +20,6 @@ import { PlaceHolderImages } from "@/lib/placeholder-images";
 export default function StudentActivationPage() {
   const [step, setStep] = useState(1);
   const [studentId, setStudentId] = useState("");
-  const [studentInfo, setStudentInfo] = useState<any>(null);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -46,9 +45,9 @@ export default function StudentActivationPage() {
         const data = studentDoc.data();
         if (data.status === "Actif") {
           toast({ variant: "destructive", title: "Déjà activé", description: "Ce compte est déjà actif. Connectez-vous directement." });
+          setIsLoading(false);
           return;
         }
-        setStudentInfo(data);
         setStep(2);
       } else {
         toast({ 
@@ -84,14 +83,13 @@ export default function StudentActivationPage() {
       name: `${formData.firstName} ${formData.lastName}`,
       role: "STUDENT_PARENT",
       password: formData.password,
-      secretQuestion: formData.secretQuestion,
-      secretAnswer: formData.secretAnswer,
       status: "Actif",
       activatedAt: serverTimestamp()
     };
 
+    // Spontané : on ne bloque pas avec await
     setDoc(userRef, userData)
-      .catch(async (err) => {
+      .catch(async () => {
         const permissionError = new FirestorePermissionError({
           path: userRef.path,
           operation: 'create',
@@ -114,85 +112,84 @@ export default function StudentActivationPage() {
     });
 
     toast({
-      title: "Compte activé !",
-      description: "Vous pouvez maintenant vous connecter.",
+      title: "Activation en cours...",
+      description: "Vous allez être redirigé vers la page de connexion.",
     });
     
     setTimeout(() => {
       router.push("/login");
-    }, 500);
+    }, 1500);
   };
 
   return (
-    <div className="min-h-screen relative flex items-center justify-center p-4 lg:p-12 overflow-hidden bg-[#F0F7FF]">
+    <div className="min-h-screen relative flex items-center justify-center p-4 overflow-hidden bg-[#F0F7FF]">
       <Image
         src={registrationImage?.imageUrl || "https://picsum.photos/seed/acadex-joy-study/1400/1000"}
         alt="Élèves travaillant ensemble"
         fill
         priority
         className="object-cover opacity-90 saturate-[1.8]"
-        data-ai-hint="happy students concentration"
       />
-      <div className="absolute inset-0 bg-gradient-to-br from-white/40 via-transparent to-white/40" />
+      <div className="absolute inset-0 bg-white/40" />
 
-      <div className="relative z-10 w-full max-w-lg animate-fade-up">
+      <div className="relative z-10 w-full max-w-md animate-fade-up">
         <Link href="/login" className="mb-6 inline-flex items-center text-[#0F172A] hover:text-primary transition-colors gap-2 font-black uppercase tracking-widest text-[10px]">
-          <ArrowLeft className="w-4 h-4" /> Retour au portail
+          <ArrowLeft className="w-3.5 h-3.5" /> Retour au portail
         </Link>
 
-        <Card className="bg-white/95 border-none shadow-[0_20px_80px_-15px_rgba(0,0,0,0.3)] rounded-[2.5rem] overflow-hidden backdrop-blur-xl">
-          <CardHeader className="text-center pb-8 pt-10">
-            <div className="mx-auto w-16 h-16 md:w-24 md:h-24 bg-[#14532D] rounded-[1.5rem] flex items-center justify-center mb-6 shadow-xl rotate-3">
-              <GraduationCap className="w-10 h-10 md:w-14 md:h-14 text-white" />
+        <Card className="bg-white/95 border-none shadow-2xl rounded-[2rem] overflow-hidden backdrop-blur-xl">
+          <CardHeader className="text-center pb-6 pt-10">
+            <div className="mx-auto w-12 h-12 md:w-16 md:h-16 bg-[#14532D] rounded-xl flex items-center justify-center mb-4 shadow-xl rotate-3">
+              <GraduationCap className="w-6 h-6 md:w-10 md:h-10 text-white" />
             </div>
-            <CardTitle className="text-3xl md:text-4xl font-headline font-black text-[#0F172A] mb-2 tracking-tighter">Activation Élève</CardTitle>
-            <CardDescription className="text-[#0F172A] font-black uppercase tracking-widest text-[10px] opacity-60">Portail d'activation ACADEX</CardDescription>
+            <CardTitle className="text-2xl md:text-3xl font-headline font-black text-[#0F172A] mb-1 tracking-tighter">Activation Élève</CardTitle>
+            <CardDescription className="text-[#0F172A] font-black uppercase tracking-widest text-[8px] opacity-60">Portail d'activation ACADEX</CardDescription>
           </CardHeader>
-          <CardContent className="px-6 md:px-10 pb-12">
+          <CardContent className="px-6 md:px-10 pb-10">
             {step === 1 ? (
-              <div className="space-y-8">
-                <div className="space-y-3">
-                  <Label className="text-[10px] font-black uppercase tracking-widest text-[#0F172A] ml-1">Identifiant Personnel</Label>
+              <div className="space-y-6">
+                <div className="space-y-2">
+                  <Label className="text-[9px] font-black uppercase tracking-widest text-[#0F172A] ml-1">Identifiant Personnel</Label>
                   <div className="relative group">
-                    <User className="absolute left-5 top-1/2 -translate-y-1/2 h-6 w-6 text-[#0F172A] group-focus-within:text-primary transition-colors" />
+                    <User className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-[#0F172A]" />
                     <Input 
                       placeholder="Ex: ELV-3EME-001" 
-                      className="bg-slate-50 border-4 border-slate-100 pl-16 h-18 text-xl font-mono font-black uppercase tracking-widest focus-visible:ring-primary/10 rounded-2xl text-[#0F172A]"
+                      className="bg-slate-50 border-2 border-slate-100 pl-12 h-12 text-base font-mono font-black uppercase tracking-widest focus-visible:ring-primary/10 rounded-xl text-[#0F172A]"
                       value={studentId}
                       onChange={(e) => setStudentId(e.target.value.toUpperCase())}
                     />
                   </div>
                 </div>
-                <Button className="w-full h-18 bg-[#14532D] hover:bg-[#1a6b3a] text-white font-black text-xl rounded-2xl shadow-xl transition-all active:scale-95 border-4 border-white/10" onClick={verifyId} disabled={isLoading}>
+                <Button className="w-full h-12 bg-[#14532D] hover:bg-[#1a6b3a] text-white font-black text-sm rounded-xl shadow-lg transition-all border-2 border-white/10" onClick={verifyId} disabled={isLoading}>
                   {isLoading ? "Vérification..." : "Vérifier mon ID"}
                 </Button>
               </div>
             ) : (
-              <form onSubmit={activateAccount} className="space-y-8 animate-in fade-in slide-in-from-bottom-4">
-                <div className="p-6 rounded-3xl bg-[#F0F7FF] border-4 border-white flex items-center gap-6 shadow-inner">
-                  <div className="w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-[#14532D] flex items-center justify-center shadow-xl">
-                    <CheckCircle2 className="w-8 h-8 md:w-10 md:h-10 text-white" />
+              <form onSubmit={activateAccount} className="space-y-6">
+                <div className="p-4 rounded-2xl bg-[#F0F7FF] border-2 border-white flex items-center gap-4 shadow-inner">
+                  <div className="w-10 h-10 rounded-xl bg-[#14532D] flex items-center justify-center shadow-md">
+                    <CheckCircle2 className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Code Validé</p>
-                    <p className="text-2xl font-mono font-black text-[#14532D] tracking-tighter">{studentId}</p>
+                    <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest">Code Validé</p>
+                    <p className="text-base font-mono font-black text-[#14532D] tracking-tighter">{studentId}</p>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4 md:gap-6">
-                  <div className="space-y-2">
-                    <Label className="text-[10px] font-black uppercase tracking-widest text-[#0F172A] ml-1">Prénom</Label>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <Label className="text-[9px] font-black uppercase tracking-widest text-[#0F172A] ml-1">Prénom</Label>
                     <Input 
-                      className="bg-slate-50 border-2 border-slate-100 h-14 rounded-xl font-black text-[#0F172A]" 
+                      className="bg-slate-50 border-2 border-slate-100 h-11 rounded-xl font-black text-[#0F172A] text-xs" 
                       value={formData.firstName}
                       onChange={(e) => setFormData({...formData, firstName: e.target.value})}
                       required
                     />
                   </div>
-                  <div className="space-y-2">
-                    <Label className="text-[10px] font-black uppercase tracking-widest text-[#0F172A] ml-1">Nom</Label>
+                  <div className="space-y-1">
+                    <Label className="text-[9px] font-black uppercase tracking-widest text-[#0F172A] ml-1">Nom</Label>
                     <Input 
-                      className="bg-slate-50 border-2 border-slate-100 h-14 rounded-xl font-black text-[#0F172A]" 
+                      className="bg-slate-50 border-2 border-slate-100 h-11 rounded-xl font-black text-[#0F172A] text-xs" 
                       value={formData.lastName}
                       onChange={(e) => setFormData({...formData, lastName: e.target.value})}
                       required
@@ -200,18 +197,18 @@ export default function StudentActivationPage() {
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <Label className="text-[10px] font-black uppercase tracking-widest text-[#0F172A] ml-1">Mot de passe</Label>
+                <div className="space-y-1">
+                  <Label className="text-[9px] font-black uppercase tracking-widest text-[#0F172A] ml-1">Nouveau Mot de passe</Label>
                   <Input 
                     type="password" 
-                    className="bg-slate-50 border-2 border-slate-100 h-14 rounded-xl font-black text-[#0F172A]"
+                    className="bg-slate-50 border-2 border-slate-100 h-11 rounded-xl font-black text-[#0F172A] text-xs"
                     value={formData.password}
                     onChange={(e) => setFormData({...formData, password: e.target.value})}
                     required 
                   />
                 </div>
 
-                <Button type="submit" className="w-full h-18 bg-[#14532D] hover:bg-[#1a6b3a] text-white font-black text-xl rounded-2xl shadow-xl transition-all active:scale-95 border-4 border-white/10" disabled={isLoading}>
+                <Button type="submit" className="w-full h-12 bg-[#14532D] hover:bg-[#1a6b3a] text-white font-black text-sm rounded-xl shadow-lg transition-all border-2 border-white/10" disabled={isLoading}>
                   {isLoading ? "Finalisation..." : "Activer mon espace ACADEX"}
                 </Button>
               </form>

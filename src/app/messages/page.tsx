@@ -1,9 +1,10 @@
+
 "use client";
 
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
-import { MessageSquare, Search, Send, Paperclip, MoreHorizontal, Loader2, User } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { MessageSquare, Search, Send, Paperclip, MoreHorizontal, Loader2 } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useFirestore, useCollection } from "@/firebase";
@@ -12,13 +13,14 @@ import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
+import { errorEmitter } from "@/firebase/error-emitter";
+import { FirestorePermissionError } from "@/firebase/errors";
 
 export default function MessagingPage() {
   const { toast } = useToast();
   const db = useFirestore();
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [newMessage, setNewMessage] = useState("");
-  const [isSending, setIsSending] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -28,7 +30,6 @@ export default function MessagingPage() {
     }
   }, []);
 
-  // Fetch real-time messages from global channel for MVP
   const messagesQuery = useMemo(() => {
     if (!db) return null;
     return query(
@@ -40,18 +41,16 @@ export default function MessagingPage() {
 
   const { data: messages, loading } = useCollection(messagesQuery);
 
-  // Auto scroll to bottom
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [messages]);
 
-  const handleSendMessage = async (e: React.FormEvent) => {
+  const handleSendMessage = (e: React.FormEvent) => {
     e.preventDefault();
     if (!db || !currentUser || !newMessage.trim()) return;
 
-    setIsSending(true);
     const messageData = {
       text: newMessage,
       senderId: currentUser.id,
@@ -59,86 +58,86 @@ export default function MessagingPage() {
       timestamp: serverTimestamp(),
     };
 
-    try {
-      await addDoc(collection(db, "messages"), messageData);
-      setNewMessage("");
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Erreur d'envoi",
-        description: "Impossible d'envoyer le message."
+    setNewMessage(""); // Spontané : on vide le champ immédiatement
+
+    addDoc(collection(db, "messages"), messageData)
+      .catch(async () => {
+        const permissionError = new FirestorePermissionError({
+          path: 'messages',
+          operation: 'create',
+          requestResourceData: messageData,
+        });
+        errorEmitter.emit('permission-error', permissionError);
+        toast({
+          variant: "destructive",
+          title: "Erreur",
+          description: "Impossible d'envoyer le message."
+        });
       });
-    } finally {
-      setIsSending(false);
-    }
   };
 
   const contacts = [
-    { name: "Direction ACADEX", lastMsg: messages?.[messages.length - 1]?.text || "Bienvenue...", time: "En ligne", unread: 0 },
-    { name: "Espace Général", lastMsg: "Discussion ouverte", time: "Actif", unread: 0 },
+    { name: "Direction ACADEX", lastMsg: messages?.[messages.length - 1]?.text || "Bienvenue...", time: "En ligne" },
+    { name: "Espace Général", lastMsg: "Discussion ouverte", time: "Actif" },
   ];
 
   return (
     <DashboardLayout>
       <div className="h-[calc(100vh-140px)] md:h-[calc(100vh-180px)] flex flex-col lg:flex-row gap-4 md:gap-8 animate-fade-up max-w-full overflow-hidden">
         
-        {/* Contacts Sidebar - Hidden on tiny phones or collapsed */}
-        <Card className="hidden lg:flex w-96 vivid-box border-none shadow-2xl flex-col bg-white overflow-hidden p-0">
+        <Card className="hidden lg:flex w-80 vivid-box border-none shadow-2xl flex-col bg-white overflow-hidden p-0 rounded-[2rem]">
           <div className="p-6 border-b-2 border-slate-50">
-            <h2 className="text-xl font-black text-[#0F172A] uppercase tracking-tighter mb-4">Conversations</h2>
+            <h2 className="text-lg font-black text-[#0F172A] uppercase tracking-tighter mb-4">Conversations</h2>
             <div className="relative group">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-300" />
-              <Input placeholder="Rechercher..." className="pl-12 bg-slate-50 border-2 border-slate-100 rounded-xl h-12 font-bold text-[#0F172A]" />
+              <Input placeholder="Rechercher..." className="pl-10 bg-slate-50 border-2 border-slate-100 rounded-xl h-10 font-bold text-[#0F172A] text-xs" />
             </div>
           </div>
           <div className="flex-1 overflow-y-auto sidebar-scroll">
             {contacts.map((c, i) => (
-              <div key={i} className="p-6 hover:bg-primary/5 cursor-pointer transition-all border-b border-slate-50 flex items-center gap-4 group">
-                <div className="w-12 h-12 rounded-2xl bg-primary text-white flex items-center justify-center font-black text-lg shadow-lg group-hover:scale-110 transition-transform">
+              <div key={i} className="p-4 hover:bg-primary/5 cursor-pointer transition-all border-b border-slate-50 flex items-center gap-3 group">
+                <div className="w-10 h-10 rounded-xl bg-primary text-white flex items-center justify-center font-black text-sm shadow-lg group-hover:scale-105 transition-transform shrink-0">
                   {c.name[0]}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="flex justify-between items-start mb-1">
-                    <p className="text-sm font-black text-[#0F172A] truncate">{c.name}</p>
-                    <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest">{c.time}</span>
+                  <div className="flex justify-between items-start mb-0.5">
+                    <p className="text-[11px] font-black text-[#0F172A] truncate uppercase">{c.name}</p>
+                    <span className="text-[7px] font-black text-slate-400 uppercase tracking-widest">{c.time}</span>
                   </div>
-                  <p className="text-xs font-bold text-slate-500 truncate">{c.lastMsg}</p>
+                  <p className="text-[10px] font-bold text-slate-500 truncate opacity-70">{c.lastMsg}</p>
                 </div>
               </div>
             ))}
           </div>
         </Card>
 
-        {/* Chat Area */}
-        <Card className="flex-1 vivid-box border-none shadow-2xl flex-col bg-white/95 backdrop-blur-xl overflow-hidden p-0 flex">
-          {/* Header */}
-          <div className="p-4 md:p-8 border-b-2 border-slate-50 flex justify-between items-center bg-slate-50/30">
-            <div className="flex items-center gap-4">
-              <div className="w-10 h-10 md:w-14 md:h-14 rounded-2xl bg-primary text-white flex items-center justify-center font-black text-lg md:text-xl shadow-xl">
+        <Card className="flex-1 vivid-box border-none shadow-2xl flex-col bg-white/95 backdrop-blur-xl overflow-hidden p-0 flex rounded-[2rem]">
+          <div className="p-4 md:p-6 border-b-2 border-slate-50 flex justify-between items-center bg-slate-50/30">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-primary text-white flex items-center justify-center font-black text-sm md:text-lg shadow-xl shrink-0">
                 D
               </div>
               <div>
-                <p className="text-base md:text-2xl font-black text-[#0F172A] tracking-tighter">Direction ACADEX</p>
+                <p className="text-sm md:text-xl font-black text-[#0F172A] tracking-tighter uppercase">Direction ACADEX</p>
                 <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-accent animate-pulse" />
-                  <span className="text-[8px] md:text-[10px] font-black text-slate-400 uppercase tracking-widest">Canal Officiel Sécurisé</span>
+                  <div className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
+                  <span className="text-[7px] md:text-[9px] font-black text-slate-400 uppercase tracking-widest">Canal Officiel Sécurisé</span>
                 </div>
               </div>
             </div>
-            <Button variant="ghost" size="icon" className="text-slate-400 hover:text-primary"><MoreHorizontal className="w-6 h-6" /></Button>
+            <Button variant="ghost" size="icon" className="text-slate-400 hover:text-primary"><MoreHorizontal className="w-5 h-5" /></Button>
           </div>
 
-          {/* Messages Feed */}
-          <div ref={scrollRef} className="flex-1 p-4 md:p-8 overflow-y-auto space-y-6 bg-slate-50/20 sidebar-scroll">
+          <div ref={scrollRef} className="flex-1 p-4 md:p-8 overflow-y-auto space-y-4 bg-slate-50/20 sidebar-scroll">
             {loading ? (
               <div className="flex flex-col items-center justify-center h-full space-y-4">
-                <Loader2 className="w-12 h-12 animate-spin text-primary" />
-                <p className="text-[#0F172A] font-black uppercase tracking-[0.2em] text-xs">Cryptage des données...</p>
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+                <p className="text-[#0F172A] font-black uppercase tracking-[0.2em] text-[8px]">Cryptage des données...</p>
               </div>
             ) : messages?.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full text-center space-y-4 opacity-30">
-                <MessageSquare className="w-20 h-20 text-slate-200" />
-                <p className="text-xl font-black text-slate-400 uppercase tracking-widest">Aucun message pour le moment</p>
+                <MessageSquare className="w-12 h-12 text-slate-200" />
+                <p className="text-xs font-black text-slate-400 uppercase tracking-widest">Aucun message pour le moment</p>
               </div>
             ) : (
               messages?.map((m: any, i) => {
@@ -146,15 +145,15 @@ export default function MessagingPage() {
                 return (
                   <div key={i} className={cn("flex w-full group animate-fade-up", isMine ? "justify-end" : "justify-start")}>
                     <div className={cn(
-                      "max-w-[85%] md:max-w-[70%] p-4 md:p-6 rounded-[2rem] shadow-xl relative",
+                      "max-w-[85%] md:max-w-[70%] p-3 md:p-5 rounded-[1.5rem] shadow-xl relative",
                       isMine 
-                        ? "bg-primary text-white rounded-tr-none border-b-4 border-slate-900/20" 
-                        : "bg-white text-[#0F172A] rounded-tl-none border-2 border-slate-100"
+                        ? "bg-primary text-white rounded-tr-none border-b-2 border-slate-900/20" 
+                        : "bg-white text-[#0F172A] rounded-tl-none border border-slate-100"
                     )}>
-                      {!isMine && <p className="text-[9px] font-black text-accent uppercase tracking-widest mb-2">{m.senderName}</p>}
-                      <p className={cn("text-sm md:text-lg font-bold leading-snug", isMine ? "text-white" : "text-[#0F172A]")}>{m.text}</p>
+                      {!isMine && <p className="text-[7px] font-black text-accent uppercase tracking-widest mb-1">{m.senderName}</p>}
+                      <p className={cn("text-[11px] md:text-sm font-bold leading-snug", isMine ? "text-white" : "text-[#0F172A]")}>{m.text}</p>
                       <div className={cn(
-                        "text-[7px] md:text-[9px] font-black uppercase mt-2 opacity-50 text-right",
+                        "text-[6px] md:text-[8px] font-black uppercase mt-1 opacity-50 text-right",
                         isMine ? "text-white" : "text-slate-400"
                       )}>
                         {m.timestamp ? format(m.timestamp.toDate(), "HH:mm", { locale: fr }) : "..."}
@@ -166,27 +165,25 @@ export default function MessagingPage() {
             )}
           </div>
 
-          {/* Input Area */}
-          <div className="p-4 md:p-8 border-t-4 border-slate-50 bg-white">
-            <form onSubmit={handleSendMessage} className="flex gap-4 md:gap-6 items-center">
-              <Button type="button" variant="ghost" size="icon" className="hidden sm:flex text-slate-400 hover:text-primary h-14 w-14 rounded-2xl">
-                <Paperclip className="w-6 h-6" />
+          <div className="p-4 md:p-6 border-t-2 border-slate-50 bg-white">
+            <form onSubmit={handleSendMessage} className="flex gap-3 md:gap-4 items-center">
+              <Button type="button" variant="ghost" size="icon" className="hidden sm:flex text-slate-400 hover:text-primary h-10 w-10 rounded-xl">
+                <Paperclip className="w-4 h-4" />
               </Button>
               <div className="flex-1 relative">
                 <Input 
                   placeholder="Écrivez votre message..." 
-                  className="h-14 md:h-18 bg-slate-50 border-4 border-slate-100 rounded-[1.5rem] font-black text-sm md:text-xl text-[#0F172A] px-6 focus-visible:ring-8 focus-visible:ring-primary/5 transition-all outline-none"
+                  className="h-10 md:h-12 bg-slate-50 border-2 border-slate-100 rounded-xl font-black text-xs md:text-sm text-[#0F172A] px-4 focus-visible:ring-4 focus-visible:ring-primary/5 transition-all outline-none"
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
-                  disabled={isSending}
                 />
               </div>
               <Button 
                 type="submit" 
-                className="bg-primary hover:bg-slate-900 text-white font-black h-14 md:h-18 w-14 md:w-24 rounded-[1.5rem] shadow-2xl transition-all active:scale-90 border-4 border-white/10"
-                disabled={isSending || !newMessage.trim()}
+                className="bg-primary hover:bg-slate-900 text-white font-black h-10 md:h-12 w-10 md:w-16 rounded-xl shadow-xl transition-all active:scale-90 border-2 border-white/10"
+                disabled={!newMessage.trim()}
               >
-                {isSending ? <Loader2 className="w-6 h-6 animate-spin" /> : <Send className="w-6 h-6 md:w-8 md:h-8" />}
+                <Send className="w-4 h-4 md:w-5 md:h-5" />
               </Button>
             </form>
           </div>
