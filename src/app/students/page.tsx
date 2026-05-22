@@ -3,16 +3,14 @@
 
 import React, { useState, useMemo, useCallback, useEffect } from "react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
-import { Search, UserPlus, Sparkles, Loader2, FileDown, Save, CheckCircle2 } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Search, UserPlus, Sparkles, Loader2, FileDown, CheckCircle2 } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
-import { cn } from "@/lib/utils";
 import { provisionUserAccount, DirectorAccountProvisioningOutput } from "@/ai/flows/director-account-provisioning-assistant";
 import { useToast } from "@/hooks/use-toast";
 import { useFirestore, useCollection } from "@/firebase";
@@ -90,7 +88,6 @@ export default function StudentsPage() {
     
     setIsProvisioning(true);
     setProvisionProgress(20);
-    console.log("ACADEX: Provisionnement élève démarré");
 
     const studentId = formData.id;
     const studentRef = doc(db, "students", studentId);
@@ -105,11 +102,7 @@ export default function StudentsPage() {
     
     setProvisionProgress(60);
 
-    // Écriture Spontanée (Non-bloquante)
     setDoc(studentRef, studentData)
-      .then(() => {
-        console.log("ACADEX: Firestore sauvegardé en arrière-plan");
-      })
       .catch(async () => {
         const permissionError = new FirestorePermissionError({
           path: studentRef.path,
@@ -119,10 +112,8 @@ export default function StudentsPage() {
         errorEmitter.emit('permission-error', permissionError);
     });
 
-    // Finalisation immédiate pour fluidité totale
     setTimeout(() => {
       setProvisionProgress(100);
-      console.log("ACADEX: Inscription terminée");
       toast({ title: "Inscription enregistrée", description: `ID : ${studentId} généré.` });
       setTimeout(() => {
         setIsProvisioning(false);
@@ -155,38 +146,38 @@ export default function StudentsPage() {
       <div className="space-y-6 md:space-y-8 animate-fade-up">
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
           <div>
-            <h1 className="text-2xl md:text-3xl font-headline font-black text-[#0F172A] tracking-tighter uppercase leading-none">Registre Élèves</h1>
+            <h1 className="text-2xl md:text-4xl font-headline font-black text-[#0F172A] tracking-tighter uppercase leading-none">Registre Élèves</h1>
             <p className="text-[#0F172A] text-[9px] md:text-base font-black opacity-80 uppercase tracking-widest">Session 2026-2027</p>
           </div>
           <Dialog onOpenChange={(open) => !open && (setAiResult(null), setFormData({ firstName: "", lastName: "", gradeLevel: "", id: "" }))}>
             <DialogTrigger asChild>
-              <Button className="bg-primary hover:bg-slate-900 text-white font-black h-10 md:h-12 px-5 rounded-xl shadow-xl transition-all flex gap-3 text-[10px] md:text-sm uppercase tracking-tighter border-2 border-white/10 shrink-0">
-                <UserPlus className="w-5 h-5" /> Nouveau
+              <Button className="bg-primary hover:bg-slate-900 text-white font-black h-12 md:h-14 px-6 rounded-xl shadow-xl transition-all flex gap-4 text-[10px] md:text-sm uppercase tracking-tighter border-2 border-white/10 shrink-0">
+                <UserPlus className="w-6 h-6 md:w-7 md:h-7" /> Nouveau
               </Button>
             </DialogTrigger>
             <DialogContent className="vivid-box border-none bg-white p-0 overflow-hidden shadow-2xl sm:max-w-[400px] rounded-[2rem]">
               <DialogHeader className="p-5 bg-primary text-white border-b-2 border-accent">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-white rounded-lg shadow-md shrink-0">
-                    <Sparkles className="w-5 h-5 text-primary" />
+                <div className="flex items-center gap-4">
+                  <div className="p-3 bg-white rounded-lg shadow-md shrink-0">
+                    <Sparkles className="w-7 h-7 text-primary" />
                   </div>
-                  <DialogTitle className="text-sm font-black tracking-tighter uppercase">Inscription Élite</DialogTitle>
+                  <DialogTitle className="text-base font-black tracking-tighter uppercase">Inscription Élite</DialogTitle>
                 </div>
               </DialogHeader>
               
               <div className="p-6 space-y-4">
                 {isProvisioning ? (
                   <div className="py-8 space-y-6 flex flex-col items-center">
-                    <Loader2 className="w-12 h-12 text-primary animate-spin" />
+                    <Loader2 className="w-14 h-14 text-primary animate-spin" />
                     <div className="w-full space-y-2">
                        <div className="flex justify-between text-[8px] font-black uppercase tracking-widest text-primary">
                           <span>Création...</span>
                           <span>{provisionProgress}%</span>
                        </div>
-                       <Progress value={provisionProgress} className="h-1.5" />
-                       <div className="p-3 bg-slate-50 rounded-xl border-2 border-slate-100 flex items-center justify-between">
-                         <CheckCircle2 className="w-5 h-5 text-primary" />
-                         <span className="font-mono font-black text-primary text-base">{formData.id}</span>
+                       <Progress value={provisionProgress} className="h-2" />
+                       <div className="p-4 bg-slate-50 rounded-xl border-2 border-slate-100 flex items-center justify-between">
+                         <CheckCircle2 className="w-6 h-6 text-primary" />
+                         <span className="font-mono font-black text-primary text-lg">{formData.id}</span>
                        </div>
                     </div>
                   </div>
@@ -195,22 +186,22 @@ export default function StudentsPage() {
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-1">
                         <Label className="text-[8px] font-black text-[#0F172A] uppercase tracking-widest">Prénom</Label>
-                        <Input className="h-10 bg-slate-50 border-2 border-slate-100 rounded-xl font-black text-xs" value={formData.firstName} onChange={(e) => setFormData({...formData, firstName: e.target.value})} />
+                        <Input className="h-11 bg-slate-50 border-2 border-slate-100 rounded-xl font-black text-xs" value={formData.firstName} onChange={(e) => setFormData({...formData, firstName: e.target.value})} />
                       </div>
                       <div className="space-y-1">
                         <Label className="text-[8px] font-black text-[#0F172A] uppercase tracking-widest">Nom</Label>
-                        <Input className="h-10 bg-slate-50 border-2 border-slate-100 rounded-xl font-black text-xs" value={formData.lastName} onChange={(e) => setFormData({...formData, lastName: e.target.value})} />
+                        <Input className="h-11 bg-slate-50 border-2 border-slate-100 rounded-xl font-black text-xs" value={formData.lastName} onChange={(e) => setFormData({...formData, lastName: e.target.value})} />
                       </div>
                     </div>
                     <div className="space-y-1">
                       <Label className="text-[8px] font-black text-[#0F172A] uppercase tracking-widest">Classe</Label>
-                      <Input placeholder="Ex: 3EME A" className="h-10 bg-slate-50 border-2 border-slate-100 rounded-xl font-black text-xs" value={formData.gradeLevel} onChange={(e) => setFormData({...formData, gradeLevel: e.target.value.toUpperCase()})} />
+                      <Input placeholder="Ex: 3EME A" className="h-11 bg-slate-50 border-2 border-slate-100 rounded-xl font-black text-xs" value={formData.gradeLevel} onChange={(e) => setFormData({...formData, gradeLevel: e.target.value.toUpperCase()})} />
                     </div>
 
                     {formData.id && (
-                      <div className="p-4 rounded-xl bg-primary/5 border-2 border-dashed border-primary/20 space-y-1 text-center">
+                      <div className="p-5 rounded-xl bg-primary/5 border-2 border-dashed border-primary/20 space-y-1 text-center">
                         <p className="text-[7px] font-black uppercase text-primary tracking-[0.3em]">ID Spontané</p>
-                        <p className="text-lg font-black text-primary font-mono tracking-tighter">{formData.id}</p>
+                        <p className="text-xl font-black text-primary font-mono tracking-tighter">{formData.id}</p>
                       </div>
                     )}
                   </>
@@ -218,12 +209,12 @@ export default function StudentsPage() {
               </div>
 
               {!isProvisioning && (
-                <DialogFooter className="p-6 pt-0 flex flex-col gap-2">
-                  <Button className="bg-primary hover:bg-slate-900 text-white font-black w-full h-11 rounded-xl text-xs uppercase shadow-lg" onClick={saveStudent} disabled={!formData.id}>
+                <DialogFooter className="p-6 pt-0 flex flex-col gap-3">
+                  <Button className="bg-primary hover:bg-slate-900 text-white font-black w-full h-12 rounded-xl text-xs uppercase shadow-lg" onClick={saveStudent} disabled={!formData.id}>
                     Valider Inscription
                   </Button>
-                  <Button variant="ghost" className="text-[8px] uppercase font-black text-slate-400 hover:text-primary h-8" onClick={handleAiProvision} disabled={isAiLoading || !formData.id}>
-                     {isAiLoading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Sparkles className="w-4 h-4 mr-2" />} Affiner avec l'IA
+                  <Button variant="ghost" className="text-[8px] uppercase font-black text-slate-400 hover:text-primary h-9" onClick={handleAiProvision} disabled={isAiLoading || !formData.id}>
+                     {isAiLoading ? <Loader2 className="w-5 h-5 animate-spin mr-2" /> : <Sparkles className="w-5 h-5 mr-2" />} Affiner avec l'IA
                   </Button>
                 </DialogFooter>
               )}
@@ -231,44 +222,44 @@ export default function StudentsPage() {
           </Dialog>
         </div>
 
-        <Card className="vivid-box border-none shadow-xl overflow-hidden bg-white/95 p-0 rounded-[2rem]">
-          <CardHeader className="p-4 md:p-6 border-b-2 border-slate-50">
-            <div className="relative w-full max-w-sm">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-300" />
-              <Input placeholder="Rechercher..." className="pl-10 h-10 bg-slate-50 border-2 border-slate-100 rounded-xl font-black text-xs text-[#0F172A]" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
+        <Card className="vivid-box border-none shadow-xl overflow-hidden bg-white/95 p-0 rounded-[2.5rem]">
+          <CardHeader className="p-5 md:p-8 border-b-2 border-slate-50">
+            <div className="relative w-full max-w-md">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-6 h-6 text-slate-300" />
+              <Input placeholder="Rechercher..." className="pl-12 h-11 bg-slate-50 border-2 border-slate-100 rounded-xl font-black text-xs text-[#0F172A]" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
             </div>
           </CardHeader>
           <CardContent className="p-0">
             {loading ? (
-              <div className="flex justify-center py-20"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>
+              <div className="flex justify-center py-20"><Loader2 className="w-10 h-10 animate-spin text-primary" /></div>
             ) : (
               <div className="overflow-x-auto">
                 <Table>
                   <TableHeader className="bg-slate-900">
-                    <TableRow className="border-none h-10">
-                      <TableHead className="text-white font-black pl-6 text-[8px] uppercase tracking-widest">Élève</TableHead>
-                      <TableHead className="text-white font-black text-[8px] uppercase tracking-widest">Classe</TableHead>
-                      <TableHead className="text-right pr-6 text-white font-black text-[8px] uppercase tracking-widest">Actions</TableHead>
+                    <TableRow className="border-none h-12">
+                      <TableHead className="text-white font-black pl-8 text-[9px] uppercase tracking-widest">Élève</TableHead>
+                      <TableHead className="text-white font-black text-[9px] uppercase tracking-widest">Classe</TableHead>
+                      <TableHead className="text-right pr-8 text-white font-black text-[9px] uppercase tracking-widest">Actions</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {filteredStudents.map((s: any) => (
                       <TableRow key={s.id} className="hover:bg-primary/5 transition-all border-slate-50">
-                        <TableCell className="pl-6 py-3">
-                           <div className="flex items-center gap-4">
-                              <div className="w-8 h-8 rounded-lg bg-primary text-white flex items-center justify-center font-black text-[11px] shrink-0">
+                        <TableCell className="pl-8 py-5">
+                           <div className="flex items-center gap-5">
+                              <div className="w-10 h-10 rounded-lg bg-primary text-white flex items-center justify-center font-black text-sm shrink-0 shadow-md">
                                 {s.lastName?.[0]}
                               </div>
                               <div className="min-w-0">
-                                <p className="font-black text-[#0F172A] text-[10px] md:text-sm uppercase truncate">{s.lastName} {s.firstName}</p>
-                                <p className="text-[6px] font-mono text-primary opacity-60 uppercase">{s.id}</p>
+                                <p className="font-black text-[#0F172A] text-[11px] md:text-base uppercase truncate">{s.lastName} {s.firstName}</p>
+                                <p className="text-[8px] font-mono text-primary opacity-60 uppercase tracking-tighter">{s.id}</p>
                               </div>
                            </div>
                         </TableCell>
-                        <TableCell className="py-3 font-black text-[#0F172A] text-xs">{s.gradeLevel}</TableCell>
-                        <TableCell className="text-right pr-6 py-3">
-                          <Button variant="ghost" size="icon" className="h-8 w-8 text-primary hover:bg-primary hover:text-white rounded-lg" onClick={() => downloadStudentPDF(s.id, s.firstName || "", s.lastName || "", s.gradeLevel)}>
-                            <FileDown className="w-5 h-5" />
+                        <TableCell className="py-5 font-black text-[#0F172A] text-sm">{s.gradeLevel}</TableCell>
+                        <TableCell className="text-right pr-8 py-5">
+                          <Button variant="ghost" size="icon" className="h-10 w-10 text-primary hover:bg-primary hover:text-white rounded-lg shadow-sm" onClick={() => downloadStudentPDF(s.id, s.firstName || "", s.lastName || "", s.gradeLevel)}>
+                            <FileDown className="w-7 h-7" />
                           </Button>
                         </TableCell>
                       </TableRow>

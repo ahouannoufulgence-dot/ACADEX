@@ -2,7 +2,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Bell, Search, Calendar as CalendarIcon, Menu, Sparkles } from "lucide-react";
+import { Search, Menu, Sparkles } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { UserRole, getRoleName } from "@/lib/auth-utils";
 import { Badge } from "@/components/ui/badge";
@@ -35,23 +35,23 @@ export const Topbar = ({ role, userName, onMenuClick, academicYear = "2026-2027"
           className="lg:hidden p-2 rounded-lg bg-slate-50 text-slate-600 hover:bg-slate-100 transition-colors"
           onClick={onMenuClick}
         >
-          <Menu className="w-6 h-6" />
+          <Menu className="w-7 h-7" />
         </button>
         
         <div className="flex-1 max-w-md hidden sm:block">
           <div className="relative group">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300 group-focus-within:text-[#0F172A] transition-colors" />
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-6 h-6 text-slate-300 group-focus-within:text-[#0F172A] transition-colors" />
             <Input 
               placeholder="Rechercher..." 
-              className="pl-10 bg-slate-50 border-none h-10 rounded-xl text-[13px] font-black text-[#0F172A] focus-visible:ring-1 focus-visible:ring-[#0F172A]/10 uppercase tracking-widest placeholder:opacity-30"
+              className="pl-11 bg-slate-50 border-none h-11 rounded-xl text-[13px] font-black text-[#0F172A] focus-visible:ring-1 focus-visible:ring-[#0F172A]/10 uppercase tracking-widest placeholder:opacity-30"
             />
           </div>
         </div>
       </div>
 
       <div className="flex items-center gap-3 md:gap-5">
-        <Badge variant="outline" className="hidden lg:flex items-center gap-2 border-2 border-primary/20 bg-primary/5 text-primary font-black px-4 h-9 rounded-xl text-[10px] uppercase tracking-widest shadow-sm">
-          <Sparkles className="w-4.5 h-4.5 text-accent" /> {academicYear}
+        <Badge variant="outline" className="hidden lg:flex items-center gap-2 border-2 border-primary/20 bg-primary/5 text-primary font-black px-4 h-10 rounded-xl text-[10px] uppercase tracking-widest shadow-sm">
+          <Sparkles className="w-5 h-5 text-accent" /> {academicYear}
         </Badge>
 
         <div className="flex items-center gap-3 md:gap-5 pl-3 md:pl-5 border-l border-slate-100 ml-1">

@@ -87,7 +87,7 @@ export const Sidebar = ({ role, userName, isOpen, onClose, schoolName = "ACADEX"
           </div>
         </div>
         <button className="lg:hidden text-white/60 hover:text-white" onClick={onClose}>
-          <X className="w-6 h-6" />
+          <X className="w-7 h-7" />
         </button>
       </div>
 
@@ -108,7 +108,7 @@ export const Sidebar = ({ role, userName, isOpen, onClose, schoolName = "ACADEX"
                 )}
               >
                 <div className="flex items-center gap-3">
-                  <item.icon className={cn("w-5 h-5 transition-colors", isActive ? "text-white" : "text-white/40 group-hover:text-white")} />
+                  <item.icon className={cn("w-6 h-6 transition-colors", isActive ? "text-white" : "text-white/40 group-hover:text-white")} />
                   <span className="text-[12px] font-bold uppercase tracking-tighter">{item.name}</span>
                 </div>
                 {isActive && <div className="w-1 h-4 bg-white/30 rounded-full" />}
@@ -132,7 +132,7 @@ export const Sidebar = ({ role, userName, isOpen, onClose, schoolName = "ACADEX"
           onClick={handleLogout}
           className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-white/50 hover:bg-red-500/10 hover:text-red-400 transition-all group"
         >
-          <LogOut className="w-5 h-5" />
+          <LogOut className="w-6 h-6" />
           <span className="text-[10px] font-black uppercase tracking-widest">Quitter</span>
         </button>
       </div>
