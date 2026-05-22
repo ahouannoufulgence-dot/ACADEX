@@ -2,21 +2,21 @@
   "placeholderImages": [
     {
       "id": "login-bg",
-      "description": "Joyful African high school students laughing together in a modern bright school hallway",
-      "imageUrl": "https://picsum.photos/seed/acadex-joy-login/1920/1080",
-      "imageHint": "happy African students"
+      "description": "Premium school hallway with natural light and minimalist architectural lines",
+      "imageUrl": "https://picsum.photos/seed/acadex-premium-hall/1920/1080",
+      "imageHint": "modern school hallway"
     },
     {
       "id": "dashboard-hero",
-      "description": "Group of African high school students smiling, high-fiving and studying together in a bright library",
-      "imageUrl": "https://picsum.photos/seed/acadex-success/1200/400",
-      "imageHint": "African student success"
+      "description": "Top-down shot of diverse African high school students laughing and working together around a table in a high-end school lounge",
+      "imageUrl": "https://picsum.photos/seed/acadex-success-premium/1200/400",
+      "imageHint": "smiling African students"
     },
     {
       "id": "school-logo",
-      "description": "Modern abstract educational logo showing growth and community",
-      "imageUrl": "https://picsum.photos/seed/acadex-logo-tech/200/200",
-      "imageHint": "modern school logo"
+      "description": "Elite educational institution logo, minimalist and geometric",
+      "imageUrl": "https://picsum.photos/seed/acadex-logo-elite/200/200",
+      "imageHint": "minimalist school logo"
     }
   ]
 }

@@ -1,4 +1,3 @@
-
 "use client";
 
 import React from "react";
@@ -96,21 +95,21 @@ export const Sidebar = ({ role, userName }: SidebarProps) => {
   const navItems = getNavItems();
 
   return (
-    <aside className="w-64 h-screen bg-gradient-to-b from-[#1A6B4A] to-[#124d35] flex flex-col fixed left-0 top-0 z-40 border-r border-white/5">
-      <div className="p-8 pb-6 shrink-0">
+    <aside className="w-64 h-screen bg-gradient-to-b from-[#14532D] to-[#111827] flex flex-col fixed left-0 top-0 z-40 border-r border-white/5">
+      <div className="p-10 pb-8 shrink-0">
         <Link href="/dashboard" className="flex items-center gap-3 hover:opacity-90 transition-opacity">
-          <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-2xl">
-            <span className="text-[#1A6B4A] font-bold text-xl">A</span>
+          <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-xl">
+            <span className="text-[#14532D] font-bold text-xl">A</span>
           </div>
           <div>
             <h1 className="text-white font-headline font-bold text-xl tracking-tight leading-tight">ACADEX</h1>
-            <p className="text-white/50 text-[10px] font-bold uppercase tracking-widest">Premium School</p>
+            <p className="text-white/40 text-[9px] font-bold uppercase tracking-[0.2em]">High End System</p>
           </div>
         </Link>
       </div>
 
-      <div className="flex-1 sidebar-scroll px-4">
-        <nav className="space-y-1.5 pb-8">
+      <div className="flex-1 sidebar-scroll px-5">
+        <nav className="space-y-1.5 pb-10">
           {navItems.map((item) => {
             const isActive = pathname === item.href;
             return (
@@ -118,7 +117,7 @@ export const Sidebar = ({ role, userName }: SidebarProps) => {
                 key={item.name + item.href}
                 href={item.href}
                 className={cn(
-                  "group flex items-center justify-between px-3.5 py-3 rounded-xl transition-all duration-200",
+                  "group flex items-center justify-between px-4 py-3 rounded-xl transition-all duration-300",
                   isActive 
                     ? "bg-white/10 text-white shadow-sm ring-1 ring-white/10" 
                     : "text-white/60 hover:bg-white/5 hover:text-white"
@@ -128,15 +127,15 @@ export const Sidebar = ({ role, userName }: SidebarProps) => {
                   <item.icon className={cn("w-5 h-5 transition-colors", isActive ? "text-white" : "text-white/40 group-hover:text-white")} />
                   <span className="text-sm font-medium">{item.name}</span>
                 </div>
-                {isActive && <ChevronRight className="w-4 h-4 opacity-40" />}
+                {isActive && <ChevronRight className="w-4 h-4 opacity-30" />}
               </Link>
             );
           })}
         </nav>
       </div>
 
-      <div className="p-6 border-t border-white/10 bg-black/10 shrink-0">
-        <div className="flex items-center gap-3 mb-6 px-2">
+      <div className="p-8 border-t border-white/10 bg-black/20 shrink-0">
+        <div className="flex items-center gap-3 mb-6 px-1">
           <div className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-white font-bold text-xs shadow-inner">
             {userName.substring(0, 2).toUpperCase()}
           </div>
@@ -147,7 +146,7 @@ export const Sidebar = ({ role, userName }: SidebarProps) => {
         </div>
         <button 
           onClick={handleLogout}
-          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-white/60 hover:bg-destructive/10 hover:text-destructive transition-all group"
+          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-white/50 hover:bg-destructive/10 hover:text-destructive transition-all group"
         >
           <LogOut className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
           <span className="text-sm font-bold">Déconnexion</span>
