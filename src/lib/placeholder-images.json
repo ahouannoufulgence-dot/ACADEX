@@ -2,21 +2,21 @@
   "placeholderImages": [
     {
       "id": "login-bg",
-      "description": "Smiling African students working together in a classroom",
-      "imageUrl": "https://picsum.photos/seed/acadex-login/1920/1080",
-      "imageHint": "African students classroom"
+      "description": "Joyful African high school students laughing together in a modern bright school hallway",
+      "imageUrl": "https://picsum.photos/seed/acadex-joy-login/1920/1080",
+      "imageHint": "happy African students"
     },
     {
       "id": "dashboard-hero",
-      "description": "Group of African high school students smiling and studying together",
-      "imageUrl": "https://picsum.photos/seed/acadex-hero/1200/400",
-      "imageHint": "African students"
+      "description": "Group of African high school students smiling, high-fiving and studying together in a bright library",
+      "imageUrl": "https://picsum.photos/seed/acadex-success/1200/400",
+      "imageHint": "African student success"
     },
     {
       "id": "school-logo",
-      "description": "Abstract school logo representing growth",
-      "imageUrl": "https://picsum.photos/seed/acadex-logo/200/200",
-      "imageHint": "education logo"
+      "description": "Modern abstract educational logo showing growth and community",
+      "imageUrl": "https://picsum.photos/seed/acadex-logo-tech/200/200",
+      "imageHint": "modern school logo"
     }
   ]
 }
