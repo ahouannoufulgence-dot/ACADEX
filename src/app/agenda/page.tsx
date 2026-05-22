@@ -23,7 +23,7 @@ export default function AgendaPage() {
             <h1 className="text-3xl font-headline font-bold text-[#111827] mb-2">Agenda Institutionnel</h1>
             <p className="text-slate-500 font-medium">Gestion des événements clés.</p>
           </div>
-          <Button className="bg-[#14532D] hover:bg-[#166534] text-white font-bold h-11 px-6 shadow-md rounded-xl">
+          <Button className="bg-[#14532D] hover:bg-[#166534] text-white font-bold h-11 px-6 shadow-md rounded-xl transition-all active:scale-95">
             <Plus className="w-4 h-4 mr-2" /> Nouvel événement
           </Button>
         </div>
@@ -38,16 +38,16 @@ export default function AgendaPage() {
             </CardHeader>
             <CardContent className="space-y-4 p-8 pt-0">
               {events.map((e, i) => (
-                <div key={i} className="p-5 rounded-xl bg-slate-50 border border-slate-100 hover:border-[#14532D]/20 hover:bg-white transition-all duration-300">
+                <div key={i} className="p-5 rounded-xl bg-slate-50 border border-slate-100 hover:border-[#14532D]/20 hover:bg-white transition-all duration-300 group">
                   <div className="flex justify-between items-center mb-3">
-                    <p className="text-sm font-bold text-[#111827]">{e.title}</p>
-                    <Badge variant="outline" className="text-[10px] font-bold tracking-widest text-[#14532D] border-[#14532D]/20 bg-white uppercase h-6 px-3">
+                    <p className="text-sm font-bold text-[#111827] group-hover:text-[#14532D] transition-colors">{e.title}</p>
+                    <Badge variant="outline" className="text-[10px] font-bold tracking-widest text-[#14532D] border-[#14532D]/20 bg-white uppercase h-6 px-3 group-hover:bg-[#14532D] group-hover:text-white transition-all">
                       {e.type}
                     </Badge>
                   </div>
                   <div className="flex items-center gap-6 text-[11px] text-slate-500 font-semibold uppercase tracking-wider">
-                    <span className="flex items-center gap-1.5"><Clock className="w-3.5 h-3.5 text-slate-400" /> {e.time}</span>
-                    <span className="flex items-center gap-1.5"><Tag className="w-3.5 h-3.5 text-slate-400" /> {e.class}</span>
+                    <span className="flex items-center gap-1.5"><Clock className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#14532D]" /> {e.time}</span>
+                    <span className="flex items-center gap-1.5"><Tag className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#14532D]" /> {e.class}</span>
                   </div>
                 </div>
               ))}
@@ -60,10 +60,10 @@ export default function AgendaPage() {
             </CardHeader>
             <CardContent className="space-y-4 p-8 pt-4">
               <textarea 
-                className="w-full h-48 bg-slate-50 rounded-xl border-none p-4 text-sm text-[#111827] placeholder:text-slate-400 focus:ring-1 focus:ring-[#14532D]/20 outline-none transition-all"
+                className="w-full h-48 bg-slate-50 rounded-xl border-none p-4 text-sm text-[#111827] placeholder:text-slate-400 focus:ring-1 focus:ring-[#14532D]/20 outline-none transition-all shadow-inner"
                 placeholder="Pense-bête personnel..."
               />
-              <Button className="w-full bg-[#14532D] hover:bg-[#166534] text-white font-bold h-12 rounded-xl">
+              <Button className="w-full bg-[#14532D] hover:bg-[#166534] text-white font-bold h-12 rounded-xl transition-all active:scale-95">
                 Sauvegarder
               </Button>
             </CardContent>

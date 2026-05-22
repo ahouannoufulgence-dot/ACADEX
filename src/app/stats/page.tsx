@@ -1,4 +1,3 @@
-
 "use client";
 
 import React from "react";
@@ -42,16 +41,16 @@ export default function StatisticsPage() {
             <p className="text-slate-500 font-medium">Suivi de la performance globale de l'institution.</p>
           </div>
           <div className="flex gap-4">
-             <div className="px-4 py-2 rounded-xl bg-white border border-slate-100 flex items-center gap-2 text-xs font-bold text-slate-500 shadow-sm">
+             <div className="px-4 py-2 rounded-xl bg-white border border-slate-100 flex items-center gap-2 text-xs font-bold text-slate-500 shadow-sm animate-pulse">
                 <Activity className="w-4 h-4 text-[#14532D]" /> Temps réel
              </div>
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-           <StatMiniCard label="Moyenne Générale" value="11.48" trend="+1.2" status="up" />
-           <StatMiniCard label="Taux d'Admission" value="92.4%" trend="+4%" status="up" />
-           <StatMiniCard label="Taux d'Abandon" value="0.8%" trend="-0.2" status="down" />
+           <StatMiniCard label="Moyenne Générale" value="11.48" trend="+1.2" status="up" delay="0s" />
+           <StatMiniCard label="Taux d'Admission" value="92.4%" trend="+4%" status="up" delay="0.1s" />
+           <StatMiniCard label="Taux d'Abandon" value="0.8%" trend="-0.2" status="down" delay="0.2s" />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -88,7 +87,7 @@ export default function StatisticsPage() {
                     <Bar 
                       dataKey="avg" 
                       fill="var(--color-avg)" 
-                      radius={[4, 4, 0, 0]} 
+                      radius={[6, 6, 0, 0]} 
                       barSize={40}
                     />
                   </BarChart>
@@ -107,16 +106,16 @@ export default function StatisticsPage() {
             </CardHeader>
             <CardContent className="h-[340px] pt-4">
               <div className="flex h-full items-end gap-6 px-8 pb-10">
-                <div className="flex-1 flex flex-col items-center gap-4">
-                  <div className="w-full bg-[#14532D]/10 rounded-xl h-[85%] flex items-end justify-center pb-4 text-[11px] font-bold text-[#14532D] border border-[#14532D]/5">45%</div>
+                <div className="flex-1 flex flex-col items-center gap-4 group">
+                  <div className="w-full bg-[#14532D]/10 rounded-xl h-[85%] flex items-end justify-center pb-4 text-[11px] font-bold text-[#14532D] border border-[#14532D]/5 transition-all group-hover:h-[90%] group-hover:bg-[#14532D]/20">45%</div>
                   <span className="text-xs font-bold text-[#111827] uppercase tracking-widest">Lycée</span>
                 </div>
-                <div className="flex-1 flex flex-col items-center gap-4">
-                  <div className="w-full bg-[#111827]/10 rounded-xl h-[65%] flex items-end justify-center pb-4 text-[11px] font-bold text-[#111827] border border-[#111827]/5">35%</div>
+                <div className="flex-1 flex flex-col items-center gap-4 group">
+                  <div className="w-full bg-[#111827]/10 rounded-xl h-[65%] flex items-end justify-center pb-4 text-[11px] font-bold text-[#111827] border border-[#111827]/5 transition-all group-hover:h-[70%] group-hover:bg-[#111827]/20">35%</div>
                   <span className="text-xs font-bold text-[#111827] uppercase tracking-widest">Collège</span>
                 </div>
-                <div className="flex-1 flex flex-col items-center gap-4">
-                  <div className="w-full bg-[#14532D]/20 rounded-xl h-[45%] flex items-end justify-center pb-4 text-[11px] font-bold text-[#14532D] border border-[#14532D]/5">20%</div>
+                <div className="flex-1 flex flex-col items-center gap-4 group">
+                  <div className="w-full bg-[#14532D]/20 rounded-xl h-[45%] flex items-end justify-center pb-4 text-[11px] font-bold text-[#14532D] border border-[#14532D]/5 transition-all group-hover:h-[50%] group-hover:bg-[#14532D]/30">20%</div>
                   <span className="text-xs font-bold text-[#111827] uppercase tracking-widest">Primaire</span>
                 </div>
               </div>
@@ -128,13 +127,16 @@ export default function StatisticsPage() {
   );
 }
 
-function StatMiniCard({ label, value, trend, status }: any) {
+function StatMiniCard({ label, value, trend, status, delay }: any) {
   return (
-    <Card className="premium-card p-6">
+    <Card className="premium-card p-6 animate-fade-up" style={{ animationDelay: delay }}>
        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">{label}</p>
        <div className="flex items-end justify-between">
           <p className="text-3xl font-headline font-bold text-[#111827]">{value}</p>
-          <Badge className={status === 'up' ? "bg-green-50 text-[#14532D] border-green-100" : "bg-red-50 text-[#B91C1C] border-red-100"} variant="outline">
+          <Badge className={cn(
+            "text-[10px] font-bold px-3 py-0.5 border-none",
+            status === 'up' ? "bg-[#14532D]/10 text-[#14532D]" : "bg-[#B91C1C]/10 text-[#B91C1C]"
+          )} variant="outline">
              {trend}
           </Badge>
        </div>

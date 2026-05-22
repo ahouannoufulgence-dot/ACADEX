@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -66,18 +65,18 @@ export default function DashboardPage() {
     <DashboardLayout>
       <div className="space-y-10 animate-fade-up">
         {/* Hero Section - Joyful background */}
-        <div className="relative h-[420px] w-full rounded-[2.5rem] overflow-hidden shadow-2xl border border-white">
+        <div className="relative h-[420px] w-full rounded-[2.5rem] overflow-hidden shadow-2xl border border-white group">
           <Image
             src={heroImage?.imageUrl || "https://picsum.photos/seed/acadex-joy-success/1200/600"}
             alt="Joie de l'apprentissage"
             fill
             priority
-            className="object-cover transition-transform duration-700 hover:scale-105"
+            className="object-cover transition-transform duration-700 group-hover:scale-105"
             data-ai-hint="happy African students"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-[#14532D]/95 via-[#14532D]/40 to-transparent" />
           <div className="absolute inset-0 p-12 lg:p-16 flex flex-col justify-center text-white space-y-6">
-            <div className="flex items-center gap-2 bg-white/20 backdrop-blur-xl w-fit px-5 py-2 rounded-full text-[10px] font-bold tracking-[0.2em] uppercase border border-white/30">
+            <div className="flex items-center gap-2 bg-white/20 backdrop-blur-xl w-fit px-5 py-2 rounded-full text-[10px] font-bold tracking-[0.2em] uppercase border border-white/30 animate-pulse">
               <Sparkles className="w-4 h-4 text-white" />
               Excellence Académique & Joie d'Apprendre
             </div>
@@ -99,10 +98,10 @@ export default function DashboardPage() {
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <StatCard title="Effectif Total" value="842" trend="+12% vs 2023" icon={Users} type="neutral" />
-          <StatCard title="Enseignants" value="48" trend="98% connectés" icon={GraduationCap} type="neutral" />
-          <StatCard title="Taux de Réussite" value="88%" trend="+5.2 pts" icon={TrendingUp} type="positive" />
-          <StatCard title="Paiements T2" value="72%" trend="Recouvrement" icon={CreditCard} type="warning" />
+          <StatCard title="Effectif Total" value="842" trend="+12% vs 2023" icon={Users} type="neutral" delay="0s" />
+          <StatCard title="Enseignants" value="48" trend="98% connectés" icon={GraduationCap} type="neutral" delay="0.1s" />
+          <StatCard title="Taux de Réussite" value="88%" trend="+5.2 pts" icon={TrendingUp} type="positive" delay="0.2s" />
+          <StatCard title="Paiements T2" value="72%" trend="Recouvrement" icon={CreditCard} type="warning" delay="0.3s" />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -153,14 +152,14 @@ export default function DashboardPage() {
   );
 }
 
-function StatCard({ title, value, trend, icon: Icon, type }: any) {
+function StatCard({ title, value, trend, icon: Icon, type, delay }: any) {
   return (
-    <Card className="premium-card group cursor-pointer hover:border-[#14532D]/30">
+    <Card className="premium-card group cursor-pointer animate-fade-up" style={{ animationDelay: delay }}>
       <CardContent className="p-6">
         <div className="flex justify-between items-start">
           <div className="space-y-2">
             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{title}</p>
-            <h3 className="text-3xl font-headline font-bold text-[#111827]">{value}</h3>
+            <h3 className="text-3xl font-headline font-bold text-[#111827] group-hover:text-[#14532D] transition-colors">{value}</h3>
             <p className={cn(
               "text-xs font-bold",
               type === "positive" ? "text-[#14532D]" : 
@@ -170,9 +169,9 @@ function StatCard({ title, value, trend, icon: Icon, type }: any) {
             </p>
           </div>
           <div className={cn(
-            "p-3 rounded-xl transition-all duration-300 shadow-sm",
-            type === "positive" ? "bg-[#14532D]/10 text-[#14532D]" : 
-            type === "warning" ? "bg-[#B91C1C]/10 text-[#B91C1C]" : "bg-slate-50 text-slate-400"
+            "p-3 rounded-xl transition-all duration-500 shadow-sm",
+            type === "positive" ? "bg-[#14532D]/10 text-[#14532D] group-hover:bg-[#14532D] group-hover:text-white" : 
+            type === "warning" ? "bg-[#B91C1C]/10 text-[#B91C1C] group-hover:bg-[#B91C1C] group-hover:text-white" : "bg-slate-50 text-slate-400 group-hover:bg-[#111827] group-hover:text-white"
           )}>
             <Icon className="w-5 h-5" />
           </div>
@@ -184,11 +183,11 @@ function StatCard({ title, value, trend, icon: Icon, type }: any) {
 
 function JournalEntry({ author, action, module, time, type }: any) {
   return (
-    <div className="flex gap-4 items-start relative pb-6 last:pb-0">
+    <div className="flex gap-4 items-start relative pb-6 last:pb-0 group">
       <div className="absolute left-[7px] top-6 bottom-0 w-px bg-slate-100 last:hidden" />
       <div 
         className={cn(
-          "w-3.5 h-3.5 rounded-full mt-1.5 shrink-0 border-2 border-white shadow-sm",
+          "w-3.5 h-3.5 rounded-full mt-1.5 shrink-0 border-2 border-white shadow-sm transition-transform group-hover:scale-125",
           type === "danger" ? "bg-[#B91C1C]" : type === "positive" ? "bg-[#14532D]" : "bg-slate-300"
         )} 
       />
@@ -199,7 +198,7 @@ function JournalEntry({ author, action, module, time, type }: any) {
         </div>
         <p className="text-xs text-slate-500 font-medium">{action}</p>
         <Badge variant="outline" className={cn(
-          "mt-2 text-[8px] font-bold h-4 tracking-tighter uppercase px-1.5",
+          "mt-2 text-[8px] font-bold h-4 tracking-tighter uppercase px-1.5 transition-all group-hover:bg-opacity-100",
           type === "danger" ? "border-[#B91C1C]/30 text-[#B91C1C] bg-[#B91C1C]/5" : "border-slate-200 text-slate-500"
         )}>
           {module}

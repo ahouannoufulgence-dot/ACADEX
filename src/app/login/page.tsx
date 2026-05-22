@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState } from "react";
@@ -65,20 +64,20 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen w-full flex bg-[#F8FAFC]">
       {/* Left - Vibrant Visual Section */}
-      <div className="hidden lg:flex lg:w-3/5 relative overflow-hidden bg-[#14532D]">
+      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-[#14532D]">
         <Image
           src={loginImage?.imageUrl || "https://picsum.photos/seed/acadex-students-uniform/1200/1200"}
           alt="Élèves ACADEX en tenue"
           fill
           priority
-          className="object-cover transition-transform duration-[10s] hover:scale-110"
+          className="object-cover animate-pulse-slow duration-[10s]"
           data-ai-hint="African students school uniform smiling"
         />
-        <div className="absolute inset-0 bg-gradient-to-tr from-[#14532D]/95 via-[#14532D]/50 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-tr from-[#14532D]/95 via-[#14532D]/40 to-transparent" />
         
-        <div className="absolute inset-0 p-20 flex flex-col justify-between z-10">
+        <div className="absolute inset-0 p-16 flex flex-col justify-between z-10 animate-fade-up">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-2xl">
+            <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-2xl transition-transform hover:rotate-6">
               <span className="text-[#14532D] font-bold text-2xl">A</span>
             </div>
             <h1 className="text-white font-headline font-bold text-3xl tracking-tight drop-shadow-md">ACADEX</h1>
@@ -86,9 +85,9 @@ export default function LoginPage() {
           
           <div className="space-y-6 max-w-xl">
             <div className="flex items-center gap-2 bg-white/20 backdrop-blur-xl w-fit px-4 py-1.5 rounded-full text-[10px] font-bold tracking-[0.2em] uppercase border border-white/30 text-white">
-              <Sparkles className="w-4 h-4" /> Excellence Institutionnelle
+              <Sparkles className="w-4 h-4 text-white" /> Excellence Institutionnelle
             </div>
-            <h2 className="text-6xl font-headline font-bold text-white leading-tight drop-shadow-xl">
+            <h2 className="text-5xl lg:text-6xl font-headline font-bold text-white leading-tight drop-shadow-xl">
               L'excellence scolaire par l'innovation.
             </h2>
             <p className="text-xl text-white/90 font-medium leading-relaxed drop-shadow-lg">
@@ -99,15 +98,14 @@ export default function LoginPage() {
           <div className="flex gap-4 items-center">
             <div className="h-1 w-20 bg-white rounded-full" />
             <div className="h-1 w-6 bg-white/30 rounded-full" />
-            <div className="h-1 w-6 bg-white/30 rounded-full" />
             <span className="ml-4 text-[10px] font-bold text-white/60 uppercase tracking-widest">Session Académique 2024 / 2025</span>
           </div>
         </div>
       </div>
 
       {/* Right - Clean Login Form */}
-      <div className="w-full lg:w-2/5 flex items-center justify-center p-8 lg:p-20">
-        <div className="w-full max-w-md space-y-12">
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 lg:p-20">
+        <div className="w-full max-w-md space-y-10 animate-fade-up" style={{ animationDelay: '0.2s' }}>
           <div className="space-y-3">
             <h1 className="text-4xl font-headline font-bold text-[#111827]">Accès Institutionnel</h1>
             <p className="text-slate-500 font-medium">Authentification sécurisée pour le personnel et les élèves.</p>
@@ -120,7 +118,7 @@ export default function LoginPage() {
                 <User className="absolute left-4 top-4 h-5 w-5 text-slate-300 group-focus-within:text-[#14532D] transition-colors" />
                 <Input
                   placeholder="DIR-001, ENS-..."
-                  className="pl-12 h-14 bg-white border-slate-200 rounded-2xl focus-visible:ring-1 focus-visible:ring-[#14532D]/20 transition-all text-sm"
+                  className="pl-12 h-14 bg-white border-slate-200 rounded-2xl focus-visible:ring-2 focus-visible:ring-[#14532D]/10 transition-all text-sm"
                   value={userId}
                   onChange={(e) => setUserId(e.target.value.toUpperCase())}
                   required
@@ -137,7 +135,7 @@ export default function LoginPage() {
                 <Lock className="absolute left-4 top-4 h-5 w-5 text-slate-300 group-focus-within:text-[#14532D] transition-colors" />
                 <Input
                   type={showPassword ? "text" : "password"}
-                  className="pl-12 pr-12 h-14 bg-white border-slate-200 rounded-2xl focus-visible:ring-1 focus-visible:ring-[#14532D]/20 transition-all text-sm"
+                  className="pl-12 pr-12 h-14 bg-white border-slate-200 rounded-2xl focus-visible:ring-2 focus-visible:ring-[#14532D]/10 transition-all text-sm"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
@@ -168,11 +166,11 @@ export default function LoginPage() {
                <div className="h-px bg-slate-100 flex-1" />
             </div>
             <div className="grid grid-cols-2 gap-4">
-              <Link href="/setup/director" className="flex-1">
-                <Button variant="outline" className="w-full h-12 border-slate-200 rounded-2xl text-[10px] font-bold uppercase tracking-widest hover:bg-slate-50 transition-colors">Portail Direction</Button>
-              </Link>
               <Link href="/activate/student" className="flex-1">
                 <Button variant="outline" className="w-full h-12 border-slate-200 rounded-2xl text-[10px] font-bold uppercase tracking-widest hover:bg-slate-50 transition-colors">Espace Élève</Button>
+              </Link>
+              <Link href="/setup/director" className="flex-1">
+                <Button variant="outline" className="w-full h-12 border-slate-200 rounded-2xl text-[10px] font-bold uppercase tracking-widest hover:bg-slate-50 transition-colors">Portail Direction</Button>
               </Link>
             </div>
           </div>
