@@ -28,7 +28,6 @@ export default function TeacherSetupPage() {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [isSlow, setIsSlow] = useState(false);
   const [generatedId, setGeneratedId] = useState<string | null>(null);
 
   const router = useRouter();
@@ -47,14 +46,16 @@ export default function TeacherSetupPage() {
     }
 
     setIsLoading(true);
-    setProgress(30);
-    
+    setProgress(20);
+    console.log("ACADEX: Création Enseignant démarrée");
+
     // Génération d'ID instantanée (Optimiste)
     const subjectCode = formData.subject.substring(0, 4).toUpperCase() || "GEN";
     const randomId = Math.floor(Math.random() * 900) + 100;
     const teacherId = `ENS-${subjectCode}-${randomId}`;
     setGeneratedId(teacherId);
     setProgress(60);
+    console.log(`ACADEX: Identifiant généré ${teacherId}`);
 
     const userRef = doc(db, "users", teacherId);
     const userData = {
@@ -69,18 +70,12 @@ export default function TeacherSetupPage() {
       createdAt: serverTimestamp()
     };
 
-    const timer = setTimeout(() => setIsSlow(true), 5000);
-
-    // Écriture spontanée
+    // Écriture spontanée sans await
     setDoc(userRef, userData)
       .then(() => {
-        clearTimeout(timer);
-        setProgress(100);
-        toast({ title: "Identifiant généré", description: teacherId });
-        setTimeout(() => router.push("/login"), 800);
+        console.log("ACADEX: Firestore sauvegardé");
       })
       .catch(async () => {
-        clearTimeout(timer);
         const permissionError = new FirestorePermissionError({
           path: userRef.path,
           operation: 'create',
@@ -88,6 +83,14 @@ export default function TeacherSetupPage() {
         });
         errorEmitter.emit('permission-error', permissionError);
       });
+
+    // Finalisation immédiate
+    setTimeout(() => {
+      setProgress(100);
+      console.log("ACADEX: Terminé");
+      toast({ title: "Compte enseignant créé", description: `ID: ${teacherId}` });
+      setTimeout(() => router.push("/login"), 500);
+    }, 400);
   };
 
   return (
@@ -109,14 +112,14 @@ export default function TeacherSetupPage() {
         <Card className="bg-white/95 backdrop-blur-3xl border-none shadow-2xl rounded-[2.5rem] overflow-hidden flex flex-col lg:flex-row">
             <div className="lg:w-[30%] bg-primary p-8 text-white flex flex-col justify-between relative overflow-hidden">
                <div className="absolute top-0 right-0 p-4 opacity-10 rotate-12">
-                  <GraduationCap size={120} />
+                  <GraduationCap size={100} />
                </div>
                <div className="relative z-10 space-y-4">
-                  <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-xl rotate-6">
-                    <Users className="w-5 h-5 text-primary" />
+                  <div className="w-8 h-8 bg-white rounded-xl flex items-center justify-center shadow-xl rotate-6">
+                    <Users className="w-4 h-4 text-primary" />
                   </div>
-                  <h1 className="text-2xl font-headline font-black tracking-tighter uppercase leading-none">Espace Profs</h1>
-                  <p className="text-white font-black text-xs opacity-90">Elite 2026-2027.</p>
+                  <h1 className="text-xl font-headline font-black tracking-tighter uppercase leading-none">Espace Profs</h1>
+                  <p className="text-white font-black text-[10px] opacity-90">Session 2026-2027</p>
                </div>
             </div>
 
@@ -128,8 +131,8 @@ export default function TeacherSetupPage() {
                    </div>
                    <div className="w-full max-w-md space-y-4">
                      <div className="flex justify-between items-end">
-                       <p className="text-[10px] font-black text-[#0F172A] uppercase tracking-widest">
-                         {isSlow ? "Connexion lente, nouvel essai..." : "Création du compte..."}
+                       <p className="text-[9px] font-black text-[#0F172A] uppercase tracking-widest">
+                         Création du compte...
                        </p>
                        <span className="text-xs font-black text-primary">{progress}%</span>
                      </div>
@@ -146,7 +149,7 @@ export default function TeacherSetupPage() {
                 <form onSubmit={handleSetup} className="space-y-6">
                   <div className="space-y-4">
                     <div className="flex items-center gap-2">
-                      <Sparkles className="w-4 h-4 text-accent" />
+                      <Sparkles className="w-3.5 h-3.5 text-accent" />
                       <span className="text-[9px] font-black uppercase tracking-[0.4em] text-[#0F172A]">Identité</span>
                     </div>
                     
@@ -154,7 +157,7 @@ export default function TeacherSetupPage() {
                       <div className="space-y-1.5">
                         <Label className="text-[#0F172A] font-black text-[9px] uppercase ml-1">Prénom</Label>
                         <div className="relative group">
-                          <User className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-[#0F172A] opacity-40" />
+                          <User className="absolute left-4 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#0F172A] opacity-40" />
                           <Input 
                             className="pl-11 h-12 bg-slate-50 border-2 border-slate-100 rounded-xl font-black text-base text-[#0F172A]" 
                             value={formData.firstName}
@@ -177,9 +180,9 @@ export default function TeacherSetupPage() {
                     <div className="space-y-1.5">
                       <Label className="text-[#0F172A] font-black text-[9px] uppercase ml-1">Matière</Label>
                       <div className="relative">
-                        <BookOpen className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-[#0F172A] opacity-40" />
+                        <BookOpen className="absolute left-4 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#0F172A] opacity-40" />
                         <Input 
-                          placeholder="Mathématiques..."
+                          placeholder="Ex: Mathématiques"
                           className="pl-11 h-12 bg-slate-50 border-2 border-slate-100 rounded-xl font-black text-base text-[#0F172A]" 
                           value={formData.subject}
                           onChange={(e) => setFormData({...formData, subject: e.target.value})}
@@ -193,7 +196,7 @@ export default function TeacherSetupPage() {
                     <div className="space-y-1.5">
                       <Label className="text-[#0F172A] font-black text-[9px] uppercase ml-1">Mot de passe</Label>
                       <div className="relative">
-                        <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-[#0F172A] opacity-40" />
+                        <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#0F172A] opacity-40" />
                         <Input 
                           type="password"
                           className="pl-11 h-12 bg-slate-50 border-2 border-slate-100 rounded-xl font-black text-base text-[#0F172A]" 

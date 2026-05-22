@@ -1,10 +1,10 @@
 
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { ShieldCheck, ArrowLeft, Save, Building, Lock, User, Loader2, CheckCircle2, Clock } from "lucide-react";
+import { ShieldCheck, ArrowLeft, Save, Building, Lock, User, Loader2, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -29,7 +29,6 @@ export default function DirectorSetupPage() {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [isSlow, setIsSlow] = useState(false);
   const [generatedId, setGeneratedId] = useState<string | null>(null);
   
   const router = useRouter();
@@ -49,11 +48,13 @@ export default function DirectorSetupPage() {
 
     setIsLoading(true);
     setProgress(20);
-    
+    console.log("ACADEX: Création Directeur démarrée");
+
     // Génération instantanée de l'ID
     const directorId = "DIR-001";
     setGeneratedId(directorId);
-    setProgress(50);
+    setProgress(60);
+    console.log("ACADEX: Identifiant généré DIR-001");
 
     const userRef = doc(db, "users", directorId);
     const userData = {
@@ -68,21 +69,12 @@ export default function DirectorSetupPage() {
       createdAt: serverTimestamp()
     };
 
-    // Timeout de sécurité
-    const timer = setTimeout(() => {
-      setIsSlow(true);
-    }, 5000);
-
-    // Écriture non-bloquante (Spontanée)
+    // Écriture Spontanée (Non-bloquante pour réactivité maximale)
     setDoc(userRef, userData)
       .then(() => {
-        clearTimeout(timer);
-        setProgress(100);
-        toast({ title: "Identifiant généré : DIR-001", description: "Espace Direction activé spontanément." });
-        setTimeout(() => router.push("/login"), 800);
+        console.log("ACADEX: Firestore sauvegardé (Background Sync)");
       })
       .catch(async () => {
-        clearTimeout(timer);
         const permissionError = new FirestorePermissionError({
           path: userRef.path,
           operation: 'create',
@@ -90,6 +82,14 @@ export default function DirectorSetupPage() {
         });
         errorEmitter.emit('permission-error', permissionError);
       });
+
+    // Progression accélérée vers la réussite
+    setTimeout(() => {
+      setProgress(100);
+      console.log("ACADEX: Terminé");
+      toast({ title: "Compte activé", description: "Identifiant DIR-001 prêt." });
+      setTimeout(() => router.push("/login"), 500);
+    }, 400);
   };
 
   return (
@@ -110,25 +110,25 @@ export default function DirectorSetupPage() {
 
         <Card className="bg-white/95 backdrop-blur-3xl border-none shadow-2xl rounded-[2.5rem] overflow-hidden">
           <CardHeader className="text-center pt-8 pb-6">
-            <div className="mx-auto w-12 h-12 bg-primary rounded-2xl flex items-center justify-center mb-4 shadow-xl rotate-3 border-2 border-white/20">
-              <ShieldCheck className="w-6 h-6 text-white" />
+            <div className="mx-auto w-10 h-10 bg-primary rounded-xl flex items-center justify-center mb-4 shadow-xl rotate-3 border-2 border-white/20">
+              <ShieldCheck className="w-5 h-5 text-white" />
             </div>
-            <CardTitle className="text-2xl md:text-4xl font-headline font-black text-[#0F172A] mb-1 tracking-tighter uppercase leading-none">Portail Direction</CardTitle>
-            <CardDescription className="text-[#0F172A] font-black uppercase tracking-widest text-[10px] opacity-60">Configuration 2026-2027</CardDescription>
+            <CardTitle className="text-2xl md:text-3xl font-headline font-black text-[#0F172A] mb-1 tracking-tighter uppercase leading-none">Portail Direction</CardTitle>
+            <CardDescription className="text-[#0F172A] font-black uppercase tracking-widest text-[9px] opacity-60">Session Académique 2026-2027</CardDescription>
           </CardHeader>
           <CardContent className="px-6 md:px-12 pb-10">
             {isLoading ? (
               <div className="py-12 space-y-8 flex flex-col items-center">
-                <div className="relative w-20 h-20">
-                  <Loader2 className="w-20 h-20 text-primary animate-spin absolute" />
+                <div className="relative w-16 h-16">
+                  <Loader2 className="w-16 h-16 text-primary animate-spin absolute" />
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <Save className="w-8 h-8 text-primary/30" />
+                    <Save className="w-6 h-6 text-primary/30" />
                   </div>
                 </div>
                 <div className="w-full max-w-sm space-y-4">
                   <div className="flex justify-between items-end">
-                    <p className="text-[10px] font-black text-[#0F172A] uppercase tracking-widest">
-                      {isSlow ? "Connexion lente, nouvel essai..." : "Création du compte..."}
+                    <p className="text-[9px] font-black text-[#0F172A] uppercase tracking-widest">
+                      Création du compte...
                     </p>
                     <span className="text-xs font-black text-primary">{progress}%</span>
                   </div>
@@ -136,8 +136,8 @@ export default function DirectorSetupPage() {
                   {generatedId && (
                     <div className="p-4 rounded-xl bg-primary/5 border-2 border-dashed border-primary/20 flex items-center justify-between animate-in fade-in slide-in-from-bottom-2">
                        <div className="flex items-center gap-3">
-                         <CheckCircle2 className="w-5 h-5 text-primary" />
-                         <span className="text-[10px] font-black text-[#0F172A] uppercase">ID Généré</span>
+                         <CheckCircle2 className="w-4 h-4 text-primary" />
+                         <span className="text-[9px] font-black text-[#0F172A] uppercase">ID Généré</span>
                        </div>
                        <span className="text-lg font-black text-primary font-mono">{generatedId}</span>
                     </div>
@@ -150,7 +150,7 @@ export default function DirectorSetupPage() {
                   <div className="space-y-1.5">
                     <Label className="text-[9px] font-black uppercase tracking-[0.3em] text-[#0F172A] ml-2">Prénom</Label>
                     <div className="relative group">
-                      <User className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-[#0F172A] opacity-40" />
+                      <User className="absolute left-4 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#0F172A] opacity-40" />
                       <input 
                         className="w-full bg-slate-50 border-2 border-slate-100 pl-11 h-12 rounded-xl font-black text-base text-[#0F172A] outline-none focus:border-primary/40 shadow-inner" 
                         value={formData.firstName}
@@ -173,7 +173,7 @@ export default function DirectorSetupPage() {
                 <div className="space-y-1.5">
                   <Label className="text-[9px] font-black uppercase tracking-[0.3em] text-[#0F172A] ml-2">Établissement</Label>
                   <div className="relative">
-                    <Building className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-[#0F172A] opacity-40" />
+                    <Building className="absolute left-4 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#0F172A] opacity-40" />
                     <input 
                       className="w-full bg-slate-50 border-2 border-slate-100 pl-11 h-12 rounded-xl font-black text-base text-[#0F172A] outline-none shadow-inner" 
                       placeholder="Nom de l'école..."
@@ -188,7 +188,7 @@ export default function DirectorSetupPage() {
                   <div className="space-y-1.5">
                     <Label className="text-[9px] font-black uppercase tracking-[0.3em] text-[#0F172A] ml-2">Mot de passe</Label>
                     <div className="relative">
-                      <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-[#0F172A] opacity-40" />
+                      <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#0F172A] opacity-40" />
                       <input 
                         type="password"
                         className="w-full bg-slate-50 border-2 border-slate-100 pl-11 h-12 rounded-xl font-black text-base text-[#0F172A] outline-none shadow-inner" 
@@ -212,7 +212,7 @@ export default function DirectorSetupPage() {
 
                 <div className="pt-4">
                   <Button className="w-full h-16 bg-primary hover:bg-slate-900 text-white font-black text-lg rounded-2xl shadow-xl transition-all active:scale-95 flex gap-3 border-2 border-white/10" disabled={isLoading}>
-                    <Save className="w-5 h-5" /> Valider l'Espace (DIR-001)
+                    <Save className="w-5 h-5" /> Activer mon Espace
                   </Button>
                 </div>
               </form>

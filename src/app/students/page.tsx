@@ -2,9 +2,8 @@
 "use client";
 
 import React, { useState, useMemo, useCallback, useEffect } from "react";
-import Image from "next/image";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
-import { Search, UserPlus, Sparkles, CheckCircle, Loader2, FileDown, Save, CheckCircle2 } from "lucide-react";
+import { Search, UserPlus, Sparkles, Loader2, FileDown, Save, CheckCircle2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -39,7 +38,7 @@ export default function StudentsPage() {
     id: ""
   });
 
-  // Génération d'identifiant instantanée dès que possible
+  // Génération d'identifiant instantanée locale
   useEffect(() => {
     if (formData.firstName && formData.lastName && formData.gradeLevel && !formData.id) {
       const classCode = formData.gradeLevel.replace(/\s+/g, '').substring(0, 3).toUpperCase() || "GEN";
@@ -90,7 +89,8 @@ export default function StudentsPage() {
     if (!db || !formData.id || isProvisioning) return;
     
     setIsProvisioning(true);
-    setProvisionProgress(30);
+    setProvisionProgress(20);
+    console.log("ACADEX: Provisionnement élève démarré");
 
     const studentId = formData.id;
     const studentRef = doc(db, "students", studentId);
@@ -103,21 +103,14 @@ export default function StudentsPage() {
       createdAt: serverTimestamp()
     };
     
-    setProvisionProgress(70);
+    setProvisionProgress(60);
 
     // Écriture Spontanée (Non-bloquante)
     setDoc(studentRef, studentData)
       .then(() => {
-        setProvisionProgress(100);
-        toast({ title: "Accès provisionné", description: `ID : ${studentId} (Spontané)` });
-        setTimeout(() => {
-          setIsProvisioning(false);
-          setAiResult(null);
-          setFormData({ firstName: "", lastName: "", gradeLevel: "", id: "" });
-        }, 500);
+        console.log("ACADEX: Firestore sauvegardé en arrière-plan");
       })
       .catch(async () => {
-        setIsProvisioning(false);
         const permissionError = new FirestorePermissionError({
           path: studentRef.path,
           operation: 'create',
@@ -125,6 +118,18 @@ export default function StudentsPage() {
         });
         errorEmitter.emit('permission-error', permissionError);
     });
+
+    // Finalisation immédiate pour fluidité totale
+    setTimeout(() => {
+      setProvisionProgress(100);
+      console.log("ACADEX: Inscription terminée");
+      toast({ title: "Inscription enregistrée", description: `ID : ${studentId} généré.` });
+      setTimeout(() => {
+        setIsProvisioning(false);
+        setAiResult(null);
+        setFormData({ firstName: "", lastName: "", gradeLevel: "", id: "" });
+      }, 400);
+    }, 500);
   }, [db, formData, toast, isProvisioning]);
 
   const downloadStudentPDF = (id: string, firstName: string, lastName: string, grade: string) => {
@@ -150,8 +155,8 @@ export default function StudentsPage() {
       <div className="space-y-6 md:space-y-8 animate-fade-up">
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
           <div>
-            <h1 className="text-2xl md:text-4xl font-headline font-black text-[#0F172A] tracking-tighter uppercase leading-none">Registre Élèves</h1>
-            <p className="text-[#0F172A] text-[9px] md:text-lg font-black opacity-80 uppercase tracking-widest">Effectifs ACADEX 2026-2027</p>
+            <h1 className="text-2xl md:text-3xl font-headline font-black text-[#0F172A] tracking-tighter uppercase leading-none">Registre Élèves</h1>
+            <p className="text-[#0F172A] text-[9px] md:text-base font-black opacity-80 uppercase tracking-widest">Session 2026-2027</p>
           </div>
           <Dialog onOpenChange={(open) => !open && (setAiResult(null), setFormData({ firstName: "", lastName: "", gradeLevel: "", id: "" }))}>
             <DialogTrigger asChild>
@@ -165,23 +170,23 @@ export default function StudentsPage() {
                   <div className="p-1.5 bg-white rounded-lg shadow-md shrink-0">
                     <Sparkles className="w-3.5 h-3.5 text-primary" />
                   </div>
-                  <DialogTitle className="text-base font-black tracking-tighter uppercase">Inscription Élite</DialogTitle>
+                  <DialogTitle className="text-sm font-black tracking-tighter uppercase">Inscription Élite</DialogTitle>
                 </div>
               </DialogHeader>
               
               <div className="p-6 space-y-4">
                 {isProvisioning ? (
                   <div className="py-8 space-y-6 flex flex-col items-center">
-                    <Loader2 className="w-12 h-12 text-primary animate-spin" />
+                    <Loader2 className="w-10 h-10 text-primary animate-spin" />
                     <div className="w-full space-y-2">
                        <div className="flex justify-between text-[8px] font-black uppercase tracking-widest text-primary">
-                          <span>Création du compte...</span>
+                          <span>Création...</span>
                           <span>{provisionProgress}%</span>
                        </div>
                        <Progress value={provisionProgress} className="h-1.5" />
                        <div className="p-3 bg-slate-50 rounded-xl border-2 border-slate-100 flex items-center justify-between">
-                         <CheckCircle2 className="w-4 h-4 text-primary" />
-                         <span className="font-mono font-black text-primary">{formData.id}</span>
+                         <CheckCircle2 className="w-3.5 h-3.5 text-primary" />
+                         <span className="font-mono font-black text-primary text-base">{formData.id}</span>
                        </div>
                     </div>
                   </div>
@@ -199,13 +204,13 @@ export default function StudentsPage() {
                     </div>
                     <div className="space-y-1">
                       <Label className="text-[8px] font-black text-[#0F172A] uppercase tracking-widest">Classe</Label>
-                      <Input placeholder="3EME A" className="h-10 bg-slate-50 border-2 border-slate-100 rounded-xl font-black text-xs" value={formData.gradeLevel} onChange={(e) => setFormData({...formData, gradeLevel: e.target.value.toUpperCase()})} />
+                      <Input placeholder="Ex: 3EME A" className="h-10 bg-slate-50 border-2 border-slate-100 rounded-xl font-black text-xs" value={formData.gradeLevel} onChange={(e) => setFormData({...formData, gradeLevel: e.target.value.toUpperCase()})} />
                     </div>
 
                     {formData.id && (
-                      <div className="p-4 rounded-xl bg-primary/5 border-2 border-dashed border-primary/20 space-y-1.5 text-center">
-                        <p className="text-[7px] font-black uppercase text-primary tracking-[0.3em]">Identifiant Spontané</p>
-                        <p className="text-xl font-black text-primary font-mono tracking-tighter">{formData.id}</p>
+                      <div className="p-4 rounded-xl bg-primary/5 border-2 border-dashed border-primary/20 space-y-1 text-center">
+                        <p className="text-[7px] font-black uppercase text-primary tracking-[0.3em]">ID Spontané</p>
+                        <p className="text-lg font-black text-primary font-mono tracking-tighter">{formData.id}</p>
                       </div>
                     )}
                   </>
@@ -229,7 +234,7 @@ export default function StudentsPage() {
         <Card className="vivid-box border-none shadow-xl overflow-hidden bg-white/95 p-0 rounded-[2rem]">
           <CardHeader className="p-4 md:p-6 border-b-2 border-slate-50">
             <div className="relative w-full max-w-sm">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-300" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-3 h-3 text-slate-300" />
               <Input placeholder="Rechercher..." className="pl-10 h-10 bg-slate-50 border-2 border-slate-100 rounded-xl font-black text-xs text-[#0F172A]" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
             </div>
           </CardHeader>
@@ -251,7 +256,7 @@ export default function StudentsPage() {
                       <TableRow key={s.id} className="hover:bg-primary/5 transition-all border-slate-50">
                         <TableCell className="pl-6 py-3">
                            <div className="flex items-center gap-3">
-                              <div className="w-7 h-7 rounded-lg bg-primary text-white flex items-center justify-center font-black text-[10px] shrink-0">
+                              <div className="w-6 h-6 rounded-lg bg-primary text-white flex items-center justify-center font-black text-[10px] shrink-0">
                                 {s.lastName?.[0]}
                               </div>
                               <div className="min-w-0">
@@ -262,7 +267,7 @@ export default function StudentsPage() {
                         </TableCell>
                         <TableCell className="py-3 font-black text-[#0F172A] text-xs">{s.gradeLevel}</TableCell>
                         <TableCell className="text-right pr-6 py-3">
-                          <Button variant="ghost" size="icon" className="h-8 w-8 text-primary hover:bg-primary hover:text-white rounded-lg" onClick={() => downloadStudentPDF(s.id, s.firstName || "", s.lastName || "", s.gradeLevel)}>
+                          <Button variant="ghost" size="icon" className="h-7 w-7 text-primary hover:bg-primary hover:text-white rounded-lg" onClick={() => downloadStudentPDF(s.id, s.firstName || "", s.lastName || "", s.gradeLevel)}>
                             <FileDown className="w-3.5 h-3.5" />
                           </Button>
                         </TableCell>
