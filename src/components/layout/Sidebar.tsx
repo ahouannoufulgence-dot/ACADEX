@@ -20,7 +20,8 @@ import {
   KeyRound,
   Home,
   FileCheck,
-  X
+  X,
+  ShieldCheck
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { UserRole } from "@/lib/auth-utils";
@@ -54,6 +55,7 @@ export const Sidebar = ({ role, userName, isOpen, onClose }: SidebarProps) => {
     { name: "Élèves", href: "/students", icon: GraduationCap, roles: ['DIRECTOR'] },
     { name: "Enseignants", href: "/teachers", icon: Users, roles: ['DIRECTOR'] },
     { name: "Classes", href: "/classes", icon: ClipboardList, roles: ['DIRECTOR'] },
+    { name: "Contrôle Notes", href: "/grades", icon: ShieldCheck, roles: ['DIRECTOR'] },
     { name: "Paiements", href: "/payments", icon: CreditCard, roles: ['DIRECTOR'] },
     { name: "Statistiques", href: "/stats", icon: BarChart3, roles: ['DIRECTOR'] },
     { name: "Génération Accès", href: "/access-management", icon: KeyRound, roles: ['DIRECTOR'] },
