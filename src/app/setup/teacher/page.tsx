@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState } from "react";
@@ -89,7 +88,7 @@ export default function TeacherSetupPage() {
       <div className="absolute inset-0 bg-gradient-to-br from-white/70 via-transparent to-[#F0F7FF]/50" />
 
       <div className="relative z-10 w-full max-w-5xl animate-fade-up">
-        <Link href="/login" className="mb-8 inline-flex items-center text-primary hover:text-black transition-colors gap-2 font-black uppercase tracking-widest text-[10px]">
+        <Link href="/login" className="mb-8 inline-flex items-center text-[#14532D] hover:text-black transition-colors gap-2 font-black uppercase tracking-widest text-[10px]">
           <ArrowLeft className="w-4 h-4" /> Retour au portail
         </Link>
 
@@ -228,7 +227,6 @@ export default function TeacherSetupPage() {
                 </Button>
               </form>
             </div>
-          </div>
         </Card>
       </div>
     </div>

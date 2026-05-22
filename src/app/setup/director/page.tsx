@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState } from "react";
@@ -92,7 +91,7 @@ export default function DirectorSetupPage() {
 
         <Card className="bg-white/95 border-none shadow-[0_40px_120px_-15px_rgba(0,0,0,0.3)] rounded-[3rem] overflow-hidden backdrop-blur-xl">
           <CardHeader className="text-center pt-12 pb-10">
-            <div className="mx-auto w-24 h-24 bg-[#14532D] rounded-[2rem] flex items-center justify-center mb-6 shadow-2xl rotate-3">
+            <div className="mx-auto w-24 h-24 bg-[#14532D] rounded-[2rem] flex items-center justify-center mb-6 shadow-2xl rotate-3 border-4 border-white/20">
               <ShieldCheck className="w-14 h-14 text-white" />
             </div>
             <CardTitle className="text-5xl font-headline font-black text-[#0F172A] mb-3 tracking-tighter uppercase">Espace Direction</CardTitle>
@@ -105,8 +104,8 @@ export default function DirectorSetupPage() {
                   <Label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 ml-2">Prénom du Directeur</Label>
                   <div className="relative group">
                     <User className="absolute left-5 top-1/2 -translate-y-1/2 h-6 w-6 text-slate-400 group-focus-within:text-[#14532D] transition-colors" />
-                    <Input 
-                      className="bg-slate-50 border-4 border-slate-100 pl-16 h-18 rounded-2xl font-black text-xl text-[#0F172A] focus:border-[#14532D]/30" 
+                    <input 
+                      className="w-full bg-slate-50 border-4 border-slate-100 pl-16 h-18 rounded-2xl font-black text-xl text-[#0F172A] outline-none focus:border-[#14532D]/30 shadow-inner" 
                       value={formData.firstName}
                       onChange={(e) => setFormData({...formData, firstName: e.target.value})}
                       required 
@@ -115,8 +114,8 @@ export default function DirectorSetupPage() {
                 </div>
                 <div className="space-y-4">
                   <Label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 ml-2">Nom de famille</Label>
-                  <Input 
-                    className="bg-slate-50 border-4 border-slate-100 h-18 rounded-2xl font-black text-xl text-[#0F172A] px-8" 
+                  <input 
+                    className="w-full bg-slate-50 border-4 border-slate-100 h-18 rounded-2xl font-black text-xl text-[#0F172A] px-8 outline-none focus:border-[#14532D]/30 shadow-inner" 
                     value={formData.lastName}
                     onChange={(e) => setFormData({...formData, lastName: e.target.value})}
                     required 
@@ -128,8 +127,8 @@ export default function DirectorSetupPage() {
                 <Label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 ml-2">Nom de l'établissement d'élite</Label>
                 <div className="relative">
                   <Building className="absolute left-5 top-1/2 -translate-y-1/2 h-6 w-6 text-slate-400" />
-                  <Input 
-                    className="bg-slate-50 border-4 border-slate-100 pl-16 h-18 rounded-2xl font-black text-xl text-[#0F172A]" 
+                  <input 
+                    className="w-full bg-slate-50 border-4 border-slate-100 pl-16 h-18 rounded-2xl font-black text-xl text-[#0F172A] outline-none focus:border-[#14532D]/30 shadow-inner" 
                     placeholder="Ex: Complexe Scolaire ACADEX Premium"
                     value={formData.schoolName}
                     onChange={(e) => setFormData({...formData, schoolName: e.target.value})}
@@ -143,9 +142,9 @@ export default function DirectorSetupPage() {
                   <Label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 ml-2">Email Officiel</Label>
                   <div className="relative">
                     <Mail className="absolute left-5 top-1/2 -translate-y-1/2 h-6 w-6 text-slate-400" />
-                    <Input 
+                    <input 
                       type="email"
-                      className="bg-slate-50 border-4 border-slate-100 pl-16 h-18 rounded-2xl font-black text-lg text-[#0F172A]" 
+                      className="w-full bg-slate-50 border-4 border-slate-100 pl-16 h-18 rounded-2xl font-black text-lg text-[#0F172A] outline-none focus:border-[#14532D]/30 shadow-inner" 
                       value={formData.email}
                       onChange={(e) => setFormData({...formData, email: e.target.value})}
                       required 
@@ -156,8 +155,8 @@ export default function DirectorSetupPage() {
                   <Label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 ml-2">Téléphone Direct</Label>
                   <div className="relative">
                     <Phone className="absolute left-5 top-1/2 -translate-y-1/2 h-6 w-6 text-slate-400" />
-                    <Input 
-                      className="bg-slate-50 border-4 border-slate-100 pl-16 h-18 rounded-2xl font-black text-lg text-[#0F172A]" 
+                    <input 
+                      className="w-full bg-slate-50 border-4 border-slate-100 pl-16 h-18 rounded-2xl font-black text-lg text-[#0F172A] outline-none focus:border-[#14532D]/30 shadow-inner" 
                       value={formData.phone}
                       onChange={(e) => setFormData({...formData, phone: e.target.value})}
                       required 
@@ -171,9 +170,9 @@ export default function DirectorSetupPage() {
                   <Label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 ml-2">Mot de passe Administrateur</Label>
                   <div className="relative">
                     <Lock className="absolute left-5 top-1/2 -translate-y-1/2 h-6 w-6 text-slate-400" />
-                    <Input 
+                    <input 
                       type="password"
-                      className="bg-slate-50 border-4 border-slate-100 pl-16 h-18 rounded-2xl font-black text-xl text-[#0F172A]" 
+                      className="w-full bg-slate-50 border-4 border-slate-100 pl-16 h-18 rounded-2xl font-black text-xl text-[#0F172A] outline-none focus:border-[#14532D]/30 shadow-inner" 
                       value={formData.password}
                       onChange={(e) => setFormData({...formData, password: e.target.value})}
                       required 
@@ -182,9 +181,9 @@ export default function DirectorSetupPage() {
                 </div>
                 <div className="space-y-4">
                   <Label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 ml-2">Confirmation</Label>
-                  <Input 
+                  <input 
                     type="password"
-                    className="bg-slate-50 border-4 border-slate-100 h-18 rounded-2xl font-black text-xl text-[#0F172A] px-8" 
+                    className="w-full bg-slate-50 border-4 border-slate-100 h-18 rounded-2xl font-black text-xl text-[#0F172A] px-8 outline-none focus:border-[#14532D]/30 shadow-inner" 
                     value={formData.confirmPassword}
                     onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
                     required 
@@ -198,7 +197,7 @@ export default function DirectorSetupPage() {
                 </Button>
                 <div className="flex items-center justify-center gap-3 mt-8">
                    <Sparkles className="w-5 h-5 text-accent animate-pulse" />
-                   <p className="text-[10px] text-slate-400 font-black uppercase tracking-[0.3em]">Accès réservé aux directions d'établissements</p>
+                   <p className="text-[10px] text-[#0F172A] font-black uppercase tracking-[0.3em]">Accès réservé aux directions d'établissements</p>
                 </div>
               </div>
             </form>
