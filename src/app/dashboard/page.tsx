@@ -69,7 +69,7 @@ export default function DashboardPage() {
     <DashboardLayout>
       <div className="space-y-10 animate-fade-up">
         {/* Hero Section */}
-        <div className="relative h-[360px] w-full rounded-2xl overflow-hidden shadow-sm group border border-slate-200">
+        <div className="relative h-[420px] w-full rounded-[2rem] overflow-hidden shadow-2xl group border border-white/10">
           <Image
             src={heroImage?.imageUrl || "https://picsum.photos/seed/acadex-joy/1200/400"}
             alt="Joyful high school students"
@@ -78,63 +78,63 @@ export default function DashboardPage() {
             data-ai-hint="happy African students"
           />
           <div className="absolute inset-0 hero-overlay" />
-          <div className="absolute inset-0 p-12 flex flex-col justify-center text-white space-y-5">
-            <div className="flex items-center gap-2 bg-[#14532D] w-fit px-4 py-1.5 rounded-full text-[10px] font-bold tracking-widest uppercase shadow-sm">
+          <div className="absolute inset-0 p-16 flex flex-col justify-center text-white space-y-6">
+            <div className="flex items-center gap-2 bg-white/10 backdrop-blur-md w-fit px-5 py-2 rounded-full text-[10px] font-bold tracking-[0.2em] uppercase border border-white/20">
               <Sparkles className="w-3 h-3 text-white" />
               Excellence Académique
             </div>
-            <h1 className="text-5xl lg:text-6xl font-headline font-bold tracking-tight">
+            <h1 className="text-6xl lg:text-7xl font-headline font-bold tracking-tight">
               Bienvenue sur ACADEX
             </h1>
-            <p className="text-xl text-white/90 font-medium max-w-2xl leading-relaxed">
+            <p className="text-xl text-white/80 font-medium max-w-2xl leading-relaxed">
               "Apprendre aujourd’hui, réussir demain." Pilotez votre établissement avec la précision et la sérénité du haut de gamme.
             </p>
-            <div className="pt-6">
-              <Button className="w-fit bg-[#14532D] hover:bg-[#166534] text-white font-bold h-14 px-10 rounded-xl shadow-lg transition-all hover:translate-y-[-2px]">
-                Voir le tableau de bord <ArrowUpRight className="ml-2 w-5 h-5" />
+            <div className="pt-8">
+              <Button className="w-fit bg-[#14532D] hover:bg-[#166534] text-white font-bold h-16 px-12 rounded-2xl shadow-2xl shadow-green-900/40 transition-all hover:translate-y-[-4px] active:scale-95 text-lg">
+                Voir le tableau de bord <ArrowUpRight className="ml-2 w-6 h-6" />
               </Button>
             </div>
           </div>
         </div>
 
         {/* Global Statistics Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           <StatCard title="Effectif Total" value="842" trend="+12% cette année" icon={Users} status="positive" />
           <StatCard title="Enseignants" value="48" trend="96% de présence" icon={GraduationCap} status="neutral" />
           <StatCard title="Taux de Réussite" value="88%" trend="+5.2 pts" icon={TrendingUp} status="positive" />
           <StatCard title="Paiements" value="72%" trend="Recouvrement T2" icon={CreditCard} status="positive" />
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
           {/* Performance Chart Card */}
           <Card className="lg:col-span-2 premium-card">
-            <CardHeader className="flex flex-row items-center justify-between pb-8">
+            <CardHeader className="flex flex-row items-center justify-between p-10 pb-4">
               <div>
-                <CardTitle className="text-xl font-bold text-[#111827]">Répartition des Performances</CardTitle>
-                <CardDescription>Nombre d'élèves par tranche de moyenne</CardDescription>
+                <CardTitle className="text-2xl font-bold text-[#111827]">Répartition des Performances</CardTitle>
+                <CardDescription className="text-slate-400 font-medium">Nombre d'élèves par tranche de moyenne</CardDescription>
               </div>
-              <div className="p-3 bg-slate-50 rounded-xl border border-slate-100">
-                <TrendingUp className="w-6 h-6 text-[#14532D]" />
+              <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                <TrendingUp className="w-7 h-7 text-[#14532D]" />
               </div>
             </CardHeader>
-            <CardContent className="h-[340px]">
+            <CardContent className="h-[400px] p-10 pt-0">
               <ChartContainer config={chartConfig} className="h-full w-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={distributionData}>
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F1F5F9" />
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
                     <XAxis 
                       dataKey="range" 
                       axisLine={false} 
                       tickLine={false} 
-                      tick={{fill: '#64748B', fontSize: 12, fontWeight: 600}} 
+                      tick={{fill: '#64748B', fontSize: 13, fontWeight: 600}} 
                     />
                     <YAxis 
                       axisLine={false} 
                       tickLine={false} 
-                      tick={{fill: '#64748B', fontSize: 12, fontWeight: 600}} 
+                      tick={{fill: '#64748B', fontSize: 13, fontWeight: 600}} 
                     />
                     <ChartTooltip content={<ChartTooltipContent />} />
-                    <Bar dataKey="count" radius={[6, 6, 0, 0]} barSize={50}>
+                    <Bar dataKey="count" radius={[10, 10, 0, 0]} barSize={60}>
                       {distributionData.map((entry, index) => (
                         <rect key={`cell-${index}`} fill={entry.color} />
                       ))}
@@ -147,13 +147,13 @@ export default function DashboardPage() {
 
           {/* Activity/Agenda Card */}
           <Card className="premium-card">
-            <CardHeader className="pb-6">
-              <CardTitle className="flex items-center gap-3 text-xl font-bold text-[#111827]">
-                <Calendar className="w-6 h-6 text-[#14532D]" />
+            <CardHeader className="p-10 pb-4">
+              <CardTitle className="flex items-center gap-4 text-2xl font-bold text-[#111827]">
+                <Calendar className="w-7 h-7 text-[#14532D]" />
                 Agenda du Jour
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-6">
+            <CardContent className="space-y-8 p-10 pt-4">
               <JournalEntry author="Conseil de Classe" action="3ème D - Salle de réunion" module="Urgent" time="15:00" color="#14532D" />
               <JournalEntry author="M. Kouassi" action="Saisie des notes MATH" module="Notes" time="09:42" color="#111827" />
               <JournalEntry author="Administration" action="Clôture inscriptions T2" module="Finance" time="18:00" color="#B91C1C" />
@@ -168,29 +168,29 @@ export default function DashboardPage() {
 
 function StatCard({ title, value, trend, icon: Icon, status }: any) {
   return (
-    <Card className="premium-card group cursor-pointer">
-      <CardContent className="p-8">
+    <Card className="premium-card group cursor-pointer border-none shadow-xl">
+      <CardContent className="p-10">
         <div className="flex justify-between items-start">
-          <div className="space-y-3">
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">{title}</p>
+          <div className="space-y-4">
+            <p className="text-[11px] font-bold text-slate-400 uppercase tracking-[0.15em] mb-1">{title}</p>
             <div className="flex items-baseline gap-2">
-              <h3 className="text-4xl font-headline font-bold text-[#111827]">{value}</h3>
+              <h3 className="text-5xl font-headline font-bold text-[#111827]">{value}</h3>
             </div>
             <p className={cn(
-              "text-[10px] font-bold flex items-center gap-1",
+              "text-xs font-bold flex items-center gap-1.5",
               status === "positive" ? "text-[#14532D]" : 
               status === "warning" ? "text-[#B91C1C]" : "text-slate-500"
             )}>
-              {status === "positive" && <ArrowUpRight className="w-3 h-3" />}
+              {status === "positive" && <ArrowUpRight className="w-4 h-4" />}
               {trend}
             </p>
           </div>
           <div className={cn(
-            "p-4 rounded-2xl border transition-all",
-            status === "positive" ? "bg-green-50/50 border-green-100 text-[#14532D]" : 
-            status === "warning" ? "bg-red-50/50 border-red-100 text-[#B91C1C]" : "bg-slate-50 border-slate-100 text-slate-400"
+            "p-5 rounded-3xl border transition-all duration-500 group-hover:scale-110 group-hover:rotate-3",
+            status === "positive" ? "bg-green-50/80 border-green-100 text-[#14532D]" : 
+            status === "warning" ? "bg-red-50/80 border-red-100 text-[#B91C1C]" : "bg-slate-50 border-slate-100 text-slate-400"
           )}>
-            <Icon className="w-8 h-8" />
+            <Icon className="w-9 h-9" />
           </div>
         </div>
       </CardContent>
@@ -200,19 +200,19 @@ function StatCard({ title, value, trend, icon: Icon, status }: any) {
 
 function JournalEntry({ author, action, module, time, color }: any) {
   return (
-    <div className="flex gap-5 items-start relative pb-8 last:pb-0">
-      <div className="absolute left-[7px] top-7 bottom-0 w-[1px] bg-slate-100 last:hidden" />
+    <div className="flex gap-6 items-start relative pb-10 last:pb-0">
+      <div className="absolute left-[9px] top-8 bottom-0 w-[1.5px] bg-slate-100 last:hidden" />
       <div 
-        className="w-4 h-4 rounded-full mt-1.5 shrink-0 border-[3px] border-white shadow-sm" 
+        className="w-5 h-5 rounded-full mt-2 shrink-0 border-4 border-white shadow-xl" 
         style={{ backgroundColor: color }} 
       />
       <div className="flex-1">
-        <div className="flex justify-between items-center mb-1">
-          <p className="text-sm font-bold text-[#111827]">{author}</p>
-          <span className="text-[10px] font-bold text-slate-400 bg-slate-50 px-2 py-0.5 rounded-full">{time}</span>
+        <div className="flex justify-between items-center mb-1.5">
+          <p className="text-base font-bold text-[#111827]">{author}</p>
+          <span className="text-[11px] font-bold text-slate-400 bg-slate-50 px-3 py-1 rounded-full">{time}</span>
         </div>
-        <p className="text-xs text-slate-500 font-medium leading-relaxed">{action}</p>
-        <Badge variant="outline" className="mt-2.5 text-[8px] font-bold h-5 tracking-widest uppercase px-2 border-slate-200 text-slate-400">
+        <p className="text-sm text-slate-500 font-medium leading-relaxed">{action}</p>
+        <Badge variant="outline" className="mt-3 text-[9px] font-bold h-6 tracking-widest uppercase px-3 border-slate-200 text-slate-400 bg-white">
           {module}
         </Badge>
       </div>
