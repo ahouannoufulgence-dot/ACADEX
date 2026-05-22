@@ -3,12 +3,13 @@
 
 import React, { useState, useMemo, useEffect } from "react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
-import { FileText, Save, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
+import { FileText, Save, CheckCircle2, AlertCircle, Loader2, Sparkles } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { useFirestore, useCollection } from "@/firebase";
 import { collection, doc, setDoc, serverTimestamp, query, where } from "firebase/firestore";
@@ -24,7 +25,6 @@ export default function GradesEntryPage() {
   const [grades, setGrades] = useState<Record<string, string>>({});
   const [isSaving, setIsSaving] = useState(false);
 
-  // Charger les élèves de la classe sélectionnée
   const studentsQuery = useMemo(() => {
     if (!db || !selectedClass) return null;
     return query(collection(db, "students"), where("gradeLevel", "==", selectedClass), where("status", "==", "Actif"));
@@ -32,14 +32,13 @@ export default function GradesEntryPage() {
 
   const { data: students, loading: loadingStudents } = useCollection(studentsQuery);
 
-  // Charger les notes déjà existantes pour ce type/classe/matière pour vérifier le statut
   const existingGradesQuery = useMemo(() => {
     if (!db || !selectedClass || !selectedSubject || !selectedType) return null;
     return query(
       collection(db, "grades"), 
       where("subjectName", "==", selectedSubject),
       where("type", "==", selectedType),
-      where("term", "==", "Trimestre 2") // Exemple fixe
+      where("term", "==", "Trimestre 2")
     );
   }, [db, selectedClass, selectedSubject, selectedType]);
 
@@ -103,48 +102,50 @@ export default function GradesEntryPage() {
 
     toast({
       title: status === "Confirmé" ? "Notes publiées !" : "Brouillon enregistré",
-      description: status === "Confirmé" ? "Seul le directeur peut désormais modifier ces notes." : "Vous pourrez revenir plus tard.",
+      description: status === "Confirmé" ? "Les notes sont maintenant verrouillées." : "Modifications sauvegardées.",
     });
     setIsSaving(false);
   };
 
   return (
     <DashboardLayout>
-      <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-300">
-        <div className="flex justify-between items-center">
+      <div className="space-y-10 animate-fade-up">
+        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
           <div>
-            <h1 className="text-3xl font-headline font-bold text-white mb-2">Saisie des Notes</h1>
-            <p className="text-muted-foreground">Enregistrez les évaluations. Une fois confirmées, elles sont verrouillées.</p>
+            <h1 className="text-4xl font-headline font-bold text-[#111827] mb-2">Saisie des Notes</h1>
+            <p className="text-slate-500 text-lg font-medium">Enregistrement des évaluations institutionnelles.</p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-4">
             {!isConfirmed && (
               <>
-                <Button variant="outline" className="border-white/10 text-white" onClick={() => saveGrades("Brouillon")} disabled={isSaving}>
-                  {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4 mr-2" />} Sauvegarder Brouillon
+                <Button variant="outline" className="border-slate-200 h-14 px-8 rounded-2xl font-bold text-[#111827] shadow-sm bg-white" onClick={() => saveGrades("Brouillon")} disabled={isSaving}>
+                  {isSaving ? <Loader2 className="w-5 h-5 animate-spin mr-2" /> : <Save className="w-5 h-5 mr-2" />} Enregistrer Brouillon
                 </Button>
-                <Button className="bg-primary text-white font-bold" onClick={() => saveGrades("Confirmé")} disabled={isSaving}>
-                  <CheckCircle2 className="w-4 h-4 mr-2" /> Confirmer et Publier
+                <Button className="bg-[#14532D] hover:bg-[#166534] text-white font-bold h-14 px-8 rounded-2xl shadow-xl transition-all active:scale-95" onClick={() => saveGrades("Confirmé")} disabled={isSaving}>
+                  <CheckCircle2 className="w-5 h-5 mr-2" /> Publier & Verrouiller
                 </Button>
               </>
             )}
             {isConfirmed && (
-              <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-accent/10 border border-accent/20 text-accent text-sm font-bold">
-                <CheckCircle2 className="w-4 h-4" /> Notes Confirmées (Lecture seule)
-              </div>
+              <Badge className="bg-[#16A34A] text-white h-14 px-8 rounded-2xl font-bold flex gap-3 text-sm shadow-lg">
+                <CheckCircle2 className="w-5 h-5" /> Évaluation Confirmée
+              </Badge>
             )}
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card className="md:col-span-1 glass-card border-none shadow-xl h-fit">
-            <CardHeader>
-              <CardTitle className="text-white text-lg">Configuration</CardTitle>
+        <div className="grid grid-cols-1 xl:grid-cols-4 gap-10">
+          <Card className="xl:col-span-1 premium-card border-none shadow-2xl h-fit">
+            <CardHeader className="p-8">
+              <CardTitle className="text-[#111827] flex items-center gap-2 text-xl font-bold">
+                <Sparkles className="w-5 h-5 text-[#14532D]" /> Configurer
+              </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="p-8 pt-0 space-y-6">
               <div className="space-y-2">
-                <label className="text-xs font-bold text-muted-foreground uppercase">Classe</label>
+                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Classe</label>
                 <Select value={selectedClass} onValueChange={setSelectedClass}>
-                  <SelectTrigger className="bg-white/5 border-white/10">
+                  <SelectTrigger className="bg-slate-50 border-slate-100 h-14 rounded-xl focus:ring-[#14532D]/20">
                     <SelectValue placeholder="Choisir une classe" />
                   </SelectTrigger>
                   <SelectContent>
@@ -155,22 +156,22 @@ export default function GradesEntryPage() {
                 </Select>
               </div>
               <div className="space-y-2">
-                <label className="text-xs font-bold text-muted-foreground uppercase">Matière</label>
+                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Matière</label>
                 <Select value={selectedSubject} onValueChange={setSelectedSubject}>
-                  <SelectTrigger className="bg-white/5 border-white/10">
-                    <SelectValue placeholder="Matière" />
+                  <SelectTrigger className="bg-slate-50 border-slate-100 h-14 rounded-xl">
+                    <SelectValue placeholder="Choisir la matière" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="Mathématiques">Mathématiques</SelectItem>
                     <SelectItem value="Français">Français</SelectItem>
-                    <SelectItem value="Anglais">Anglais</SelectItem>
+                    <SelectItem value="Physique-Chimie">Physique-Chimie</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
               <div className="space-y-2">
-                <label className="text-xs font-bold text-muted-foreground uppercase">Évaluation</label>
+                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Type d'Évaluation</label>
                 <Select value={selectedType} onValueChange={setSelectedType}>
-                  <SelectTrigger className="bg-white/5 border-white/10">
+                  <SelectTrigger className="bg-slate-50 border-slate-100 h-14 rounded-xl">
                     <SelectValue placeholder="Type de devoir" />
                   </SelectTrigger>
                   <SelectContent>
@@ -183,47 +184,63 @@ export default function GradesEntryPage() {
             </CardContent>
           </Card>
 
-          <Card className="md:col-span-2 glass-card border-none shadow-xl">
-            <CardHeader>
-              <CardTitle className="text-white">Liste de saisie</CardTitle>
-              <CardDescription>
-                {selectedClass && selectedSubject ? `${selectedClass} • ${selectedSubject}` : "Veuillez configurer la classe et la matière."}
-              </CardDescription>
+          <Card className="xl:col-span-3 premium-card border-none shadow-2xl overflow-hidden">
+            <CardHeader className="p-10 pb-4 border-b border-slate-50">
+              <div className="flex justify-between items-center">
+                <div>
+                  <CardTitle className="text-2xl font-bold text-[#111827]">Registre de Saisie</CardTitle>
+                  <CardDescription className="text-base font-medium mt-1">
+                    {selectedClass && selectedSubject ? `${selectedClass} • ${selectedSubject}` : "Veuillez sélectionner les paramètres."}
+                  </CardDescription>
+                </div>
+                {isConfirmed && <Badge variant="outline" className="border-[#B91C1C] text-[#B91C1C] font-bold h-7 px-4">Lecture Seule</Badge>}
+              </div>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-0">
               {!selectedClass ? (
-                <div className="flex flex-col items-center justify-center py-12 text-muted-foreground italic">
-                  <AlertCircle className="w-8 h-8 mb-2 opacity-20" />
-                  Sélectionnez une classe pour commencer
+                <div className="flex flex-col items-center justify-center py-32 text-slate-300">
+                  <AlertCircle className="w-16 h-16 mb-4 opacity-10" />
+                  <p className="text-lg font-bold">Sélectionnez une classe pour commencer</p>
                 </div>
               ) : loadingStudents ? (
-                <div className="flex justify-center py-12">
-                   <Loader2 className="w-8 h-8 animate-spin text-accent" />
+                <div className="flex flex-col items-center justify-center py-32">
+                   <Loader2 className="w-10 h-10 animate-spin text-[#14532D] mb-4" />
+                   <p className="text-slate-500 font-bold uppercase tracking-widest text-xs">Chargement de la liste...</p>
                 </div>
               ) : (
-                <div className="rounded-xl border border-white/10 overflow-hidden">
+                <div className="overflow-x-auto">
                   <Table>
-                    <TableHeader className="bg-white/5">
-                      <TableRow className="border-white/5">
-                        <TableHead className="text-white">Élève</TableHead>
-                        <TableHead className="text-white w-32">Note / 20</TableHead>
+                    <TableHeader className="bg-slate-50/50">
+                      <TableRow className="border-slate-50">
+                        <TableHead className="text-[#111827] font-bold h-16 pl-10 text-xs uppercase tracking-widest">Élève</TableHead>
+                        <TableHead className="text-[#111827] font-bold h-16 w-48 text-center text-xs uppercase tracking-widest">Note / 20</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {students?.map((s) => (
-                        <TableRow key={s.id} className="hover:bg-white/5 border-white/5">
-                          <TableCell className="font-bold text-white">
-                             {s.lastName?.toUpperCase()} {s.firstName}
-                             <p className="text-[10px] text-muted-foreground font-mono">{s.id}</p>
+                        <TableRow key={s.id} className="hover:bg-slate-50 transition-colors border-slate-50">
+                          <TableCell className="pl-10 py-6">
+                             <div className="flex items-center gap-4">
+                                <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-[#111827] font-bold shadow-inner">
+                                  {s.lastName?.[0]}{s.firstName?.[0]}
+                                </div>
+                                <div>
+                                  <p className="font-bold text-[#111827] text-lg">{s.lastName?.toUpperCase()} {s.firstName}</p>
+                                  <p className="text-[10px] text-slate-400 font-mono tracking-tighter uppercase">{s.id}</p>
+                                </div>
+                             </div>
                           </TableCell>
-                          <TableCell>
+                          <TableCell className="py-6 pr-10">
                             <Input 
                               type="number" 
                               max="20" 
                               min="0"
                               step="0.25"
                               placeholder="00.00" 
-                              className="bg-white/5 border-white/10 h-10 text-center text-accent font-bold"
+                              className={cn(
+                                "h-14 text-center text-2xl font-black rounded-xl border-slate-100 bg-white shadow-sm transition-all focus:ring-2 focus:ring-[#14532D]/20",
+                                isConfirmed ? "opacity-50 cursor-not-allowed text-slate-400" : "text-[#14532D]"
+                              )}
                               value={grades[s.id] || ""}
                               onChange={(e) => handleGradeChange(s.id, e.target.value)}
                               disabled={isConfirmed}
@@ -233,7 +250,7 @@ export default function GradesEntryPage() {
                       ))}
                       {students?.length === 0 && (
                         <TableRow>
-                          <TableCell colSpan={2} className="text-center py-8 text-muted-foreground">
+                          <TableCell colSpan={2} className="text-center py-20 text-slate-400 italic font-medium">
                             Aucun élève actif trouvé dans cette classe.
                           </TableCell>
                         </TableRow>

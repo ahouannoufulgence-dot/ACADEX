@@ -79,7 +79,6 @@ export default function StatisticsPage() {
 
         {/* Charts Grid - First Row */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-          {/* Bar Chart Evolution */}
           <Card className="premium-card">
             <CardHeader className="p-8 pb-4">
               <CardTitle className="text-[#111827] flex items-center gap-3 text-xl font-bold">
@@ -122,7 +121,6 @@ export default function StatisticsPage() {
             </CardContent>
           </Card>
 
-          {/* Pie Chart Cycle Distribution */}
           <Card className="premium-card">
             <CardHeader className="p-8 pb-4">
               <CardTitle className="text-[#111827] flex items-center gap-3 text-xl font-bold">
@@ -131,7 +129,7 @@ export default function StatisticsPage() {
               </CardTitle>
               <CardDescription>Distribution globale entre Collège et Primaire.</CardDescription>
             </CardHeader>
-            <CardContent className="h-[360px] p-8 pt-4 flex items-center justify-center">
+            <CardContent className="h-[360px] p-8 pt-4 flex items-center justify-center relative">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie
@@ -148,10 +146,9 @@ export default function StatisticsPage() {
                     ))}
                   </Pie>
                   <RechartsTooltip />
-                  <ChartLegend content={<ChartLegendContent />} />
                 </PieChart>
               </ResponsiveContainer>
-              <div className="absolute flex flex-col items-center justify-center pointer-events-none">
+              <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                 <span className="text-3xl font-bold text-[#111827]">1000</span>
                 <span className="text-[10px] uppercase font-bold text-slate-400">Total</span>
               </div>
@@ -234,5 +231,5 @@ function StatMiniCard({ label, value, trend, status, delay }: any) {
           </Badge>
        </div>
     </Card>
-  )
+  );
 }

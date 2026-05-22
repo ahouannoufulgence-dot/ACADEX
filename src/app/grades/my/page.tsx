@@ -1,8 +1,9 @@
+
 "use client";
 
 import React from "react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
-import { FileText, Trophy, Target, AlertCircle } from "lucide-react";
+import { FileText, Trophy, Target, AlertCircle, TrendingUp, Star } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
@@ -18,17 +19,17 @@ export default function MyGradesPage() {
   ];
 
   const getNoteColor = (note: number) => {
-    if (note >= 14) return "text-[#1A6B4A] bg-[#1A6B4A]/10 border-[#1A6B4A]/20";
-    if (note >= 10) return "text-orange-500 bg-orange-500/10 border-orange-500/20";
-    return "text-[#DC2626] bg-[#DC2626]/10 border-[#DC2626]/20";
+    if (note >= 14) return "text-[#16A34A] bg-[#16A34A]/10 border-[#16A34A]/20";
+    if (note >= 10) return "text-[#111827] bg-[#111827]/5 border-[#111827]/10";
+    return "text-[#B91C1C] bg-[#B91C1C]/10 border-[#B91C1C]/20";
   };
 
   const getMention = (avg: number) => {
-    if (avg >= 16) return { text: "Très Bien", color: "bg-[#1A6B4A]" };
-    if (avg >= 14) return { text: "Bien", color: "bg-[#1A6B4A]/80" };
-    if (avg >= 12) return { text: "Assez Bien", color: "bg-blue-600" };
-    if (avg >= 10) return { text: "Passable", color: "bg-orange-500" };
-    return { text: "Insuffisant", color: "bg-[#DC2626]" };
+    if (avg >= 16) return { text: "Très Bien", color: "bg-[#16A34A]" };
+    if (avg >= 14) return { text: "Bien", color: "bg-[#14532D]" };
+    if (avg >= 12) return { text: "Assez Bien", color: "bg-[#111827]" };
+    if (avg >= 10) return { text: "Passable", color: "bg-slate-400" };
+    return { text: "Insuffisant", color: "bg-[#B91C1C]" };
   };
 
   const generalAvg = 14.85;
@@ -36,68 +37,70 @@ export default function MyGradesPage() {
 
   return (
     <DashboardLayout>
-      <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-300">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div className="space-y-10 animate-fade-up">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
           <div>
-            <h1 className="text-3xl font-headline font-bold text-[#1F2937] mb-2">Mes Résultats Scolaires</h1>
-            <p className="text-slate-500 font-medium">Trimestre 2 - Session 2023/2024</p>
+            <h1 className="text-4xl font-headline font-bold text-[#111827] mb-2">Mon Relevé de Notes</h1>
+            <p className="text-slate-500 text-lg font-medium">Trimestre 2 • Session 2023 / 2024</p>
           </div>
-          <Card className="p-4 premium-card flex items-center gap-6 border-none">
-            <div className="text-center px-4 border-r border-slate-100">
-              <p className="text-[10px] text-slate-400 uppercase font-bold mb-1 tracking-wider">Moyenne</p>
-              <p className="text-3xl font-headline font-bold text-[#1A6B4A]">{generalAvg}</p>
+          <Card className="premium-card p-2 flex items-center border-none bg-white shadow-2xl">
+            <div className="px-8 py-4 border-r border-slate-100 flex flex-col items-center">
+              <p className="text-[10px] text-slate-400 uppercase font-bold mb-1 tracking-widest">Moyenne Générale</p>
+              <p className="text-4xl font-headline font-bold text-[#14532D]">{generalAvg}</p>
             </div>
-            <div className="text-center pr-4">
-              <p className="text-[10px] text-slate-400 uppercase font-bold mb-1 tracking-wider">Mention</p>
-              <Badge className={cn("text-white font-bold h-6", mention.color)}>{mention.text}</Badge>
+            <div className="px-8 py-4 flex flex-col items-center">
+              <p className="text-[10px] text-slate-400 uppercase font-bold mb-1 tracking-widest">Mention Finale</p>
+              <Badge className={cn("text-white font-bold h-7 px-4", mention.color)}>{mention.text}</Badge>
             </div>
           </Card>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <StatMiniCard icon={Trophy} label="Rang Global" value="4ème / 42" color="text-[#1A6B4A]" />
-          <StatMiniCard icon={Target} label="Points Totaux" value="214.5" color="text-blue-600" />
-          <StatMiniCard icon={AlertCircle} label="Progression" value="+1.2 pts" color="text-purple-600" />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <StatMiniCard icon={Trophy} label="Rang dans la classe" value="4ème / 42" color="text-[#14532D]" />
+          <StatMiniCard icon={Star} label="Points Cumulés" value="214.50" color="text-[#111827]" />
+          <StatMiniCard icon={TrendingUp} label="Progression" value="+1.2 pts" color="text-[#16A34A]" />
         </div>
 
-        <Card className="premium-card">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-[#1F2937] text-lg">
-              <FileText className="w-5 h-5 text-[#1A6B4A]" />
-              Détail par Matière
+        <Card className="premium-card border-none shadow-2xl">
+          <CardHeader className="p-10 pb-4">
+            <CardTitle className="flex items-center gap-3 text-2xl font-bold text-[#111827]">
+              <FileText className="w-6 h-6 text-[#14532D]" />
+              Détails des Évaluations
             </CardTitle>
-            <CardDescription>Consultez vos notes et votre position par rapport à la classe.</CardDescription>
+            <CardDescription className="text-lg">Consultez vos performances détaillées par matière.</CardDescription>
           </CardHeader>
-          <CardContent>
-            <div className="rounded-xl border border-slate-100 overflow-hidden">
+          <CardContent className="p-10 pt-4">
+            <div className="rounded-[1.5rem] border border-slate-100 overflow-hidden shadow-inner bg-slate-50/30">
               <Table>
-                <TableHeader className="bg-[#F5F7F9]">
-                  <TableRow>
-                    <TableHead className="text-[#1F2937] font-bold">Matière</TableHead>
-                    <TableHead className="text-[#1F2937] font-bold">Note / 20</TableHead>
-                    <TableHead className="text-[#1F2937] font-bold">Coeff</TableHead>
-                    <TableHead className="text-[#1F2937] font-bold">Moy. Classe</TableHead>
-                    <TableHead className="text-[#1F2937] font-bold">Min/Max</TableHead>
-                    <TableHead className="text-right text-[#1F2937] font-bold">Rang</TableHead>
+                <TableHeader className="bg-slate-50">
+                  <TableRow className="border-slate-100">
+                    <TableHead className="text-[#111827] font-bold h-14">Matière</TableHead>
+                    <TableHead className="text-[#111827] font-bold h-14 text-center">Note / 20</TableHead>
+                    <TableHead className="text-[#111827] font-bold h-14 text-center">Coeff</TableHead>
+                    <TableHead className="text-[#111827] font-bold h-14 text-center">Moy. Classe</TableHead>
+                    <TableHead className="text-[#111827] font-bold h-14 text-center">Min/Max</TableHead>
+                    <TableHead className="text-right text-[#111827] font-bold h-14 pr-8">Rang</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {grades.map((item, idx) => (
-                    <TableRow key={idx} className="hover:bg-[#F5F7F9] transition-colors">
-                      <TableCell className="font-semibold text-[#1F2937]">{item.subject}</TableCell>
-                      <TableCell>
-                        <Badge variant="outline" className={cn("text-sm font-bold w-12 justify-center border-none", getNoteColor(item.note))}>
+                    <TableRow key={idx} className="hover:bg-white transition-all duration-200 border-slate-50 group">
+                      <TableCell className="font-bold text-[#111827] text-base py-5">{item.subject}</TableCell>
+                      <TableCell className="text-center">
+                        <Badge variant="outline" className={cn("text-sm font-bold w-14 h-8 justify-center border-none shadow-sm", getNoteColor(item.note))}>
                           {item.note}
                         </Badge>
                       </TableCell>
-                      <TableCell className="text-slate-600 font-medium">{item.coeff}</TableCell>
-                      <TableCell className="text-slate-600 font-medium">{item.avg}</TableCell>
-                      <TableCell className="text-[11px] font-medium">
-                        <span className="text-[#DC2626]">{item.low}</span>
-                        <span className="mx-1 text-slate-300">/</span>
-                        <span className="text-[#1A6B4A]">{item.high}</span>
+                      <TableCell className="text-center font-bold text-slate-500">{item.coeff}</TableCell>
+                      <TableCell className="text-center font-bold text-slate-500">{item.avg}</TableCell>
+                      <TableCell className="text-center">
+                        <div className="flex items-center justify-center gap-1.5 text-[11px] font-bold">
+                          <span className="text-[#B91C1C] bg-red-50 px-2 py-0.5 rounded">{item.low}</span>
+                          <span className="text-slate-300">/</span>
+                          <span className="text-[#16A34A] bg-green-50 px-2 py-0.5 rounded">{item.high}</span>
+                        </div>
                       </TableCell>
-                      <TableCell className="text-right font-bold text-[#1F2937]">{item.rank}</TableCell>
+                      <TableCell className="text-right font-black text-[#111827] pr-8 text-lg">{item.rank}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -112,13 +115,13 @@ export default function MyGradesPage() {
 
 function StatMiniCard({ icon: Icon, label, value, color }: any) {
   return (
-    <Card className="p-4 premium-card flex items-center gap-4">
-      <div className={cn("p-2.5 rounded-lg bg-slate-50", color)}>
-        <Icon className="w-5 h-5" />
+    <Card className="premium-card p-8 flex items-center gap-6 border-none shadow-xl hover:translate-y-[-4px] transition-transform">
+      <div className={cn("p-4 rounded-[1.25rem] bg-slate-50 shadow-inner", color)}>
+        <Icon className="w-8 h-8" />
       </div>
       <div>
-        <p className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">{label}</p>
-        <p className="text-xl font-headline font-bold text-[#1F2937]">{value}</p>
+        <p className="text-[10px] text-slate-400 uppercase font-bold tracking-[0.15em] mb-1">{label}</p>
+        <p className="text-3xl font-headline font-bold text-[#111827]">{value}</p>
       </div>
     </Card>
   );
