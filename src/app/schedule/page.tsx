@@ -12,7 +12,8 @@ import {
   Plus,
   Trash2,
   Edit3,
-  Loader2
+  Loader2,
+  ArrowRight
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -36,7 +37,8 @@ export default function SchedulePage() {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
     day: "Lun",
-    hour: "07h00",
+    startTime: "07h00",
+    endTime: "08h00",
     subject: "",
     room: "",
     teacher: ""
@@ -62,13 +64,15 @@ export default function SchedulePage() {
   const { data: schedules, loading } = useCollection(schedulesQuery);
 
   const getCourse = (day: string, hour: string) => {
-    return schedules?.find((c: any) => c.day === day && c.hour === hour);
+    // On mappe le cours sur sa case de début pour la grille
+    return schedules?.find((c: any) => c.day === day && c.startTime === hour);
   };
 
   const handleSaveSlot = () => {
     if (!db || !formData.subject || !formData.room) return;
 
-    const slotId = `${formData.day}-${formData.hour}`.replace(/\s+/g, '-');
+    // Identifiant basé sur le jour et l'heure de début pour éviter les doublons sur le même créneau initial
+    const slotId = `${formData.day}-${formData.startTime}`.replace(/\s+/g, '-');
     const slotRef = doc(db, "schedules", slotId);
     
     const data = {
@@ -92,7 +96,7 @@ export default function SchedulePage() {
 
     toast({ title: "Horaire mis à jour", description: "Le créneau a été enregistré spontanément." });
     setIsEditing(false);
-    setFormData({ day: "Lun", hour: "07h00", subject: "", room: "", teacher: "" });
+    setFormData({ day: "Lun", startTime: "07h00", endTime: "08h00", subject: "", room: "", teacher: "" });
   };
 
   const handleDeleteSlot = (id: string) => {
@@ -113,7 +117,7 @@ export default function SchedulePage() {
   return (
     <DashboardLayout>
       <div className="space-y-6 md:space-y-12 animate-fade-up max-w-full overflow-hidden">
-        {/* Header - High Contrast Vivid Elite */}
+        {/* Header - Vivid Elite Branding */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 px-2">
           <div className="text-left w-full">
             <h1 className="text-3xl md:text-7xl font-headline font-black text-[#0F172A] mb-1 tracking-tighter uppercase leading-none">Planning Élite</h1>
@@ -123,47 +127,66 @@ export default function SchedulePage() {
           {canEdit && (
             <Dialog open={isEditing} onOpenChange={setIsEditing}>
               <DialogTrigger asChild>
-                <Button className="bg-primary hover:bg-slate-900 text-white font-black h-11 md:h-14 px-6 md:px-8 rounded-xl md:rounded-2xl shadow-xl transition-all border-2 border-white/10 w-full md:w-auto text-[10px] md:text-base uppercase tracking-tighter">
+                <Button className="bg-primary hover:bg-slate-900 text-white font-black h-11 md:h-14 px-6 md:px-8 rounded-xl md:rounded-2xl shadow-xl transition-all border-2 border-white/10 w-full md:w-auto text-[10px] md:text-base uppercase tracking-tighter shrink-0">
                   <Plus className="w-3 h-3 md:w-4 md:h-4 mr-2" /> Nouveau Créneau
                 </Button>
               </DialogTrigger>
-              <DialogContent className="vivid-box border-none bg-white p-0 overflow-hidden rounded-[2rem] sm:max-w-[400px]">
+              <DialogContent className="vivid-box border-none bg-white p-0 overflow-hidden rounded-[2.5rem] sm:max-w-[450px]">
                 <DialogHeader className="p-6 bg-primary text-white border-b-2 border-accent">
                    <div className="flex items-center gap-3">
-                      <div className="p-2 bg-white rounded-xl shadow-lg rotate-3">
+                      <div className="p-2 bg-white rounded-xl shadow-lg rotate-3 shrink-0">
                         <Clock className="w-3.5 h-3.5 text-primary" />
                       </div>
-                      <DialogTitle className="text-lg font-black tracking-tighter uppercase">Planification</DialogTitle>
+                      <DialogTitle className="text-xl font-black tracking-tighter uppercase leading-none">Nouvelle Séance</DialogTitle>
                    </div>
                 </DialogHeader>
-                <div className="p-6 space-y-4">
+                <div className="p-6 space-y-5">
+                   <div className="space-y-1.5">
+                      <Label className="text-[8px] font-black uppercase text-[#0F172A] tracking-widest ml-1">Jour de la semaine</Label>
+                      <Select value={formData.day} onValueChange={(v) => setFormData({...formData, day: v})}>
+                        <SelectTrigger className="h-12 bg-slate-50 border-2 border-slate-100 rounded-xl font-black text-sm text-[#0F172A]"><SelectValue /></SelectTrigger>
+                        <SelectContent>{days.map(d => <SelectItem key={d} value={d} className="font-bold">{d}</SelectItem>)}</SelectContent>
+                      </Select>
+                   </div>
+
                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-1">
-                        <Label className="text-[8px] font-black uppercase text-[#0F172A] ml-1">Jour</Label>
-                        <Select value={formData.day} onValueChange={(v) => setFormData({...formData, day: v})}>
-                          <SelectTrigger className="h-10 bg-slate-50 border-2 border-slate-100 rounded-xl font-black text-xs"><SelectValue /></SelectTrigger>
-                          <SelectContent>{days.map(d => <SelectItem key={d} value={d}>{d}</SelectItem>)}</SelectContent>
+                      <div className="space-y-1.5">
+                        <Label className="text-[8px] font-black uppercase text-[#0F172A] tracking-widest ml-1">Heure Début</Label>
+                        <Select value={formData.startTime} onValueChange={(v) => setFormData({...formData, startTime: v})}>
+                          <SelectTrigger className="h-12 bg-slate-50 border-2 border-slate-100 rounded-xl font-black text-sm text-[#0F172A]"><SelectValue /></SelectTrigger>
+                          <SelectContent>{hours.map(h => <SelectItem key={h} value={h} className="font-bold">{h}</SelectItem>)}</SelectContent>
                         </Select>
                       </div>
-                      <div className="space-y-1">
-                        <Label className="text-[8px] font-black uppercase text-[#0F172A] ml-1">Heure</Label>
-                        <Select value={formData.hour} onValueChange={(v) => setFormData({...formData, hour: v})}>
-                          <SelectTrigger className="h-10 bg-slate-50 border-2 border-slate-100 rounded-xl font-black text-xs"><SelectValue /></SelectTrigger>
-                          <SelectContent>{hours.map(h => <SelectItem key={h} value={h}>{h}</SelectItem>)}</SelectContent>
+                      <div className="space-y-1.5">
+                        <Label className="text-[8px] font-black uppercase text-[#0F172A] tracking-widest ml-1">Heure Fin</Label>
+                        <Select value={formData.endTime} onValueChange={(v) => setFormData({...formData, endTime: v})}>
+                          <SelectTrigger className="h-12 bg-slate-50 border-2 border-slate-100 rounded-xl font-black text-sm text-[#0F172A]"><SelectValue /></SelectTrigger>
+                          <SelectContent>{hours.map(h => <SelectItem key={h} value={h} className="font-bold">{h}</SelectItem>)}</SelectContent>
                         </Select>
                       </div>
                    </div>
-                   <div className="space-y-1">
-                      <Label className="text-[8px] font-black uppercase text-[#0F172A] ml-1">Matière</Label>
-                      <Input className="h-10 bg-slate-50 border-2 border-slate-100 rounded-xl font-black text-xs" value={formData.subject} onChange={e => setFormData({...formData, subject: e.target.value})} />
+
+                   <div className="space-y-1.5">
+                      <Label className="text-[8px] font-black uppercase text-[#0F172A] tracking-widest ml-1">Matière / Enseignement</Label>
+                      <Input 
+                        placeholder="Ex: Mathématiques"
+                        className="h-12 bg-slate-50 border-2 border-slate-100 rounded-xl font-black text-sm text-[#0F172A]" 
+                        value={formData.subject} 
+                        onChange={e => setFormData({...formData, subject: e.target.value})} 
+                      />
                    </div>
-                   <div className="space-y-1">
-                      <Label className="text-[8px] font-black uppercase text-[#0F172A] ml-1">Salle / Prof</Label>
-                      <Input className="h-10 bg-slate-50 border-2 border-slate-100 rounded-xl font-black text-xs" placeholder="Ex: Salle S01 - M. Kouassi" value={formData.room} onChange={e => setFormData({...formData, room: e.target.value})} />
+                   <div className="space-y-1.5">
+                      <Label className="text-[8px] font-black uppercase text-[#0F172A] tracking-widest ml-1">Salle & Professeur</Label>
+                      <Input 
+                        className="h-12 bg-slate-50 border-2 border-slate-100 rounded-xl font-black text-sm text-[#0F172A]" 
+                        placeholder="Ex: Salle S01 - M. Kouassi" 
+                        value={formData.room} 
+                        onChange={e => setFormData({...formData, room: e.target.value})} 
+                      />
                    </div>
                 </div>
                 <DialogFooter className="p-6 pt-0">
-                  <Button className="w-full h-12 bg-primary text-white font-black rounded-xl uppercase shadow-lg border-2 border-white/10" onClick={handleSaveSlot}>
+                  <Button className="w-full h-14 bg-primary text-white font-black rounded-xl uppercase shadow-xl border-2 border-white/10 text-sm tracking-tighter" onClick={handleSaveSlot}>
                     Enregistrer Spontanément
                   </Button>
                 </DialogFooter>
@@ -173,9 +196,9 @@ export default function SchedulePage() {
         </div>
 
         {/* Schedule Grid - Vivid Elite Styling */}
-        <Card className="vivid-box border-none shadow-2xl overflow-hidden bg-white/95 p-0 rounded-[2rem] md:rounded-[4rem]">
+        <Card className="vivid-box border-none shadow-2xl overflow-hidden bg-white/95 p-0 rounded-[2.5rem] md:rounded-[4rem]">
           <div className="overflow-x-auto no-scrollbar">
-            <div className="min-w-[800px] md:min-w-full">
+            <div className="min-w-[900px] md:min-w-full">
               {/* Header Days */}
               <div className="grid grid-cols-7 bg-slate-900 border-b-4 border-white/5">
                 <div className="p-4 md:p-8 text-center border-r-2 border-white/5 flex items-center justify-center">
@@ -191,7 +214,7 @@ export default function SchedulePage() {
               {/* Grid Body */}
               <div className="divide-y-2 divide-slate-100">
                 {hours.map(hour => (
-                  <div key={hour} className="grid grid-cols-7 min-h-[80px] md:min-h-[160px]">
+                  <div key={hour} className="grid grid-cols-7 min-h-[100px] md:min-h-[180px]">
                     {/* Time Column */}
                     <div className="flex items-center justify-center border-r-2 border-slate-100 bg-slate-50/50">
                       <span className="text-[9px] md:text-xl font-black text-[#0F172A] font-mono tracking-tighter opacity-40">{hour}</span>
@@ -201,26 +224,34 @@ export default function SchedulePage() {
                     {days.map(day => {
                       const course = getCourse(day, hour);
                       return (
-                        <div key={`${day}-${hour}`} className="p-1 md:p-3 border-r-2 border-slate-100 last:border-r-0 relative group">
+                        <div key={`${day}-${hour}`} className="p-1.5 md:p-4 border-r-2 border-slate-100 last:border-r-0 relative group bg-white">
                           {course ? (
                             <div className={cn(
-                              "h-full w-full rounded-xl md:rounded-[1.5rem] p-2 md:p-4 border-2 shadow-lg flex flex-col justify-between overflow-hidden transition-all group-hover:scale-[1.02] bg-white border-slate-100",
+                              "h-full w-full rounded-2xl md:rounded-[2rem] p-3 md:p-6 border-4 shadow-xl flex flex-col justify-between overflow-hidden transition-all group-hover:scale-[1.03] bg-white border-slate-50",
                             )}>
-                              <div className="flex justify-between items-start">
-                                <p className="text-[7px] md:text-sm font-black uppercase text-[#0F172A] leading-tight truncate">{course.subject}</p>
+                              <div className="flex justify-between items-start mb-2">
+                                <div className="space-y-0.5 min-w-0">
+                                   <div className="flex items-center gap-1.5 text-[6px] md:text-[10px] font-black text-primary uppercase tracking-widest leading-none mb-1">
+                                      <Clock className="w-2 h-2 md:w-3 md:h-3" />
+                                      <span>{course.startTime} - {course.endTime}</span>
+                                   </div>
+                                   <p className="text-[9px] md:text-lg font-black uppercase text-[#0F172A] leading-tight truncate tracking-tighter">{course.subject}</p>
+                                </div>
                                 {canEdit && (
-                                  <button onClick={() => handleDeleteSlot(course.id)} className="text-slate-300 hover:text-red-500 transition-colors">
-                                    <Trash2 className="w-2.5 h-2.5 md:w-3.5 md:h-3.5" />
+                                  <button onClick={() => handleDeleteSlot(course.id)} className="text-slate-200 hover:text-red-500 transition-colors p-1">
+                                    <Trash2 className="w-2.5 h-2.5 md:w-4 md:h-4" />
                                   </button>
                                 )}
                               </div>
-                              <div className="flex items-center gap-1 text-[6px] md:text-[10px] font-black text-slate-400 uppercase tracking-widest mt-2">
-                                <MapPin className="w-2 h-2 md:w-2.5 md:h-2.5 shrink-0" />
+                              <div className="flex items-center gap-1.5 text-[6px] md:text-[10px] font-black text-slate-400 uppercase tracking-widest mt-auto border-t border-slate-50 pt-2 md:pt-4">
+                                <MapPin className="w-2 h-2 md:w-3 md:h-3 shrink-0 text-primary" />
                                 <span className="truncate">{course.room}</span>
                               </div>
                             </div>
                           ) : (
-                            <div className="h-full w-full rounded-xl border-2 border-dashed border-slate-50/50" />
+                            <div className="h-full w-full rounded-2xl md:rounded-[2rem] border-2 border-dashed border-slate-50 flex items-center justify-center group-hover:bg-slate-50 transition-colors">
+                               <Plus className="w-4 h-4 text-slate-100 opacity-0 group-hover:opacity-100 transition-opacity" />
+                            </div>
                           )}
                         </div>
                       );
