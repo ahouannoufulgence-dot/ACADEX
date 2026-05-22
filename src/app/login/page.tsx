@@ -75,21 +75,21 @@ export default function LoginPage() {
         data-ai-hint="happy students concentration"
       />
       
-      <div className="absolute inset-0 bg-gradient-to-r from-white/20 via-transparent to-white/20" />
+      <div className="absolute inset-0 bg-gradient-to-r from-white/30 via-transparent to-white/30" />
 
       <div className="relative z-10 w-full max-w-[480px] animate-fade-up">
         <Card className="bg-white/95 backdrop-blur-3xl border-none shadow-[0_40px_120px_rgba(0,0,0,0.4)] rounded-[3rem] overflow-hidden">
-          <CardContent className="p-10 lg:p-14 text-center space-y-10">
+          <CardContent className="p-8 md:p-14 text-center space-y-10">
             
             <div className="space-y-6">
-              <div className="mx-auto w-24 h-24 relative group">
+              <div className="mx-auto w-20 h-20 md:w-28 md:h-28 relative group">
                   <div className="absolute inset-0 bg-primary/10 rounded-3xl rotate-6 group-hover:rotate-12 transition-transform"></div>
-                  <div className="relative bg-white rounded-2xl shadow-xl border-4 border-slate-50 p-4 flex flex-col items-center justify-center gap-1">
-                      <GraduationCap className="w-12 h-12 text-primary" />
+                  <div className="relative bg-white h-full rounded-2xl shadow-xl border-4 border-slate-50 p-4 flex flex-col items-center justify-center gap-1">
+                      <GraduationCap className="w-10 h-10 md:w-14 md:h-14 text-primary" />
                   </div>
               </div>
               <div>
-                  <h1 className="text-5xl font-headline font-black text-[#0F172A] tracking-tighter">
+                  <h1 className="text-4xl md:text-5xl font-headline font-black text-[#0F172A] tracking-tighter">
                       ACADEX
                   </h1>
                   <p className="text-[#0F172A] text-[10px] font-black uppercase tracking-[0.3em] mt-2">Gestion Scolaire Élite</p>
@@ -101,10 +101,10 @@ export default function LoginPage() {
                 <div className="space-y-2">
                   <label className="text-[11px] font-black text-[#0F172A] uppercase tracking-widest ml-1">Identifiant Personnel</label>
                   <div className="relative group">
-                    <User className="absolute left-4 top-1/2 -translate-y-1/2 h-6 w-6 text-[#0F172A]/40 group-focus-within:text-primary transition-colors" />
+                    <User className="absolute left-4 top-1/2 -translate-y-1/2 h-6 w-6 text-[#0F172A] group-focus-within:text-primary transition-colors" />
                     <input
                       placeholder="Ex: DIR-001"
-                      className="w-full pl-14 h-16 bg-slate-50 border-4 border-slate-100 rounded-2xl focus:border-primary/40 outline-none text-[#0F172A] font-black uppercase tracking-widest shadow-inner placeholder:text-[#0F172A]/20"
+                      className="w-full pl-14 h-16 bg-slate-50 border-4 border-slate-100 rounded-2xl focus:border-primary/40 outline-none text-[#0F172A] font-black uppercase tracking-widest shadow-inner placeholder:text-[#0F172A]/30"
                       value={userId}
                       onChange={(e) => setUserId(e.target.value.toUpperCase())}
                       required
@@ -115,11 +115,11 @@ export default function LoginPage() {
                 <div className="space-y-2">
                   <label className="text-[11px] font-black text-[#0F172A] uppercase tracking-widest ml-1">Mot de passe</label>
                   <div className="relative group">
-                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-6 w-6 text-[#0F172A]/40 group-focus-within:text-primary transition-colors" />
+                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-6 w-6 text-[#0F172A] group-focus-within:text-primary transition-colors" />
                     <input
                       type={showPassword ? "text" : "password"}
                       placeholder="••••••••"
-                      className="w-full pl-14 pr-14 h-16 bg-slate-50 border-4 border-slate-100 rounded-2xl focus:border-primary/40 outline-none text-[#0F172A] font-black shadow-inner placeholder:text-[#0F172A]/20"
+                      className="w-full pl-14 pr-14 h-16 bg-slate-50 border-4 border-slate-100 rounded-2xl focus:border-primary/40 outline-none text-[#0F172A] font-black shadow-inner placeholder:text-[#0F172A]/30"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       required
@@ -127,7 +127,7 @@ export default function LoginPage() {
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 text-[#0F172A]/40 hover:text-primary transition-colors"
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-[#0F172A] hover:text-primary transition-colors"
                     >
                       {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                     </button>
@@ -144,7 +144,7 @@ export default function LoginPage() {
               </Button>
             </form>
 
-            <div className="pt-10 border-t-4 border-slate-50 grid grid-cols-3 gap-6">
+            <div className="pt-10 border-t-4 border-slate-50 flex flex-wrap justify-center gap-6">
               <Link href="/activate/student" className="text-[11px] font-black text-[#0F172A] hover:text-primary transition-colors uppercase tracking-[0.2em]">Élève</Link>
               <Link href="/setup/teacher" className="text-[11px] font-black text-[#0F172A] hover:text-primary transition-colors uppercase tracking-[0.2em]">Enseignant</Link>
               <Link href="/setup/director" className="text-[11px] font-black text-[#0F172A] hover:text-primary transition-colors uppercase tracking-[0.2em]">Direction</Link>

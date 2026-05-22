@@ -81,7 +81,7 @@ export default function DirectorSetupPage() {
         className="object-cover opacity-90 saturate-[1.8]"
         data-ai-hint="happy students concentration"
       />
-      <div className="absolute inset-0 bg-gradient-to-br from-white/30 via-transparent to-white/30" />
+      <div className="absolute inset-0 bg-gradient-to-br from-white/40 via-transparent to-white/40" />
 
       <div className="relative z-10 w-full max-w-3xl animate-fade-up">
         <Link href="/login" className="mb-8 inline-flex items-center text-[#0F172A] hover:text-primary transition-colors gap-3 font-black uppercase tracking-[0.3em] text-[11px]">
@@ -90,19 +90,19 @@ export default function DirectorSetupPage() {
 
         <Card className="bg-white/95 backdrop-blur-3xl border-none shadow-[0_40px_120px_-15px_rgba(0,0,0,0.4)] rounded-[3rem] overflow-hidden">
           <CardHeader className="text-center pt-12 pb-10">
-            <div className="mx-auto w-24 h-24 bg-primary rounded-[2.5rem] flex items-center justify-center mb-6 shadow-2xl rotate-3 border-4 border-white/20">
-              <ShieldCheck className="w-14 h-14 text-white" />
+            <div className="mx-auto w-20 h-20 md:w-28 md:h-28 bg-primary rounded-[2.5rem] flex items-center justify-center mb-6 shadow-2xl rotate-3 border-4 border-white/20">
+              <ShieldCheck className="w-12 h-12 md:w-16 md:h-16 text-white" />
             </div>
-            <CardTitle className="text-5xl font-headline font-black text-[#0F172A] mb-3 tracking-tighter uppercase">Espace Direction</CardTitle>
+            <CardTitle className="text-4xl md:text-5xl font-headline font-black text-[#0F172A] mb-3 tracking-tighter uppercase">Espace Direction</CardTitle>
             <CardDescription className="text-[#0F172A] font-black uppercase tracking-widest text-sm opacity-60">Configuration Maîtresse Élite</CardDescription>
           </CardHeader>
-          <CardContent className="px-12 pb-16">
+          <CardContent className="px-6 md:px-12 pb-16">
             <form onSubmit={handleSetup} className="space-y-10">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
                 <div className="space-y-4">
                   <Label className="text-[11px] font-black uppercase tracking-[0.4em] text-[#0F172A] ml-2">Prénom du Directeur</Label>
                   <div className="relative group">
-                    <User className="absolute left-5 top-1/2 -translate-y-1/2 h-6 w-6 text-[#0F172A]/40 group-focus-within:text-primary transition-colors" />
+                    <User className="absolute left-5 top-1/2 -translate-y-1/2 h-6 w-6 text-[#0F172A] group-focus-within:text-primary transition-colors" />
                     <input 
                       className="w-full bg-slate-50 border-4 border-slate-100 pl-16 h-18 rounded-2xl font-black text-xl text-[#0F172A] outline-none focus:border-primary/40 shadow-inner" 
                       value={formData.firstName}
@@ -125,9 +125,9 @@ export default function DirectorSetupPage() {
               <div className="space-y-4">
                 <Label className="text-[11px] font-black uppercase tracking-[0.4em] text-[#0F172A] ml-2">Nom de l'établissement</Label>
                 <div className="relative">
-                  <Building className="absolute left-5 top-1/2 -translate-y-1/2 h-6 w-6 text-[#0F172A]/40" />
+                  <Building className="absolute left-5 top-1/2 -translate-y-1/2 h-6 w-6 text-[#0F172A]" />
                   <input 
-                    className="w-full bg-slate-50 border-4 border-slate-100 pl-16 h-18 rounded-2xl font-black text-xl text-[#0F172A] outline-none focus:border-primary/40 shadow-inner placeholder:text-[#0F172A]/20" 
+                    className="w-full bg-slate-50 border-4 border-slate-100 pl-16 h-18 rounded-2xl font-black text-xl text-[#0F172A] outline-none focus:border-primary/40 shadow-inner placeholder:text-[#0F172A]/30" 
                     placeholder="Ex: Complexe Scolaire ACADEX Premium"
                     value={formData.schoolName}
                     onChange={(e) => setFormData({...formData, schoolName: e.target.value})}
@@ -136,11 +136,11 @@ export default function DirectorSetupPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
                 <div className="space-y-4">
                   <Label className="text-[11px] font-black uppercase tracking-[0.4em] text-[#0F172A] ml-2">Email Officiel</Label>
                   <div className="relative">
-                    <Mail className="absolute left-5 top-1/2 -translate-y-1/2 h-6 w-6 text-[#0F172A]/40" />
+                    <Mail className="absolute left-5 top-1/2 -translate-y-1/2 h-6 w-6 text-[#0F172A]" />
                     <input 
                       type="email"
                       className="w-full bg-slate-50 border-4 border-slate-100 pl-16 h-18 rounded-2xl font-black text-lg text-[#0F172A] outline-none focus:border-primary/40 shadow-inner" 
@@ -153,7 +153,7 @@ export default function DirectorSetupPage() {
                 <div className="space-y-4">
                   <Label className="text-[11px] font-black uppercase tracking-[0.4em] text-[#0F172A] ml-2">Téléphone</Label>
                   <div className="relative">
-                    <Phone className="absolute left-5 top-1/2 -translate-y-1/2 h-6 w-6 text-[#0F172A]/40" />
+                    <Phone className="absolute left-5 top-1/2 -translate-y-1/2 h-6 w-6 text-[#0F172A]" />
                     <input 
                       className="w-full bg-slate-50 border-4 border-slate-100 pl-16 h-18 rounded-2xl font-black text-lg text-[#0F172A] outline-none focus:border-primary/40 shadow-inner" 
                       value={formData.phone}
@@ -164,11 +164,11 @@ export default function DirectorSetupPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-10 pt-10 border-t-4 border-slate-50">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10 pt-10 border-t-4 border-slate-50">
                 <div className="space-y-4">
                   <Label className="text-[11px] font-black uppercase tracking-[0.4em] text-[#0F172A] ml-2">Mot de passe Admin</Label>
                   <div className="relative">
-                    <Lock className="absolute left-5 top-1/2 -translate-y-1/2 h-6 w-6 text-[#0F172A]/40" />
+                    <Lock className="absolute left-5 top-1/2 -translate-y-1/2 h-6 w-6 text-[#0F172A]" />
                     <input 
                       type="password"
                       className="w-full bg-slate-50 border-4 border-slate-100 pl-16 h-18 rounded-2xl font-black text-xl text-[#0F172A] outline-none focus:border-primary/40 shadow-inner" 
@@ -191,12 +191,12 @@ export default function DirectorSetupPage() {
               </div>
 
               <div className="pt-8">
-                <Button className="w-full h-24 bg-primary hover:bg-slate-900 text-white font-black text-2xl rounded-[2.5rem] shadow-2xl transition-all active:scale-95 flex gap-8 border-4 border-white/10" disabled={isLoading}>
-                  <Save className="w-10 h-10" /> Valider l'Espace (DIR-001)
+                <Button className="w-full h-20 md:h-24 bg-primary hover:bg-slate-900 text-white font-black text-xl md:text-2xl rounded-[2.5rem] shadow-2xl transition-all active:scale-95 flex gap-4 md:gap-8 border-4 border-white/10" disabled={isLoading}>
+                  <Save className="w-8 h-8 md:w-10 md:h-10" /> Valider l'Espace (DIR-001)
                 </Button>
                 <div className="flex items-center justify-center gap-4 mt-10">
                    <Sparkles className="w-6 h-6 text-accent animate-pulse" />
-                   <p className="text-[11px] text-[#0F172A] font-black uppercase tracking-[0.4em]">Accès réservé aux directions d'établissements</p>
+                   <p className="text-[11px] text-[#0F172A] font-black uppercase tracking-[0.4em]">Accès réservé aux directions</p>
                 </div>
               </div>
             </form>
