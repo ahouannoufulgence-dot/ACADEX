@@ -19,6 +19,7 @@ import {
   Sparkles
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { getRoleFromId } from "@/lib/auth-utils";
 import { cn } from "@/lib/utils";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
@@ -33,8 +34,6 @@ import {
   XAxis, 
   YAxis, 
   CartesianGrid,
-  Line,
-  LineChart,
   ResponsiveContainer
 } from "recharts";
 import { Button } from "@/components/ui/button";
@@ -55,13 +54,6 @@ export default function DashboardPage() {
   if (!role || !mounted) return null;
 
   const heroImage = PlaceHolderImages.find(img => img.id === "dashboard-hero");
-
-  // Chart data matching the restricted color scheme (Green, Black, Red)
-  const performanceData = [
-    { name: "Trim 1", value: 11.2 },
-    { name: "Trim 2", value: 12.4 },
-    { name: "Trim 3", value: 13.8 },
-  ];
 
   const distributionData = [
     { range: "0-8", count: 45, color: "#DC2626" },   // Red: Alert
@@ -154,7 +146,7 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent className="space-y-6">
               <JournalEntry author="Conseil de Classe" action="3ème D - Salle de réunion" module="Réunion" time="15:00" color="#1A6B4A" />
-              <JournalEntry author="M. Kossou" action="Saisie des notes MATH" module="Notes" time="09:42" color="#1F2937" />
+              <JournalEntry author="M. Kouassi" action="Saisie des notes MATH" module="Notes" time="09:42" color="#1F2937" />
               <JournalEntry author="Administration" action="Clôture inscriptions T2" module="Urgent" time="18:00" color="#DC2626" />
             </CardContent>
           </Card>
