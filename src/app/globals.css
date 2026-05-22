@@ -4,34 +4,34 @@
 
 @layer base {
   :root {
-    --background: 210 40% 98%;
-    --foreground: 222 47% 11%;
-    --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
+    --background: 222 47% 4%;
+    --foreground: 210 40% 98%;
+    --card: 222 47% 8%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222 47% 4%;
+    --popover-foreground: 210 40% 98%;
     --primary: 144 61% 20%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 222 47% 11%;
-    --muted: 210 40% 96%;
-    --muted-foreground: 215 14% 46%;
-    --accent: 144 61% 20%;
+    --secondary: 222 47% 12%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 222 47% 12%;
+    --muted-foreground: 215 20% 65%;
+    --accent: 144 61% 30%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 74% 42%;
     --destructive-foreground: 0 0% 100%;
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
+    --border: 222 47% 12%;
+    --input: 222 47% 12%;
     --ring: 144 61% 20%;
     --radius: 1rem;
     
-    --sidebar-background: 144 61% 12%;
+    --sidebar-background: 144 61% 8%;
     --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 0 0% 100%;
-    --sidebar-primary-foreground: 144 61% 15%;
-    --sidebar-accent: 0 0% 100% / 0.05;
+    --sidebar-primary: 144 61% 25%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 255 255 255 / 0.05;
     --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 144 61% 8%;
+    --sidebar-border: 144 61% 5%;
     --sidebar-ring: 144 61% 20%;
   }
 }
@@ -41,25 +41,25 @@
     @apply border-border;
   }
   body {
-    @apply bg-[#F1F5F9] text-[#111827] font-body;
+    @apply bg-[#0B0F1A] text-foreground font-body;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
   }
   h1, h2, h3, h4, h5, h6 {
-    @apply font-headline text-[#111827] tracking-tight;
+    @apply font-headline text-white tracking-tight;
   }
 }
 
 .premium-card {
-  @apply bg-white/90 backdrop-blur-sm border border-slate-200/60 shadow-[0_2px_4px_rgba(0,0,0,0.02),0_1px_2px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_25px_-5px_rgba(0,0,0,0.05),0_10px_10px_-5px_rgba(0,0,0,0.02)] transition-all duration-500 rounded-2xl overflow-hidden;
+  @apply bg-[#111827]/80 backdrop-blur-xl border border-white/5 shadow-[0_8px_32px_rgba(0,0,0,0.5)] hover:border-primary/30 transition-all duration-500 rounded-2xl overflow-hidden;
 }
 
 .glass-card {
-  @apply backdrop-blur-md bg-white/10 border border-white/20;
+  @apply backdrop-blur-md bg-white/5 border border-white/10;
 }
 
 .hero-overlay {
-  background: linear-gradient(to bottom, rgba(17, 24, 39, 0.4), rgba(17, 24, 39, 0.8));
+  background: linear-gradient(to bottom, rgba(11, 15, 26, 0.2), rgba(11, 15, 26, 0.9));
 }
 
 .sidebar-scroll {
