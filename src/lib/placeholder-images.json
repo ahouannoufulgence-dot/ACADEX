@@ -2,9 +2,9 @@
   "placeholderImages": [
     {
       "id": "login-bg",
-      "description": "Joyful African students celebrating academic success in a bright campus",
-      "imageUrl": "https://picsum.photos/seed/acadex-joy-login/1200/1200",
-      "imageHint": "happy African students"
+      "description": "African students in school uniforms studying together and smiling in a bright classroom",
+      "imageUrl": "https://picsum.photos/seed/acadex-students-uniform/1200/1200",
+      "imageHint": "African students school uniform smiling"
     },
     {
       "id": "dashboard-hero",

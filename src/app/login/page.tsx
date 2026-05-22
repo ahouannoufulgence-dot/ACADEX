@@ -67,14 +67,14 @@ export default function LoginPage() {
       {/* Left - Vibrant Visual Section */}
       <div className="hidden lg:flex lg:w-3/5 relative overflow-hidden bg-[#14532D]">
         <Image
-          src={loginImage?.imageUrl || "https://picsum.photos/seed/acadex-joy-login/1200/1200"}
-          alt="Joie de la réussite"
+          src={loginImage?.imageUrl || "https://picsum.photos/seed/acadex-students-uniform/1200/1200"}
+          alt="Élèves ACADEX en tenue"
           fill
           priority
           className="object-cover transition-transform duration-[10s] hover:scale-110"
-          data-ai-hint="happy African students"
+          data-ai-hint="African students school uniform smiling"
         />
-        <div className="absolute inset-0 bg-gradient-to-tr from-[#14532D]/90 via-[#14532D]/40 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-tr from-[#14532D]/95 via-[#14532D]/50 to-transparent" />
         
         <div className="absolute inset-0 p-20 flex flex-col justify-between z-10">
           <div className="flex items-center gap-3">
@@ -86,13 +86,13 @@ export default function LoginPage() {
           
           <div className="space-y-6 max-w-xl">
             <div className="flex items-center gap-2 bg-white/20 backdrop-blur-xl w-fit px-4 py-1.5 rounded-full text-[10px] font-bold tracking-[0.2em] uppercase border border-white/30 text-white">
-              <Sparkles className="w-4 h-4" /> Excellence & Épanouissement
+              <Sparkles className="w-4 h-4" /> Excellence Institutionnelle
             </div>
             <h2 className="text-6xl font-headline font-bold text-white leading-tight drop-shadow-xl">
-              L'école où chaque sourire est une victoire.
+              L'excellence scolaire par l'innovation.
             </h2>
-            <p className="text-xl text-white/80 font-medium leading-relaxed drop-shadow-lg">
-              Une plateforme moderne pour accompagner la réussite de vos élèves avec passion et précision.
+            <p className="text-xl text-white/90 font-medium leading-relaxed drop-shadow-lg">
+              Une plateforme SaaS premium conçue pour les établissements d'élite. Pilotez votre succès avec précision.
             </p>
           </div>
           
@@ -100,7 +100,7 @@ export default function LoginPage() {
             <div className="h-1 w-20 bg-white rounded-full" />
             <div className="h-1 w-6 bg-white/30 rounded-full" />
             <div className="h-1 w-6 bg-white/30 rounded-full" />
-            <span className="ml-4 text-[10px] font-bold text-white/60 uppercase tracking-widest">Session 2024 / 2025</span>
+            <span className="ml-4 text-[10px] font-bold text-white/60 uppercase tracking-widest">Session Académique 2024 / 2025</span>
           </div>
         </div>
       </div>
@@ -110,17 +110,17 @@ export default function LoginPage() {
         <div className="w-full max-w-md space-y-12">
           <div className="space-y-3">
             <h1 className="text-4xl font-headline font-bold text-[#111827]">Accès Institutionnel</h1>
-            <p className="text-slate-500 font-medium">Veuillez entrer vos identifiants pour continuer.</p>
+            <p className="text-slate-500 font-medium">Authentification sécurisée pour le personnel et les élèves.</p>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-6">
             <div className="space-y-2">
-              <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Votre Identifiant</Label>
+              <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Identifiant Unique</Label>
               <div className="relative group">
                 <User className="absolute left-4 top-4 h-5 w-5 text-slate-300 group-focus-within:text-[#14532D] transition-colors" />
                 <Input
                   placeholder="DIR-001, ENS-..."
-                  className="pl-12 h-14 bg-white border-slate-200 rounded-2xl focus-visible:ring-1 focus-visible:ring-[#14532D]/20 transition-all"
+                  className="pl-12 h-14 bg-white border-slate-200 rounded-2xl focus-visible:ring-1 focus-visible:ring-[#14532D]/20 transition-all text-sm"
                   value={userId}
                   onChange={(e) => setUserId(e.target.value.toUpperCase())}
                   required
@@ -131,13 +131,13 @@ export default function LoginPage() {
             <div className="space-y-2">
               <div className="flex justify-between items-center">
                 <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Mot de passe</Label>
-                <button type="button" className="text-[10px] font-bold text-[#14532D] hover:underline uppercase tracking-widest">Oublié ?</button>
+                <button type="button" className="text-[10px] font-bold text-[#14532D] hover:underline uppercase tracking-widest">Récupérer</button>
               </div>
               <div className="relative group">
                 <Lock className="absolute left-4 top-4 h-5 w-5 text-slate-300 group-focus-within:text-[#14532D] transition-colors" />
                 <Input
                   type={showPassword ? "text" : "password"}
-                  className="pl-12 pr-12 h-14 bg-white border-slate-200 rounded-2xl focus-visible:ring-1 focus-visible:ring-[#14532D]/20 transition-all"
+                  className="pl-12 pr-12 h-14 bg-white border-slate-200 rounded-2xl focus-visible:ring-1 focus-visible:ring-[#14532D]/20 transition-all text-sm"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
@@ -157,22 +157,22 @@ export default function LoginPage() {
               className="w-full h-14 text-sm font-bold bg-[#14532D] hover:bg-[#166534] text-white shadow-xl shadow-[#14532D]/10 transition-all active:scale-95 rounded-2xl"
               disabled={isLoading}
             >
-              {isLoading ? "Authentification..." : "Se connecter"} <ArrowRight className="ml-2 w-5 h-5" />
+              {isLoading ? "Vérification..." : "Se connecter"} <ArrowRight className="ml-2 w-5 h-5" />
             </Button>
           </form>
 
           <div className="pt-8 border-t border-slate-100 flex flex-col gap-6">
             <div className="flex items-center gap-4">
                <div className="h-px bg-slate-100 flex-1" />
-               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Nouvel utilisateur ?</span>
+               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Première connexion ?</span>
                <div className="h-px bg-slate-100 flex-1" />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <Link href="/setup/director" className="flex-1">
-                <Button variant="outline" className="w-full h-12 border-slate-200 rounded-2xl text-[10px] font-bold uppercase tracking-widest hover:bg-slate-50">Directeur</Button>
+                <Button variant="outline" className="w-full h-12 border-slate-200 rounded-2xl text-[10px] font-bold uppercase tracking-widest hover:bg-slate-50 transition-colors">Portail Direction</Button>
               </Link>
               <Link href="/activate/student" className="flex-1">
-                <Button variant="outline" className="w-full h-12 border-slate-200 rounded-2xl text-[10px] font-bold uppercase tracking-widest hover:bg-slate-50">Élève/Parent</Button>
+                <Button variant="outline" className="w-full h-12 border-slate-200 rounded-2xl text-[10px] font-bold uppercase tracking-widest hover:bg-slate-50 transition-colors">Espace Élève</Button>
               </Link>
             </div>
           </div>
