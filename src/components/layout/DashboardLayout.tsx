@@ -78,7 +78,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 flex relative max-w-full overflow-x-hidden">
+    <div className="min-h-screen bg-slate-50 flex relative w-full overflow-x-hidden">
       <Sidebar 
         role={role} 
         userName={user.name} 
@@ -103,10 +103,10 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
           onMenuClick={() => setIsSidebarOpen(true)}
         />
         <main className="flex-1 overflow-y-auto w-full">
-          <div className="p-4 md:p-6 lg:p-8 max-w-[1440px] mx-auto w-full">
+          <div className="p-4 md:p-6 lg:p-8 max-w-[1440px] mx-auto w-full box-border">
             {children}
           </div>
-          <footer className="p-6 text-center text-slate-400 text-[9px] font-black uppercase tracking-widest border-t border-slate-100 bg-white/50">
+          <footer className="p-4 md:p-6 text-center text-slate-400 text-[9px] font-black uppercase tracking-widest border-t border-slate-100 bg-white/50">
             © 2024 ACADEX Premium Systems • Excellence Éducative
           </footer>
         </main>
