@@ -28,7 +28,6 @@ export default function DashboardPage() {
   const [mounted, setMounted] = useState(false);
   const db = useFirestore();
 
-  // Fetch school config for customization
   const schoolConfigRef = useMemo(() => (db ? doc(db, "config", "school") : null), [db]);
   const { data: schoolConfig } = useDoc(schoolConfigRef);
 
@@ -60,8 +59,8 @@ export default function DashboardPage() {
           <div className="absolute inset-0 bg-gradient-to-r from-white via-white/40 to-transparent" />
           <div className="absolute inset-0 p-6 md:p-14 flex flex-col justify-center space-y-4 md:space-y-6">
             <div className="flex items-center gap-2 bg-primary text-white w-fit px-4 py-1.5 rounded-full text-[9px] md:text-xs font-black tracking-widest uppercase shadow-xl border border-white/20">
-              <Sparkles className="w-3.5 h-3.5 text-accent" />
-              Session {schoolConfig?.academicYear || "2023-2024"}
+              <Sparkles className="w-3 h-3 text-accent" />
+              Session {schoolConfig?.academicYear || "2026-2027"}
             </div>
             <div className="space-y-1 md:space-y-2">
               <h1 className="text-3xl md:text-7xl font-headline font-black text-[#0F172A] leading-tight tracking-tighter uppercase">
@@ -117,7 +116,7 @@ export default function DashboardPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4 md:space-y-6 p-6 md:p-8">
-              <JournalEntry author={schoolConfig?.name || "Système ACADEX"} action="Version 2024 active" module="Système" time="Maintenant" type="positive" />
+              <JournalEntry author={schoolConfig?.name || "Système ACADEX"} action="Version 2026-2027 active" module="Système" time="Maintenant" type="positive" />
               <JournalEntry author="Administration" action="Définissez les coefficients" module="Gestion" time="En cours" />
               <JournalEntry author="Sécurité" action="Chiffrement activé" module="Sécurité" time="Actif" type="positive" />
             </CardContent>
