@@ -46,110 +46,89 @@ export const Sidebar = ({ role, userName }: SidebarProps) => {
     router.push("/login");
   };
 
-  const getNavItems = () => {
-    const commonItems = [
-      { name: "Accueil", href: "/dashboard", icon: Home },
-      { name: "Messagerie", href: "/messages", icon: MessageSquare },
-      { name: "Agenda", href: "/agenda", icon: Calendar },
-    ];
-
-    if (role === "DIRECTOR") {
-      return [
-        ...commonItems,
-        { name: "Tableau de bord", href: "/dashboard", icon: LayoutDashboard },
-        { name: "Élèves", href: "/students", icon: GraduationCap },
-        { name: "Enseignants", href: "/teachers", icon: Users },
-        { name: "Classes", href: "/classes", icon: ClipboardList },
-        { name: "Matières", href: "/settings", icon: BookMarked },
-        { name: "Emploi du temps", href: "/schedule", icon: Calendar },
-        { name: "Notes & Résultats", href: "/grades", icon: FileText },
-        { name: "Absences", href: "/absences", icon: ShieldAlert },
-        { name: "Paiements", href: "/payments", icon: CreditCard },
-        { name: "Statistiques", href: "/stats", icon: BarChart3 },
-        { name: "Rapports", href: "/report-card", icon: FileCheck },
-        { name: "Génération Accès", href: "/access-management", icon: KeyRound },
-        { name: "Sécurité", href: "/security", icon: ShieldAlert },
-        { name: "Paramètres", href: "/settings", icon: Settings },
-      ];
-    }
-
-    if (role === "TEACHER") {
-      return [
-        ...commonItems,
-        { name: "Mes Classes", href: "/my-classes", icon: ClipboardList },
-        { name: "Saisie Notes", href: "/grades/entry", icon: FileText },
-        { name: "Absences", href: "/absences", icon: ShieldAlert },
-      ];
-    }
-
-    return [
-      ...commonItems,
-      { name: "Mes Notes", href: "/grades/my", icon: FileText },
-      { name: "Bulletin", href: "/report-card", icon: BookOpen },
-      { name: "Emploi du temps", href: "/schedule", icon: Calendar },
-      { name: "Mes Paiements", href: "/payments/my", icon: CreditCard },
-      { name: "Absences", href: "/absences", icon: ShieldAlert },
-    ];
-  };
-
-  const navItems = getNavItems();
+  const navItems = [
+    { name: "Accueil", href: "/dashboard", icon: Home, roles: ['DIRECTOR', 'TEACHER', 'STUDENT_PARENT'] },
+    { name: "Messagerie", href: "/messages", icon: MessageSquare, roles: ['DIRECTOR', 'TEACHER', 'STUDENT_PARENT'] },
+    { name: "Agenda", href: "/agenda", icon: Calendar, roles: ['DIRECTOR', 'TEACHER', 'STUDENT_PARENT'] },
+    
+    // Director Only
+    { name: "Élèves", href: "/students", icon: GraduationCap, roles: ['DIRECTOR'] },
+    { name: "Enseignants", href: "/teachers", icon: Users, roles: ['DIRECTOR'] },
+    { name: "Classes", href: "/classes", icon: ClipboardList, roles: ['DIRECTOR'] },
+    { name: "Paiements", href: "/payments", icon: CreditCard, roles: ['DIRECTOR'] },
+    { name: "Statistiques", href: "/stats", icon: BarChart3, roles: ['DIRECTOR'] },
+    { name: "Génération Accès", href: "/access-management", icon: KeyRound, roles: ['DIRECTOR'] },
+    { name: "Sécurité", href: "/security", icon: ShieldAlert, roles: ['DIRECTOR'] },
+    
+    // Teacher Only
+    { name: "Mes Classes", href: "/my-classes", icon: ClipboardList, roles: ['TEACHER'] },
+    { name: "Saisie Notes", href: "/grades/entry", icon: FileText, roles: ['TEACHER'] },
+    
+    // Student Only
+    { name: "Mes Notes", href: "/grades/my", icon: FileText, roles: ['STUDENT_PARENT'] },
+    { name: "Bulletin", href: "/report-card", icon: FileCheck, roles: ['STUDENT_PARENT'] },
+    { name: "Mes Paiements", href: "/payments/my", icon: CreditCard, roles: ['STUDENT_PARENT'] },
+    
+    // Global Access based on permissions (Common)
+    { name: "Emploi du temps", href: "/schedule", icon: Calendar, roles: ['DIRECTOR', 'STUDENT_PARENT'] },
+    { name: "Absences", href: "/absences", icon: ShieldAlert, roles: ['DIRECTOR', 'TEACHER', 'STUDENT_PARENT'] },
+    { name: "Paramètres", href: "/settings", icon: Settings, roles: ['DIRECTOR'] },
+  ].filter(item => item.roles.includes(role));
 
   return (
-    <aside className="w-64 h-screen bg-gradient-to-b from-[#14532D] to-[#111827] flex flex-col fixed left-0 top-0 z-40 border-r border-white/5">
-      <div className="p-10 pb-8 shrink-0">
-        <Link href="/dashboard" className="flex items-center gap-3 hover:opacity-90 transition-opacity">
-          <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-xl">
-            <span className="text-[#14532D] font-bold text-xl">A</span>
-          </div>
-          <div>
-            <h1 className="text-white font-headline font-bold text-xl tracking-tight leading-tight">ACADEX</h1>
-            <p className="text-white/40 text-[9px] font-bold uppercase tracking-[0.2em]">High End System</p>
-          </div>
-        </Link>
+    <aside className="w-64 h-screen bg-[#14532D] flex flex-col fixed left-0 top-0 z-40 border-r border-slate-200">
+      <div className="p-8 pb-10 flex items-center gap-3">
+        <div className="w-9 h-9 bg-white rounded-lg flex items-center justify-center shadow-lg">
+          <span className="text-[#14532D] font-bold text-lg">A</span>
+        </div>
+        <div className="flex flex-col">
+          <span className="text-white font-headline font-bold text-lg leading-tight tracking-tight">ACADEX</span>
+          <span className="text-white/40 text-[8px] font-bold uppercase tracking-[0.2em]">Management Elite</span>
+        </div>
       </div>
 
-      <div className="flex-1 sidebar-scroll px-5">
-        <nav className="space-y-1.5 pb-10">
+      <div className="flex-1 sidebar-scroll px-4">
+        <nav className="space-y-1">
           {navItems.map((item) => {
             const isActive = pathname === item.href;
             return (
               <Link
-                key={item.name + item.href}
+                key={item.href}
                 href={item.href}
                 className={cn(
-                  "group flex items-center justify-between px-4 py-3 rounded-xl transition-all duration-300",
+                  "group flex items-center justify-between px-4 py-2.5 rounded-xl transition-all duration-200",
                   isActive 
-                    ? "bg-white/10 text-white shadow-sm ring-1 ring-white/10" 
+                    ? "bg-white/15 text-white shadow-sm ring-1 ring-white/10" 
                     : "text-white/60 hover:bg-white/5 hover:text-white"
                 )}
               >
                 <div className="flex items-center gap-3">
-                  <item.icon className={cn("w-5 h-5 transition-colors", isActive ? "text-white" : "text-white/40 group-hover:text-white")} />
+                  <item.icon className={cn("w-4 h-4 transition-colors", isActive ? "text-white" : "text-white/40 group-hover:text-white")} />
                   <span className="text-sm font-medium">{item.name}</span>
                 </div>
-                {isActive && <ChevronRight className="w-4 h-4 opacity-30" />}
+                {isActive && <div className="w-1 h-4 bg-white/30 rounded-full" />}
               </Link>
             );
           })}
         </nav>
       </div>
 
-      <div className="p-8 border-t border-white/10 bg-black/20 shrink-0">
+      <div className="p-6 border-t border-white/5 bg-black/10">
         <div className="flex items-center gap-3 mb-6 px-1">
-          <div className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-white font-bold text-xs shadow-inner">
-            {userName.substring(0, 2).toUpperCase()}
+          <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-white font-bold text-xs">
+            {userName.substring(0, 1).toUpperCase()}
           </div>
           <div className="flex-1 overflow-hidden">
-            <p className="text-sm font-bold text-white truncate">{userName}</p>
-            <p className="text-[10px] text-white/40 uppercase font-bold tracking-tighter">{role}</p>
+            <p className="text-xs font-bold text-white truncate">{userName}</p>
+            <p className="text-[9px] text-white/40 uppercase font-bold tracking-tighter">{role}</p>
           </div>
         </div>
         <button 
           onClick={handleLogout}
-          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-white/50 hover:bg-destructive/10 hover:text-destructive transition-all group"
+          className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-white/50 hover:bg-red-500/10 hover:text-red-400 transition-all group"
         >
-          <LogOut className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-          <span className="text-sm font-bold">Déconnexion</span>
+          <LogOut className="w-4 h-4" />
+          <span className="text-sm font-bold">Quitter</span>
         </button>
       </div>
     </aside>

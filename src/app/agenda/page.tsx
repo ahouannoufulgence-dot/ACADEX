@@ -17,56 +17,54 @@ export default function AgendaPage() {
 
   return (
     <DashboardLayout>
-      <div className="space-y-10 animate-fade-up">
+      <div className="space-y-8 animate-fade-up">
         <div className="flex justify-between items-center">
           <div>
             <h1 className="text-3xl font-headline font-bold text-[#111827] mb-2">Agenda Institutionnel</h1>
-            <p className="text-slate-500 font-medium">Gestion des événements et dates clés de l'établissement.</p>
+            <p className="text-slate-500 font-medium">Gestion des événements clés.</p>
           </div>
-          <Button className="bg-[#14532D] hover:bg-[#166534] text-white font-bold h-13 px-8 shadow-xl rounded-xl transition-all">
-            <Plus className="w-5 h-5 mr-2" /> Nouvel événement
+          <Button className="bg-[#14532D] hover:bg-[#166534] text-white font-bold h-11 px-6 shadow-md rounded-xl">
+            <Plus className="w-4 h-4 mr-2" /> Nouvel événement
           </Button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <Card className="lg:col-span-2 premium-card">
-            <CardHeader className="pb-8">
-              <CardTitle className="text-[#111827] flex items-center gap-3 text-xl font-bold">
-                <CalendarIcon className="w-6 h-6 text-[#14532D]" />
+            <CardHeader className="p-8 pb-4">
+              <CardTitle className="text-[#111827] flex items-center gap-2 text-lg font-bold">
+                <CalendarIcon className="w-5 h-5 text-[#14532D]" />
                 Prochains événements
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-5">
+            <CardContent className="space-y-4 p-8 pt-0">
               {events.map((e, i) => (
-                <div key={i} className="p-6 rounded-2xl bg-slate-50 border border-slate-100 hover:border-[#14532D]/20 hover:bg-white transition-all duration-300 group cursor-default">
-                  <div className="flex justify-between items-center mb-4">
-                    <p className="text-base font-bold text-[#111827] group-hover:text-[#14532D] transition-colors">{e.title}</p>
-                    <Badge variant="outline" className="text-[10px] font-bold tracking-widest text-[#14532D] border-[#14532D]/20 bg-white uppercase h-7 px-4">
+                <div key={i} className="p-5 rounded-xl bg-slate-50 border border-slate-100 hover:border-[#14532D]/20 hover:bg-white transition-all duration-300">
+                  <div className="flex justify-between items-center mb-3">
+                    <p className="text-sm font-bold text-[#111827]">{e.title}</p>
+                    <Badge variant="outline" className="text-[10px] font-bold tracking-widest text-[#14532D] border-[#14532D]/20 bg-white uppercase h-6 px-3">
                       {e.type}
                     </Badge>
                   </div>
-                  <div className="flex items-center gap-8 text-[11px] text-slate-500 font-semibold uppercase tracking-wider">
-                    <span className="flex items-center gap-2"><Clock className="w-4 h-4 text-slate-400" /> {e.time}</span>
-                    <span className="flex items-center gap-2"><Tag className="w-4 h-4 text-slate-400" /> {e.class}</span>
+                  <div className="flex items-center gap-6 text-[11px] text-slate-500 font-semibold uppercase tracking-wider">
+                    <span className="flex items-center gap-1.5"><Clock className="w-3.5 h-3.5 text-slate-400" /> {e.time}</span>
+                    <span className="flex items-center gap-1.5"><Tag className="w-3.5 h-3.5 text-slate-400" /> {e.class}</span>
                   </div>
                 </div>
               ))}
             </CardContent>
           </Card>
 
-          <Card className="premium-card bg-[#111827] border-none shadow-2xl relative overflow-hidden">
-             <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-16 -mt-16" />
-             <CardHeader className="relative z-10 pt-10">
-              <CardTitle className="text-white text-xl font-bold">Note Administrative</CardTitle>
-              <p className="text-white/40 text-xs font-medium uppercase tracking-widest mt-1">Pense-bête personnel</p>
+          <Card className="premium-card">
+             <CardHeader className="p-8 pb-4">
+              <CardTitle className="text-lg font-bold">Notes Rapides</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-6 relative z-10 mt-4">
+            <CardContent className="space-y-4 p-8 pt-4">
               <textarea 
-                className="w-full h-64 bg-white/5 rounded-2xl border border-white/10 p-6 text-sm text-white placeholder:text-white/20 focus:ring-1 focus:ring-white/20 outline-none transition-all shadow-inner"
-                placeholder="Saisissez vos notes ici..."
+                className="w-full h-48 bg-slate-50 rounded-xl border-none p-4 text-sm text-[#111827] placeholder:text-slate-400 focus:ring-1 focus:ring-[#14532D]/20 outline-none transition-all"
+                placeholder="Pense-bête personnel..."
               />
-              <Button className="w-full bg-[#14532D] hover:bg-[#166534] text-white font-bold h-14 rounded-xl shadow-lg border-none">
-                Sauvegarder la note
+              <Button className="w-full bg-[#14532D] hover:bg-[#166534] text-white font-bold h-12 rounded-xl">
+                Sauvegarder
               </Button>
             </CardContent>
           </Card>
