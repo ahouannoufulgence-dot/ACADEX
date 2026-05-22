@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useMemo, useState } from "react";
@@ -125,179 +124,179 @@ export default function GradesPage() {
 
   return (
     <DashboardLayout>
-      <div className="space-y-10 animate-fade-up">
+      <div className="space-y-12 animate-fade-up">
         {/* Header - Vivid Premium */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-10">
           <div>
-            <h1 className="text-4xl md:text-5xl font-headline font-black text-[#111827] mb-2 tracking-tighter">Contrôle des Notes</h1>
-            <p className="text-slate-500 text-lg font-bold">Supervision et pilotage pédagogique ACADEX.</p>
+            <h1 className="text-5xl md:text-7xl font-headline font-black text-[#0F172A] mb-4 tracking-tighter">Contrôle des Notes</h1>
+            <p className="text-[#0F172A] text-2xl font-black">Supervision et pilotage pédagogique ACADEX.</p>
           </div>
-          <div className="p-6 rounded-[2rem] bg-white border-2 border-primary/10 flex items-center gap-4 shadow-[0_20px_50px_rgba(0,0,0,0.05)]">
-             <div className="p-3 bg-primary rounded-2xl shadow-lg rotate-3">
-                <ShieldCheck className="w-8 h-8 text-white" />
+          <div className="p-8 rounded-[2.5rem] bg-primary text-white flex items-center gap-6 shadow-[0_30px_100px_rgba(20,83,45,0.4)] border-4 border-white/20">
+             <div className="p-4 bg-white rounded-2xl shadow-2xl rotate-3">
+                <ShieldCheck className="w-10 h-10 text-primary" />
              </div>
              <div className="flex flex-col">
-                <span className="text-[10px] font-black text-primary uppercase tracking-[0.2em] leading-none mb-1">Autorité</span>
-                <span className="text-lg font-black text-[#111827] tracking-tight">Super-Administrateur</span>
+                <span className="text-[12px] font-black text-accent uppercase tracking-[0.3em] leading-none mb-1">Autorité Élite</span>
+                <span className="text-2xl font-black tracking-tight">Directeur Académique</span>
              </div>
           </div>
         </div>
 
         {/* Search and Filters - Ultra Clear */}
         <Card className="vivid-box border-none shadow-2xl overflow-hidden bg-white">
-          <CardHeader className="p-8 md:p-12 border-b border-slate-100 bg-slate-50/30">
-            <div className="flex flex-col md:flex-row justify-between gap-8">
-              <div className="relative w-full max-w-xl group">
-                <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-6 h-6 text-slate-300 group-focus-within:text-primary transition-all" />
+          <CardHeader className="p-10 md:p-14 border-b-4 border-slate-50 bg-slate-50/50">
+            <div className="flex flex-col md:flex-row justify-between gap-10">
+              <div className="relative w-full max-w-2xl group">
+                <Search className="absolute left-8 top-1/2 -translate-y-1/2 w-8 h-8 text-[#0F172A] transition-all" />
                 <Input 
                   placeholder="Rechercher un élève, une classe ou une matière..." 
-                  className="pl-16 h-16 bg-white border-2 border-slate-100 rounded-[1.5rem] focus-visible:ring-4 focus-visible:ring-primary/5 font-bold text-lg shadow-sm"
+                  className="pl-20 h-20 bg-white border-4 border-slate-100 rounded-[2rem] focus-visible:ring-8 focus-visible:ring-primary/10 font-black text-2xl text-[#0F172A] shadow-xl"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
-              <div className="flex items-center gap-4">
-                 <Button variant="outline" className="h-16 px-8 rounded-[1.5rem] border-2 border-slate-100 bg-white text-slate-500 font-black flex gap-3 hover:bg-slate-50 transition-all shadow-lg">
-                    <Filter className="w-5 h-5 text-primary" /> 
-                    <span className="uppercase tracking-widest text-xs">Filtrer par Classe</span>
+              <div className="flex items-center gap-6">
+                 <Button variant="outline" className="h-20 px-12 rounded-[2rem] border-4 border-slate-100 bg-white text-[#0F172A] font-black flex gap-4 hover:bg-slate-50 transition-all shadow-2xl text-lg">
+                    <Filter className="w-6 h-6 text-primary" /> 
+                    <span className="uppercase tracking-widest text-sm">Filtrer par Classe</span>
                  </Button>
               </div>
             </div>
           </CardHeader>
           <CardContent className="p-0">
             {loading ? (
-              <div className="flex flex-col items-center justify-center py-40 space-y-6">
-                <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin shadow-2xl" />
-                <p className="text-slate-400 font-black uppercase tracking-[0.3em] text-sm">Chargement du registre...</p>
+              <div className="flex flex-col items-center justify-center py-48 space-y-10">
+                <div className="w-24 h-24 border-8 border-primary border-t-transparent rounded-full animate-spin shadow-2xl" />
+                <p className="text-[#0F172A] font-black uppercase tracking-[0.4em] text-xl">Accès au registre sécurisé...</p>
               </div>
             ) : (
               <div className="overflow-x-auto">
                 <Table>
-                  <TableHeader className="bg-slate-50/80">
-                    <TableRow className="border-slate-100 h-20">
-                      <TableHead className="text-[#111827] font-black pl-12 text-xs uppercase tracking-[0.25em]">Élève</TableHead>
-                      <TableHead className="text-[#111827] font-black text-xs uppercase tracking-[0.25em]">Matière & Type</TableHead>
-                      <TableHead className="text-[#111827] font-black text-center text-xs uppercase tracking-[0.25em]">Note / 20</TableHead>
-                      <TableHead className="text-[#111827] font-black text-xs uppercase tracking-[0.25em]">Statut</TableHead>
-                      <TableHead className="text-right pr-12 text-[#111827] font-black text-xs uppercase tracking-[0.25em]">Actions</TableHead>
+                  <TableHeader className="bg-slate-900">
+                    <TableRow className="border-none h-24">
+                      <TableHead className="text-white font-black pl-16 text-xs uppercase tracking-[0.3em]">Identité Élève</TableHead>
+                      <TableHead className="text-white font-black text-xs uppercase tracking-[0.3em]">Évaluation</TableHead>
+                      <TableHead className="text-white font-black text-center text-xs uppercase tracking-[0.3em]">Score / 20</TableHead>
+                      <TableHead className="text-white font-black text-xs uppercase tracking-[0.3em]">Validation</TableHead>
+                      <TableHead className="text-right pr-16 text-white font-black text-xs uppercase tracking-[0.3em]">Actions</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {filteredGrades.map((g: any) => (
-                      <TableRow key={g.id} className="hover:bg-slate-50 transition-all border-slate-100 group">
-                        <TableCell className="pl-12 py-8">
-                           <div className="flex items-center gap-5">
-                              <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary font-black text-xl shadow-inner border border-primary/5">
+                      <TableRow key={g.id} className="hover:bg-primary/5 transition-all border-slate-100 group">
+                        <TableCell className="pl-16 py-10">
+                           <div className="flex items-center gap-8">
+                              <div className="w-16 h-16 rounded-[1.5rem] bg-primary text-white flex items-center justify-center font-black text-2xl shadow-2xl border-2 border-white/20">
                                 {g.studentName?.[0]}
                               </div>
                               <div className="flex flex-col">
-                                <span className="font-black text-[#111827] text-xl tracking-tight">{g.studentName}</span>
-                                <span className="text-[10px] font-mono text-slate-400 font-bold uppercase tracking-tighter">{g.studentId}</span>
+                                <span className="font-black text-[#0F172A] text-2xl tracking-tighter uppercase">{g.studentName}</span>
+                                <span className="text-xs font-black font-mono text-primary uppercase tracking-widest">{g.studentId}</span>
                               </div>
                            </div>
                         </TableCell>
-                        <TableCell className="py-8">
-                          <div className="space-y-1">
-                            <p className="font-black text-[#111827] text-lg">{g.subjectName}</p>
-                            <Badge variant="outline" className="text-[9px] text-primary border-primary/20 bg-white px-3 font-black uppercase tracking-widest">{g.type}</Badge>
+                        <TableCell className="py-10">
+                          <div className="space-y-2">
+                            <p className="font-black text-[#0F172A] text-xl tracking-tight">{g.subjectName}</p>
+                            <Badge variant="outline" className="text-[10px] text-primary border-2 border-primary/20 bg-white px-5 h-8 font-black uppercase tracking-[0.2em]">{g.type}</Badge>
                           </div>
                         </TableCell>
-                        <TableCell className="text-center py-8">
-                          <div className="inline-block p-1 bg-primary/5 rounded-2xl border border-primary/10">
-                             <div className="bg-white text-primary font-black text-4xl px-8 py-4 rounded-xl shadow-xl">
+                        <TableCell className="text-center py-10">
+                          <div className="inline-block p-1 bg-primary/10 rounded-[1.5rem] border-2 border-primary/20">
+                             <div className="bg-white text-primary font-black text-5xl px-10 py-5 rounded-2xl shadow-2xl">
                                 {g.value}
                              </div>
                           </div>
                         </TableCell>
-                        <TableCell className="py-8">
+                        <TableCell className="py-10">
                           <Badge className={cn(
-                            "text-[10px] font-black px-4 py-1.5 h-8 uppercase tracking-[0.15em] border-none shadow-sm",
-                            g.status === "Confirmé" ? "bg-accent/20 text-accent" : "bg-amber-400/20 text-amber-600"
+                            "text-[10px] font-black px-6 py-2 h-10 uppercase tracking-[0.2em] border-none shadow-xl",
+                            g.status === "Confirmé" ? "bg-accent text-white" : "bg-primary text-white"
                           )} variant="outline">
                             {g.status}
                           </Badge>
                         </TableCell>
-                        <TableCell className="text-right pr-12 py-8">
-                          <div className="flex justify-end gap-3 opacity-0 group-hover:opacity-100 transition-all">
+                        <TableCell className="text-right pr-16 py-10">
+                          <div className="flex justify-end gap-6 opacity-0 group-hover:opacity-100 transition-all translate-x-4 group-hover:translate-x-0">
                             <Dialog>
                               <DialogTrigger asChild>
                                 <Button 
-                                  className="h-14 px-6 bg-primary/10 hover:bg-primary text-primary hover:text-white rounded-2xl font-black text-xs uppercase tracking-widest gap-2 shadow-sm transition-all"
+                                  className="h-16 px-10 bg-primary text-white hover:bg-slate-900 rounded-2xl font-black text-xs uppercase tracking-widest gap-4 shadow-2xl transition-all"
                                   onClick={() => runAiAnalysis(g.studentId, g.studentName)}
                                 >
-                                  <BrainCircuit className="w-5 h-5" /> Bilan IA
+                                  <BrainCircuit className="w-6 h-6" /> Bilan IA
                                 </Button>
                               </DialogTrigger>
-                              <DialogContent className="rounded-[2.5rem] border-none shadow-2xl sm:max-w-[600px] p-0 overflow-hidden bg-white">
-                                <DialogHeader className="p-10 bg-primary text-white border-b-4 border-accent">
-                                  <div className="flex items-center gap-6">
-                                    <div className="w-20 h-20 bg-white rounded-[2rem] flex items-center justify-center text-primary shadow-2xl animate-pulse">
-                                      <BrainCircuit className="w-12 h-12" />
+                              <DialogContent className="rounded-[3.5rem] border-none shadow-[0_50px_150px_rgba(0,0,0,0.3)] sm:max-w-[700px] p-0 overflow-hidden bg-white">
+                                <DialogHeader className="p-12 bg-primary text-white border-b-8 border-accent">
+                                  <div className="flex items-center gap-8">
+                                    <div className="w-24 h-24 bg-white rounded-[2.5rem] flex items-center justify-center text-primary shadow-2xl animate-pulse">
+                                      <BrainCircuit className="w-14 h-14" />
                                     </div>
                                     <div>
-                                      <DialogTitle className="text-4xl font-black tracking-tighter">Conseiller Pédagogique IA</DialogTitle>
-                                      <DialogDescription className="text-primary-foreground/80 font-bold text-lg">
-                                        Analyse du dossier de : <br/><b>{selectedStudentForAi?.name}</b>
+                                      <DialogTitle className="text-5xl font-black tracking-tighter">Conseiller Pédagogique IA</DialogTitle>
+                                      <DialogDescription className="text-white font-black text-xl mt-2">
+                                        Analyse stratégique : <br/><b>{selectedStudentForAi?.name}</b>
                                       </DialogDescription>
                                     </div>
                                   </div>
                                 </DialogHeader>
-                                <div className="p-10 bg-slate-50/50">
+                                <div className="p-12 bg-[#F1F5F9]">
                                   {isAiLoading ? (
-                                    <div className="flex flex-col items-center justify-center py-20 space-y-6">
-                                      <Loader2 className="w-16 h-16 animate-spin text-primary" />
-                                      <p className="text-xl font-black text-slate-400 uppercase tracking-widest">Calcul de la stratégie...</p>
+                                    <div className="flex flex-col items-center justify-center py-24 space-y-8">
+                                      <Loader2 className="w-20 h-20 animate-spin text-primary" />
+                                      <p className="text-2xl font-black text-slate-400 uppercase tracking-[0.3em]">Génération du rapport d'excellence...</p>
                                     </div>
                                   ) : aiAnalysis ? (
-                                    <div className="space-y-8 animate-in fade-in zoom-in duration-300">
-                                      <div className="grid grid-cols-2 gap-6">
-                                        <div className="p-6 rounded-3xl bg-white shadow-xl border-2 border-slate-100">
-                                          <div className="flex items-center gap-3 mb-4">
-                                            <div className="p-2 bg-accent/10 rounded-xl"><Award className="w-5 h-5 text-accent" /></div>
-                                            <p className="text-xs font-black uppercase text-slate-400 tracking-widest">Forces</p>
+                                    <div className="space-y-10 animate-in fade-in zoom-in duration-500">
+                                      <div className="grid grid-cols-2 gap-8">
+                                        <div className="p-8 rounded-[2.5rem] bg-white shadow-2xl border-4 border-slate-50">
+                                          <div className="flex items-center gap-4 mb-6">
+                                            <div className="p-3 bg-accent text-white rounded-2xl shadow-xl"><Award className="w-6 h-6" /></div>
+                                            <p className="text-xs font-black uppercase text-slate-400 tracking-[0.25em]">Forces Académiques</p>
                                           </div>
-                                          <div className="flex flex-wrap gap-2">
+                                          <div className="flex flex-wrap gap-3">
                                             {aiAnalysis.strengths.map((s, i) => (
-                                              <Badge key={i} className="bg-accent/10 text-accent border-none font-bold text-[10px] px-3">{s}</Badge>
+                                              <Badge key={i} className="bg-accent/10 text-accent border-2 border-accent/20 font-black text-[11px] px-5 py-1.5 rounded-full">{s}</Badge>
                                             ))}
                                           </div>
                                         </div>
-                                        <div className="p-6 rounded-3xl bg-white shadow-xl border-2 border-slate-100">
-                                          <div className="flex items-center gap-3 mb-4">
-                                            <div className="p-2 bg-amber-100 rounded-xl"><TrendingUp className="w-5 h-5 text-amber-600" /></div>
-                                            <p className="text-xs font-black uppercase text-slate-400 tracking-widest">Vigilances</p>
+                                        <div className="p-8 rounded-[2.5rem] bg-white shadow-2xl border-4 border-slate-50">
+                                          <div className="flex items-center gap-4 mb-6">
+                                            <div className="p-3 bg-primary text-white rounded-2xl shadow-xl"><TrendingUp className="w-6 h-6" /></div>
+                                            <p className="text-xs font-black uppercase text-slate-400 tracking-[0.25em]">Axe de Progrès</p>
                                           </div>
-                                          <div className="flex flex-wrap gap-2">
+                                          <div className="flex flex-wrap gap-3">
                                             {aiAnalysis.weaknesses.map((w, i) => (
-                                              <Badge key={i} className="bg-amber-100 text-amber-600 border-none font-bold text-[10px] px-3">{w}</Badge>
+                                              <Badge key={i} className="bg-primary/10 text-primary border-2 border-primary/20 font-black text-[11px] px-5 py-1.5 rounded-full">{w}</Badge>
                                             ))}
                                           </div>
                                         </div>
                                       </div>
 
-                                      <div className="p-8 rounded-[2.5rem] bg-white shadow-2xl border-4 border-primary/5 space-y-4">
-                                        <div className="flex items-center gap-3">
-                                          <Sparkles className="w-6 h-6 text-primary animate-pulse" />
-                                          <p className="text-sm font-black uppercase text-primary tracking-[0.2em]">Diagnostic IA</p>
+                                      <div className="p-10 rounded-[3rem] bg-white shadow-2xl border-4 border-primary/10 space-y-6">
+                                        <div className="flex items-center gap-4">
+                                          <Sparkles className="w-8 h-8 text-primary animate-pulse" />
+                                          <p className="text-base font-black uppercase text-primary tracking-[0.3em]">Diagnostic ACADEX AI</p>
                                         </div>
-                                        <p className="text-xl font-bold text-[#111827] leading-relaxed italic">"{aiAnalysis.overallAssessment}"</p>
+                                        <p className="text-2xl font-black text-[#0F172A] leading-tight italic">"{aiAnalysis.overallAssessment}"</p>
                                       </div>
 
-                                      <div className="p-8 rounded-[2rem] bg-primary text-white shadow-xl space-y-3">
-                                        <p className="text-xs font-black uppercase tracking-widest opacity-60">Plan d'action suggéré</p>
-                                        <p className="text-lg font-medium leading-relaxed">{aiAnalysis.advice}</p>
+                                      <div className="p-10 rounded-[2.5rem] bg-primary text-white shadow-2xl space-y-4 border-4 border-white/20">
+                                        <p className="text-xs font-black uppercase tracking-[0.3em] opacity-60">Plan d'action prioritaire</p>
+                                        <p className="text-xl font-black leading-snug">{aiAnalysis.advice}</p>
                                       </div>
                                     </div>
                                   ) : (
-                                    <div className="text-center py-20 text-slate-300">
-                                      <AlertCircle className="w-16 h-16 mx-auto mb-4 opacity-10" />
-                                      <p className="text-xl font-black uppercase">Erreur lors de l'analyse</p>
+                                    <div className="text-center py-24 text-slate-400">
+                                      <AlertCircle className="w-20 h-20 mx-auto mb-6 opacity-20" />
+                                      <p className="text-2xl font-black uppercase tracking-widest">Échec de l'analyse</p>
                                     </div>
                                   )}
                                 </div>
-                                <DialogFooter className="p-8 bg-white border-t border-slate-100">
-                                  <Button className="bg-slate-100 hover:bg-slate-200 text-slate-600 font-black h-14 rounded-2xl w-full" onClick={() => setAiAnalysis(null)}>
-                                    Fermer le bilan
+                                <DialogFooter className="p-10 bg-white border-t-4 border-slate-50">
+                                  <Button className="bg-slate-900 hover:bg-primary text-white font-black h-18 rounded-[2rem] w-full text-lg shadow-2xl transition-all" onClick={() => setAiAnalysis(null)}>
+                                    Fermer le Dossier IA
                                   </Button>
                                 </DialogFooter>
                               </DialogContent>
@@ -306,48 +305,47 @@ export default function GradesPage() {
                             <Dialog>
                               <DialogTrigger asChild>
                                 <Button 
-                                  variant="ghost" 
-                                  size="sm" 
-                                  className="h-14 px-6 text-slate-500 hover:text-white hover:bg-primary rounded-2xl font-black text-xs uppercase tracking-widest gap-2 shadow-sm transition-all"
+                                  variant="outline" 
+                                  className="h-16 px-10 border-4 border-slate-100 bg-white text-[#0F172A] hover:bg-primary hover:text-white hover:border-primary rounded-2xl font-black text-xs uppercase tracking-widest gap-4 shadow-2xl transition-all"
                                   onClick={() => {
                                     setEditingGrade(g);
                                     setNewValue(g.value.toString());
                                   }}
                                 >
-                                  <Edit3 className="w-4 h-4" /> Rectifier
+                                  <Edit3 className="w-6 h-6" /> Rectifier
                                 </Button>
                               </DialogTrigger>
-                              <DialogContent className="vivid-box border-none shadow-2xl sm:max-w-[450px] p-0 overflow-hidden bg-white">
-                                <DialogHeader className="p-10 bg-slate-50/50 border-b border-slate-100">
-                                  <div className="flex items-center gap-6">
-                                    <div className="w-16 h-16 bg-primary rounded-[1.5rem] flex items-center justify-center text-white shadow-2xl rotate-3">
-                                      <Sparkles className="w-10 h-10" />
+                              <DialogContent className="vivid-box border-none shadow-[0_60px_180px_rgba(0,0,0,0.4)] sm:max-w-[500px] p-0 overflow-hidden bg-white">
+                                <DialogHeader className="p-12 bg-slate-900 text-white border-b-8 border-primary">
+                                  <div className="flex items-center gap-8">
+                                    <div className="w-20 h-20 bg-primary rounded-[2rem] flex items-center justify-center text-white shadow-2xl rotate-6">
+                                      <Sparkles className="w-12 h-12" />
                                     </div>
                                     <div>
-                                      <DialogTitle className="text-3xl font-black text-[#111827] tracking-tighter">Ajustement</DialogTitle>
-                                      <DialogDescription className="text-base font-bold text-slate-500">
-                                        Correction de : <br/><b>{editingGrade?.studentName}</b>
+                                      <DialogTitle className="text-4xl font-black tracking-tighter">Ajustement Élite</DialogTitle>
+                                      <DialogDescription className="text-white font-black text-lg mt-1 opacity-80">
+                                        Correction : <b>{editingGrade?.studentName}</b>
                                       </DialogDescription>
                                     </div>
                                   </div>
                                 </DialogHeader>
-                                <div className="p-10 space-y-8">
-                                  <div className="space-y-4">
-                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.25em] ml-2">Nouvelle Note / 20</label>
+                                <div className="p-12 space-y-10 bg-white">
+                                  <div className="space-y-6">
+                                    <label className="text-[12px] font-black text-[#0F172A] uppercase tracking-[0.3em] ml-4">Nouvelle Note / 20</label>
                                     <Input 
                                       type="number" 
                                       step="0.25" 
                                       max="20"
                                       min="0"
-                                      className="h-24 text-center text-6xl font-black text-primary bg-slate-50 border-4 border-slate-100 rounded-[2rem] focus-visible:ring-0 focus-visible:border-primary shadow-inner"
+                                      className="h-32 text-center text-8xl font-black text-primary bg-[#F1F5F9] border-4 border-slate-100 rounded-[3rem] focus-visible:ring-0 focus-visible:border-primary shadow-inner"
                                       value={newValue}
                                       onChange={(e) => setNewValue(e.target.value)}
                                     />
                                   </div>
                                 </div>
-                                <DialogFooter className="p-10 pt-0">
-                                  <Button className="bg-primary hover:bg-primary/90 text-white font-black w-full h-20 rounded-[2rem] shadow-2xl transition-all text-xl" onClick={handleUpdate}>
-                                    Confirmer
+                                <DialogFooter className="p-12 pt-0">
+                                  <Button className="bg-primary hover:bg-slate-900 text-white font-black w-full h-24 rounded-[2.5rem] shadow-[0_30px_80px_rgba(20,83,45,0.4)] transition-all text-2xl border-4 border-white/10" onClick={handleUpdate}>
+                                    Confirmer la Rectification
                                   </Button>
                                 </DialogFooter>
                               </DialogContent>
@@ -358,12 +356,12 @@ export default function GradesPage() {
                     ))}
                     {filteredGrades.length === 0 && (
                       <TableRow>
-                        <TableCell colSpan={5} className="text-center py-48 text-slate-300">
-                          <div className="flex flex-col items-center space-y-6">
-                            <div className="p-10 bg-slate-50 rounded-[3rem] border-4 border-slate-100 shadow-inner">
-                               <AlertCircle className="w-20 h-20 opacity-10" />
+                        <TableCell colSpan={5} className="text-center py-64">
+                          <div className="flex flex-col items-center space-y-10">
+                            <div className="p-16 bg-white rounded-[4rem] border-8 border-slate-50 shadow-inner">
+                               <AlertCircle className="w-32 h-32 text-slate-100" />
                             </div>
-                            <p className="text-2xl font-black uppercase tracking-[0.2em] opacity-40">Aucune donnée à superviser</p>
+                            <p className="text-3xl font-black uppercase text-[#0F172A] tracking-[0.3em] opacity-40">Aucune donnée à superviser</p>
                           </div>
                         </TableCell>
                       </TableRow>
