@@ -275,7 +275,7 @@ export default function SettingsPage() {
                       <GraduationCap className="w-10 h-10 md:w-16 md:h-16" />
                    </div>
                    <div className="text-right">
-                      <p className="text-[10px] md:text-sm font-black text-slate-400 uppercase tracking-[0.4em]">Inscrites</p>
+                      <p className="text-[10px] md:sm font-black text-slate-400 uppercase tracking-[0.4em]">Inscrites</p>
                       <p className="text-3xl md:text-7xl font-black text-[#0F172A] leading-none">{subjects?.length || 0}</p>
                    </div>
                 </div>
@@ -283,38 +283,38 @@ export default function SettingsPage() {
               <CardContent className="p-0 pt-10">
                 <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-5 gap-4 md:gap-10 mb-10 md:mb-20 p-6 md:p-16 rounded-[2.5rem] md:rounded-[4rem] bg-slate-50 border-4 border-slate-100 shadow-inner">
                   <div className="col-span-2 lg:col-span-1 space-y-3">
-                    <label className="text-[10px] md:text-sm font-black text-slate-400 uppercase tracking-[0.3em] ml-2">Intitulé</label>
-                    <Input 
+                    <label className="text-[10px] md:sm font-black text-slate-400 uppercase tracking-[0.3em] ml-2">Intitulé</label>
+                    <input 
                       placeholder="Ex: Maths" 
-                      className="h-14 md:h-20 bg-white border-4 border-slate-200 rounded-xl md:rounded-2xl font-black text-lg md:text-2xl focus:border-primary shadow-xl text-[#0F172A]"
+                      className="h-14 md:h-20 bg-white border-4 border-slate-200 rounded-xl md:rounded-2xl font-black text-lg md:text-2xl px-5 outline-none focus:border-primary shadow-xl text-[#0F172A]"
                       value={newSub.subject}
                       onChange={e => setNewSub({...newSub, subject: e.target.value})}
                     />
                   </div>
                   <div className="space-y-3">
-                    <label className="text-[10px] md:text-sm font-black text-slate-400 uppercase tracking-[0.3em] ml-2">Niveau</label>
-                    <Input 
+                    <label className="text-[10px] md:sm font-black text-slate-400 uppercase tracking-[0.3em] ml-2">Niveau</label>
+                    <input 
                       placeholder="Collège" 
-                      className="h-14 md:h-20 bg-white border-4 border-slate-200 rounded-xl md:rounded-2xl font-bold text-lg md:text-2xl text-[#0F172A] shadow-xl"
+                      className="h-14 md:h-20 bg-white border-4 border-slate-200 rounded-xl md:rounded-2xl font-bold text-lg md:text-2xl px-5 outline-none text-[#0F172A] shadow-xl"
                       value={newSub.level}
                       onChange={e => setNewSub({...newSub, level: e.target.value})}
                     />
                   </div>
                   <div className="space-y-3">
-                    <label className="text-[10px] md:text-sm font-black text-slate-400 uppercase tracking-[0.3em] ml-2">Classe</label>
-                    <Input 
+                    <label className="text-[10px] md:sm font-black text-slate-400 uppercase tracking-[0.3em] ml-2">Classe</label>
+                    <input 
                       placeholder="3EME" 
-                      className="h-14 md:h-20 bg-white border-4 border-slate-200 rounded-xl md:rounded-2xl font-bold text-lg md:text-2xl text-[#0F172A] shadow-xl"
+                      className="h-14 md:h-20 bg-white border-4 border-slate-200 rounded-xl md:rounded-2xl font-bold text-lg md:text-2xl px-5 outline-none text-[#0F172A] shadow-xl"
                       value={newSub.gradeLevel}
                       onChange={e => setNewSub({...newSub, gradeLevel: e.target.value.toUpperCase()})}
                     />
                   </div>
                   <div className="space-y-3">
-                    <label className="text-[10px] md:text-sm font-black text-slate-400 uppercase tracking-[0.3em] ml-2">Coeff</label>
-                    <Input 
+                    <label className="text-[10px] md:sm font-black text-slate-400 uppercase tracking-[0.3em] ml-2">Coeff</label>
+                    <input 
                       type="number" 
                       placeholder="4" 
-                      className="h-14 md:h-20 bg-white border-4 border-slate-200 rounded-xl md:rounded-2xl text-center font-black text-2xl md:text-4xl text-primary focus:border-primary shadow-xl"
+                      className="h-14 md:h-20 bg-white border-4 border-slate-200 rounded-xl md:rounded-2xl text-center font-black text-2xl md:text-4xl text-primary outline-none focus:border-primary shadow-xl"
                       value={newSub.coeff}
                       onChange={e => setNewSub({...newSub, coeff: e.target.value})}
                     />
