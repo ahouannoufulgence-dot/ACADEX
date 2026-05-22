@@ -132,9 +132,9 @@ export default function GradesPage() {
             <h1 className="text-3xl md:text-5xl font-headline font-black text-[#0F172A] mb-2 tracking-tighter uppercase leading-none">Contrôle des Notes</h1>
             <p className="text-[#0F172A] text-[10px] md:text-xl font-black opacity-80 uppercase tracking-widest">Pilotage pédagogique ACADEX</p>
           </div>
-          <div className="p-3 md:p-5 rounded-xl md:rounded-2xl bg-primary text-white flex items-center gap-3 md:gap-4 shadow-xl border-2 border-white/10">
-             <div className="p-2 bg-white rounded-lg shadow-md rotate-3">
-                <ShieldCheck className="w-4 h-4 md:w-6 md:h-6 text-primary" />
+          <div className="p-3 md:p-5 rounded-xl md:rounded-2xl bg-primary text-white flex items-center gap-4 md:gap-5 shadow-xl border-2 border-white/10">
+             <div className="p-3 bg-white rounded-lg shadow-md rotate-3">
+                <ShieldCheck className="w-6 h-6 md:w-8 md:h-8 text-primary" />
              </div>
              <div className="flex flex-col">
                 <span className="text-[7px] md:text-[9px] font-black text-accent uppercase tracking-widest leading-none mb-0.5">Autorité</span>
@@ -148,7 +148,7 @@ export default function GradesPage() {
           <CardHeader className="p-6 md:p-8 border-b-2 border-slate-50 bg-slate-50/50">
             <div className="flex flex-col md:flex-row justify-between gap-4">
               <div className="relative w-full max-w-xl group">
-                <Search className="absolute left-4 md:left-5 top-1/2 -translate-y-1/2 w-4 h-4 md:w-5 md:h-5 text-[#0F172A] opacity-30" />
+                <Search className="absolute left-4 md:left-5 top-1/2 -translate-y-1/2 w-6 h-6 text-[#0F172A] opacity-30" />
                 <Input 
                   placeholder="Rechercher..." 
                   className="pl-12 h-11 md:h-12 bg-white border-2 border-slate-100 rounded-xl focus-visible:ring-4 focus-visible:ring-primary/5 font-black text-sm md:text-lg text-[#0F172A] shadow-md"
@@ -157,7 +157,7 @@ export default function GradesPage() {
                 />
               </div>
               <Button variant="outline" className="h-11 md:h-12 px-6 rounded-xl border-2 border-slate-100 bg-white text-[#0F172A] font-black flex gap-2 hover:bg-slate-50 shadow-md text-[10px] md:text-sm">
-                <Filter className="w-3.5 h-3.5 md:w-4 md:h-4 text-primary" /> 
+                <Filter className="w-5 h-5 md:w-6 md:h-6 text-primary" /> 
                 <span className="uppercase tracking-widest">Filtrer</span>
               </Button>
             </div>
@@ -165,7 +165,7 @@ export default function GradesPage() {
           <CardContent className="p-0">
             {loading ? (
               <div className="flex flex-col items-center justify-center py-20">
-                <Loader2 className="w-8 h-8 md:w-10 md:h-10 animate-spin text-primary mb-4" />
+                <Loader2 className="w-12 h-12 md:w-16 md:h-16 animate-spin text-primary mb-4" />
                 <p className="text-[#0F172A] font-black uppercase tracking-[0.3em] text-[8px] md:text-xs">Accès sécurisé...</p>
               </div>
             ) : (
@@ -183,8 +183,8 @@ export default function GradesPage() {
                     {filteredGrades.map((g: any) => (
                       <TableRow key={g.id} className="hover:bg-primary/5 transition-all border-slate-100 group">
                         <TableCell className="pl-6 md:pl-10 py-4 md:py-6">
-                           <div className="flex items-center gap-3 md:gap-4">
-                              <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-primary text-white flex items-center justify-center font-black text-xs md:text-lg shadow-md border border-white/10 shrink-0">
+                           <div className="flex items-center gap-4 md:gap-5">
+                              <div className="w-10 h-10 md:w-12 md:h-12 rounded-lg bg-primary text-white flex items-center justify-center font-black text-xs md:text-lg shadow-md border border-white/10 shrink-0">
                                 {g.studentName?.[0]}
                               </div>
                               <div className="flex flex-col min-w-0">
@@ -205,21 +205,21 @@ export default function GradesPage() {
                           </div>
                         </TableCell>
                         <TableCell className="text-right pr-6 md:pr-10 py-4 md:py-6">
-                          <div className="flex justify-end gap-2 md:opacity-0 group-hover:opacity-100 transition-all">
+                          <div className="flex justify-end gap-3 md:opacity-0 group-hover:opacity-100 transition-all">
                             <Dialog>
                               <DialogTrigger asChild>
                                 <Button 
-                                  className="h-7 md:h-9 px-2 md:px-4 bg-primary text-white hover:bg-slate-900 rounded-lg font-black text-[7px] md:text-[9px] uppercase tracking-widest gap-1.5 shadow-md"
+                                  className="h-8 md:h-10 px-3 md:px-5 bg-primary text-white hover:bg-slate-900 rounded-lg font-black text-[7px] md:text-[9px] uppercase tracking-widest gap-2 shadow-md"
                                   onClick={() => runAiAnalysis(g.studentId, g.studentName)}
                                 >
-                                  <BrainCircuit className="w-3 h-3 md:w-4 md:h-4" /> Bilan
+                                  <BrainCircuit className="w-5 h-5" /> Bilan
                                 </Button>
                               </DialogTrigger>
                               <DialogContent className="rounded-[1.5rem] md:rounded-[2rem] border-none shadow-2xl sm:max-w-[500px] p-0 overflow-hidden bg-white">
                                 <DialogHeader className="p-6 md:p-8 bg-primary text-white border-b-4 border-accent">
-                                  <div className="flex items-center gap-4">
-                                    <div className="w-10 h-10 md:w-12 md:h-12 bg-white rounded-xl flex items-center justify-center text-primary shadow-lg">
-                                      <BrainCircuit className="w-6 h-6 md:w-8 md:h-8" />
+                                  <div className="flex items-center gap-5">
+                                    <div className="w-12 h-12 md:w-16 md:h-16 bg-white rounded-xl flex items-center justify-center text-primary shadow-lg">
+                                      <BrainCircuit className="w-8 h-8 md:w-10 md:h-10" />
                                     </div>
                                     <div>
                                       <DialogTitle className="text-lg md:text-2xl font-black tracking-tighter">Conseiller IA</DialogTitle>
@@ -231,8 +231,8 @@ export default function GradesPage() {
                                 </DialogHeader>
                                 <div className="p-6 md:p-8 bg-slate-50 max-h-[60vh] overflow-y-auto">
                                   {isAiLoading ? (
-                                    <div className="flex flex-col items-center justify-center py-12 space-y-4">
-                                      <Loader2 className="w-8 h-8 animate-spin text-primary" />
+                                    <div className="flex flex-col items-center justify-center py-12 space-y-6">
+                                      <Loader2 className="w-12 h-12 animate-spin text-primary" />
                                       <p className="text-[10px] md:text-sm font-black text-slate-400 uppercase tracking-widest">Analyse en cours...</p>
                                     </div>
                                   ) : aiAnalysis ? (
@@ -240,7 +240,7 @@ export default function GradesPage() {
                                       <div className="grid grid-cols-2 gap-4">
                                         <div className="p-4 rounded-xl bg-white shadow-md border-2 border-slate-100">
                                           <div className="flex items-center gap-2 mb-2">
-                                            <Award className="w-3.5 h-3.5 text-accent" />
+                                            <Award className="w-5 h-5 text-accent" />
                                             <p className="text-[8px] font-black uppercase text-slate-400">Forces</p>
                                           </div>
                                           <div className="flex flex-wrap gap-1.5">
@@ -251,7 +251,7 @@ export default function GradesPage() {
                                         </div>
                                         <div className="p-4 rounded-xl bg-white shadow-md border-2 border-slate-100">
                                           <div className="flex items-center gap-2 mb-2">
-                                            <TrendingUp className="w-3.5 h-3.5 text-primary" />
+                                            <TrendingUp className="w-5 h-5 text-primary" />
                                             <p className="text-[8px] font-black uppercase text-slate-400">Points</p>
                                           </div>
                                           <div className="flex flex-wrap gap-1.5">
@@ -264,7 +264,7 @@ export default function GradesPage() {
 
                                       <div className="p-5 rounded-2xl bg-white shadow-md border-2 border-primary/10 space-y-2">
                                         <div className="flex items-center gap-2">
-                                          <Sparkles className="w-4 h-4 text-primary" />
+                                          <Sparkles className="w-5 h-5 text-primary" />
                                           <p className="text-[9px] font-black uppercase text-primary tracking-widest">Diagnostic</p>
                                         </div>
                                         <p className="text-xs md:text-base font-black text-[#0F172A] leading-tight italic">"{aiAnalysis.overallAssessment}"</p>
@@ -277,7 +277,7 @@ export default function GradesPage() {
                                     </div>
                                   ) : (
                                     <div className="text-center py-12 text-slate-400">
-                                      <AlertCircle className="w-8 h-8 mx-auto mb-3 opacity-20" />
+                                      <AlertCircle className="w-10 h-10 mx-auto mb-3 opacity-20" />
                                       <p className="text-[10px] font-black uppercase tracking-widest">Échec de l'analyse</p>
                                     </div>
                                   )}
@@ -294,20 +294,20 @@ export default function GradesPage() {
                               <DialogTrigger asChild>
                                 <Button 
                                   variant="outline" 
-                                  className="h-7 md:h-9 px-2 md:px-4 border-2 border-slate-100 bg-white text-[#0F172A] hover:bg-primary hover:text-white rounded-lg font-black text-[7px] md:text-[9px] uppercase tracking-widest gap-1.5 shadow-md"
+                                  className="h-8 md:h-10 px-3 md:px-5 border-2 border-slate-100 bg-white text-[#0F172A] hover:bg-primary hover:text-white rounded-lg font-black text-[7px] md:text-[9px] uppercase tracking-widest gap-2 shadow-md"
                                   onClick={() => {
                                     setEditingGrade(g);
                                     setNewValue(g.value.toString());
                                   }}
                                 >
-                                  <Edit3 className="w-3 h-3 md:w-4 md:h-4" /> Rectifier
+                                  <Edit3 className="w-5 h-5" /> Rectifier
                                 </Button>
                               </DialogTrigger>
                               <DialogContent className="vivid-box border-none shadow-xl sm:max-w-[350px] p-0 overflow-hidden bg-white rounded-[1.5rem]">
                                 <DialogHeader className="p-6 bg-slate-900 text-white border-b-4 border-primary">
-                                  <div className="flex items-center gap-4">
-                                    <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white shadow-lg rotate-6">
-                                      <Sparkles className="w-5 h-5 md:w-6 md:h-6" />
+                                  <div className="flex items-center gap-5">
+                                    <div className="w-12 h-12 bg-primary rounded-xl flex items-center justify-center text-white shadow-lg rotate-6">
+                                      <Sparkles className="w-7 h-7 md:w-9 md:h-9" />
                                     </div>
                                     <div>
                                       <DialogTitle className="text-lg md:text-xl font-black tracking-tighter">Ajustement</DialogTitle>

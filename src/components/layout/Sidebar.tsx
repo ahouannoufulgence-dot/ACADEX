@@ -1,3 +1,4 @@
+
 "use client";
 
 import React from "react";
@@ -76,9 +77,9 @@ export const Sidebar = ({ role, userName, isOpen, onClose, schoolName = "ACADEX"
       isOpen ? "translate-x-0" : "-translate-x-full"
     )}>
       <div className="p-6 pb-6 flex items-center justify-between">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center shadow-lg shrink-0">
-            <span className="text-[#14532D] font-bold text-base">{schoolName[0].toUpperCase()}</span>
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-lg shrink-0">
+            <span className="text-[#14532D] font-bold text-lg">{schoolName[0].toUpperCase()}</span>
           </div>
           <div className="flex flex-col min-w-0">
             <span className="text-white font-headline font-black text-sm leading-tight tracking-tight uppercase truncate">{schoolName}</span>
@@ -86,7 +87,7 @@ export const Sidebar = ({ role, userName, isOpen, onClose, schoolName = "ACADEX"
           </div>
         </div>
         <button className="lg:hidden text-white/60 hover:text-white" onClick={onClose}>
-          <X className="w-4 h-4" />
+          <X className="w-6 h-6" />
         </button>
       </div>
 
@@ -100,17 +101,17 @@ export const Sidebar = ({ role, userName, isOpen, onClose, schoolName = "ACADEX"
                 href={item.href}
                 onClick={() => onClose()}
                 className={cn(
-                  "group flex items-center justify-between px-3 py-1.5 rounded-xl transition-all duration-200",
+                  "group flex items-center justify-between px-3 py-2 rounded-xl transition-all duration-200",
                   isActive 
                     ? "bg-white/15 text-white shadow-sm ring-1 ring-white/10" 
                     : "text-white/60 hover:bg-white/5 hover:text-white"
                 )}
               >
-                <div className="flex items-center gap-2.5">
-                  <item.icon className={cn("w-3.5 h-3.5 transition-colors", isActive ? "text-white" : "text-white/40 group-hover:text-white")} />
+                <div className="flex items-center gap-3">
+                  <item.icon className={cn("w-5 h-5 transition-colors", isActive ? "text-white" : "text-white/40 group-hover:text-white")} />
                   <span className="text-[12px] font-bold uppercase tracking-tighter">{item.name}</span>
                 </div>
-                {isActive && <div className="w-0.5 h-3 bg-white/30 rounded-full" />}
+                {isActive && <div className="w-1 h-4 bg-white/30 rounded-full" />}
               </Link>
             );
           })}
@@ -118,8 +119,8 @@ export const Sidebar = ({ role, userName, isOpen, onClose, schoolName = "ACADEX"
       </div>
 
       <div className="p-4 border-t border-white/5 bg-black/10">
-        <div className="flex items-center gap-2.5 mb-4 px-1">
-          <div className="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center text-white font-bold text-[10px] shrink-0">
+        <div className="flex items-center gap-3 mb-4 px-1">
+          <div className="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center text-white font-bold text-[12px] shrink-0">
             {userName.substring(0, 1).toUpperCase()}
           </div>
           <div className="flex-1 overflow-hidden">
@@ -129,9 +130,9 @@ export const Sidebar = ({ role, userName, isOpen, onClose, schoolName = "ACADEX"
         </div>
         <button 
           onClick={handleLogout}
-          className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-xl text-white/50 hover:bg-red-500/10 hover:text-red-400 transition-all group"
+          className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-white/50 hover:bg-red-500/10 hover:text-red-400 transition-all group"
         >
-          <LogOut className="w-3.5 h-3.5" />
+          <LogOut className="w-5 h-5" />
           <span className="text-[10px] font-black uppercase tracking-widest">Quitter</span>
         </button>
       </div>

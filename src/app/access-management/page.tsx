@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useMemo } from "react";
@@ -147,21 +148,21 @@ export default function AccessManagementPage() {
             <Button 
               onClick={exportAccessPDF}
               variant="outline"
-              className="bg-white/90 border-2 border-slate-100 text-[#0F172A] font-black h-12 md:h-16 px-4 md:px-8 rounded-xl shadow-xl hover:bg-slate-50 flex gap-2 text-[10px] md:text-base backdrop-blur-xl flex-1 md:flex-none uppercase tracking-tighter"
+              className="bg-white/90 border-2 border-slate-100 text-[#0F172A] font-black h-12 md:h-16 px-4 md:px-8 rounded-xl shadow-xl hover:bg-slate-50 flex gap-3 text-[10px] md:text-base backdrop-blur-xl flex-1 md:flex-none uppercase tracking-tighter"
             >
-              <FileDown className="w-4 h-4 md:w-6 md:h-6" /> PDF
+              <FileDown className="w-6 h-6 md:w-8 md:h-8" /> PDF
             </Button>
             <Dialog>
               <DialogTrigger asChild>
-                <Button className="bg-primary hover:bg-slate-900 text-white font-black h-12 md:h-16 px-4 md:px-8 rounded-xl shadow-xl transition-all flex gap-2 text-[10px] md:text-base border-4 border-white/10 uppercase tracking-tighter flex-1 md:flex-none">
-                  <Users className="w-4 h-4 md:w-6 md:h-6" /> Nouveau
+                <Button className="bg-primary hover:bg-slate-900 text-white font-black h-12 md:h-16 px-4 md:px-8 rounded-xl shadow-xl transition-all flex gap-3 text-[10px] md:text-base border-4 border-white/10 uppercase tracking-tighter flex-1 md:flex-none">
+                  <Users className="w-6 h-6 md:w-8 md:h-8" /> Nouveau
                 </Button>
               </DialogTrigger>
               <DialogContent className="vivid-box border-none p-0 overflow-hidden bg-white shadow-2xl sm:max-w-[420px] rounded-[2.5rem]">
                 <DialogHeader className="p-6 md:p-8 bg-primary text-white border-b-4 border-accent">
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-5">
                     <div className="p-3 bg-white rounded-2xl shadow-xl shrink-0 rotate-3">
-                      <ShieldCheck className="w-6 h-6 md:w-8 md:h-8 text-primary" />
+                      <ShieldCheck className="w-8 h-8 md:w-10 md:h-10 text-primary" />
                     </div>
                     <DialogTitle className="text-xl md:text-3xl font-black tracking-tighter uppercase leading-none">Provisionnement Lot</DialogTitle>
                   </div>
@@ -194,7 +195,7 @@ export default function AccessManagementPage() {
                     onClick={handleBulkGenerate} 
                     disabled={isGenerating}
                   >
-                    {isGenerating ? <Loader2 className="w-8 h-8 animate-spin" /> : "Générer Spontanément"}
+                    {isGenerating ? <Loader2 className="w-10 h-10 animate-spin" /> : "Générer Spontanément"}
                   </Button>
                 </DialogFooter>
               </DialogContent>
@@ -204,14 +205,14 @@ export default function AccessManagementPage() {
 
         {/* Small Quadrants Grid for Mobile (2 columns) and Desktop (5 columns) */}
         <div className="space-y-4 md:space-y-8">
-          <div className="flex items-center gap-3 px-2">
-            <div className="w-1 h-4 bg-primary rounded-full" />
+          <div className="flex items-center gap-4 px-2">
+            <div className="w-1.5 h-5 bg-primary rounded-full" />
             <h2 className="text-[9px] md:text-[14px] font-black text-[#0F172A] uppercase tracking-[0.5em]">Identifiants Actifs</h2>
           </div>
           
           {loading ? (
             <div className="flex flex-col items-center justify-center py-32">
-              <Loader2 className="w-10 h-10 md:w-16 md:h-16 animate-spin text-primary mb-6" />
+              <Loader2 className="w-12 h-12 md:w-16 md:h-16 animate-spin text-primary mb-6" />
               <p className="text-[#0F172A] font-black uppercase tracking-[0.4em] text-[8px] md:text-base">Lecture sécurisée...</p>
             </div>
           ) : (
@@ -219,8 +220,8 @@ export default function AccessManagementPage() {
               {students?.map((u: any) => (
                 <Card key={u.id} className="vivid-box border-none shadow-2xl bg-white/95 p-3 md:p-6 group relative overflow-hidden transition-all hover:scale-[1.05] hover:rotate-1 rounded-[1.5rem] md:rounded-[2.5rem]">
                   <div className="flex justify-between items-start mb-3 md:mb-6">
-                    <div className="p-2 md:p-3 bg-primary/10 rounded-xl text-primary shrink-0 rotate-6 border-2 border-primary/5 shadow-md">
-                      <KeyRound className="w-3.5 h-3.5 md:w-6 md:h-6" />
+                    <div className="p-2.5 md:p-4 bg-primary/10 rounded-xl text-primary shrink-0 rotate-6 border-2 border-primary/5 shadow-md">
+                      <KeyRound className="w-6 h-6 md:w-8 md:h-8" />
                     </div>
                     <Badge className="bg-primary text-white text-[6px] md:text-[9px] font-black px-1.5 md:px-3 py-0.5 md:py-1.5 uppercase tracking-widest border-none shadow-lg">
                       PRÊT
@@ -234,22 +235,22 @@ export default function AccessManagementPage() {
                   
                   <div className="mt-4 md:mt-8 flex items-center justify-between border-t-2 border-slate-50 pt-3 md:pt-6">
                     <span className="text-[8px] md:text-base font-black text-primary uppercase tracking-tighter truncate leading-none">{u.gradeLevel}</span>
-                    <div className="flex gap-1 md:gap-2">
+                    <div className="flex gap-2 md:gap-3">
                       <Button 
                         size="icon" 
                         variant="ghost" 
-                        className="h-7 w-7 md:h-10 md:w-10 rounded-xl text-slate-300 hover:text-primary hover:bg-primary/5 transition-all"
+                        className="h-8 w-8 md:h-12 md:w-12 rounded-xl text-slate-300 hover:text-primary hover:bg-primary/5 transition-all"
                         onClick={() => copyToClipboard(u.id)}
                       >
-                        <Copy className="h-3.5 w-3.5 md:h-5 md:w-5" />
+                        <Copy className="h-5 w-5 md:h-6 md:w-6" />
                       </Button>
                       <Button 
                         size="icon" 
                         variant="ghost" 
-                        className="h-7 w-7 md:h-10 md:w-10 rounded-xl text-slate-300 hover:text-destructive hover:bg-destructive/5 transition-all"
+                        className="h-8 w-8 md:h-12 md:w-12 rounded-xl text-slate-300 hover:text-destructive hover:bg-destructive/5 transition-all"
                         onClick={() => handleDelete(u.id)}
                       >
-                        <Trash2 className="h-3.5 w-3.5 md:h-5 md:w-5" />
+                        <Trash2 className="h-5 w-5 md:h-6 md:w-6" />
                       </Button>
                     </div>
                   </div>
@@ -258,8 +259,8 @@ export default function AccessManagementPage() {
               
               {(students?.length === 0 || !students) && !loading && (
                 <div className="col-span-full p-20 md:p-40 text-center bg-white/30 rounded-[3rem] border-4 border-dashed border-white shadow-inner backdrop-blur-2xl">
-                   <div className="w-16 h-16 md:w-24 md:h-24 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-6 opacity-20">
-                    <KeyRound className="w-8 h-8 md:w-12 md:h-12 text-slate-400" />
+                   <div className="w-20 h-20 md:w-28 md:h-28 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-6 opacity-20">
+                    <KeyRound className="w-12 h-12 md:w-16 md:h-16 text-slate-400" />
                    </div>
                   <p className="text-xs md:text-2xl font-black text-slate-400 uppercase tracking-[0.5em] opacity-30">Registre Vierge 2026-2027</p>
                 </div>

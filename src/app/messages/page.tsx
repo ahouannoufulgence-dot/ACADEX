@@ -89,14 +89,14 @@ export default function MessagingPage() {
           <div className="p-6 border-b-2 border-slate-50">
             <h2 className="text-lg font-black text-[#0F172A] uppercase tracking-tighter mb-4">Conversations</h2>
             <div className="relative group">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-300" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300" />
               <Input placeholder="Rechercher..." className="pl-10 bg-slate-50 border-2 border-slate-100 rounded-xl h-10 font-bold text-[#0F172A] text-xs" />
             </div>
           </div>
           <div className="flex-1 overflow-y-auto sidebar-scroll">
             {contacts.map((c, i) => (
-              <div key={i} className="p-4 hover:bg-primary/5 cursor-pointer transition-all border-b border-slate-50 flex items-center gap-3 group">
-                <div className="w-10 h-10 rounded-xl bg-primary text-white flex items-center justify-center font-black text-sm shadow-lg group-hover:scale-105 transition-transform shrink-0">
+              <div key={i} className="p-4 hover:bg-primary/5 cursor-pointer transition-all border-b border-slate-50 flex items-center gap-4 group">
+                <div className="w-12 h-12 rounded-xl bg-primary text-white flex items-center justify-center font-black text-sm shadow-lg group-hover:scale-105 transition-transform shrink-0">
                   {c.name[0]}
                 </div>
                 <div className="flex-1 min-w-0">
@@ -113,30 +113,30 @@ export default function MessagingPage() {
 
         <Card className="flex-1 vivid-box border-none shadow-2xl flex-col bg-white/95 backdrop-blur-xl overflow-hidden p-0 flex rounded-[2rem]">
           <div className="p-4 md:p-6 border-b-2 border-slate-50 flex justify-between items-center bg-slate-50/30">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-primary text-white flex items-center justify-center font-black text-sm md:text-lg shadow-xl shrink-0">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl bg-primary text-white flex items-center justify-center font-black text-sm md:text-lg shadow-xl shrink-0">
                 D
               </div>
               <div>
                 <p className="text-sm md:text-xl font-black text-[#0F172A] tracking-tighter uppercase">Direction ACADEX</p>
                 <div className="flex items-center gap-2">
-                  <div className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
+                  <div className="w-2 h-2 rounded-full bg-accent animate-pulse" />
                   <span className="text-[7px] md:text-[9px] font-black text-slate-400 uppercase tracking-widest">Canal Officiel Sécurisé</span>
                 </div>
               </div>
             </div>
-            <Button variant="ghost" size="icon" className="text-slate-400 hover:text-primary"><MoreHorizontal className="w-5 h-5" /></Button>
+            <Button variant="ghost" size="icon" className="text-slate-400 hover:text-primary"><MoreHorizontal className="w-6 h-6" /></Button>
           </div>
 
           <div ref={scrollRef} className="flex-1 p-4 md:p-8 overflow-y-auto space-y-4 bg-slate-50/20 sidebar-scroll">
             {loading ? (
-              <div className="flex flex-col items-center justify-center h-full space-y-4">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              <div className="flex flex-col items-center justify-center h-full space-y-6">
+                <Loader2 className="w-12 h-12 animate-spin text-primary" />
                 <p className="text-[#0F172A] font-black uppercase tracking-[0.2em] text-[8px]">Cryptage des données...</p>
               </div>
             ) : messages?.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-full text-center space-y-4 opacity-30">
-                <MessageSquare className="w-12 h-12 text-slate-200" />
+              <div className="flex flex-col items-center justify-center h-full text-center space-y-6 opacity-30">
+                <MessageSquare className="w-16 h-16 text-slate-200" />
                 <p className="text-xs font-black text-slate-400 uppercase tracking-widest">Aucun message pour le moment</p>
               </div>
             ) : (
@@ -166,9 +166,9 @@ export default function MessagingPage() {
           </div>
 
           <div className="p-4 md:p-6 border-t-2 border-slate-50 bg-white">
-            <form onSubmit={handleSendMessage} className="flex gap-3 md:gap-4 items-center">
+            <form onSubmit={handleSendMessage} className="flex gap-4 md:gap-5 items-center">
               <Button type="button" variant="ghost" size="icon" className="hidden sm:flex text-slate-400 hover:text-primary h-10 w-10 rounded-xl">
-                <Paperclip className="w-4 h-4" />
+                <Paperclip className="w-5.5 h-5.5" />
               </Button>
               <div className="flex-1 relative">
                 <Input 
@@ -183,7 +183,7 @@ export default function MessagingPage() {
                 className="bg-primary hover:bg-slate-900 text-white font-black h-10 md:h-12 w-10 md:w-16 rounded-xl shadow-xl transition-all active:scale-90 border-2 border-white/10"
                 disabled={!newMessage.trim()}
               >
-                <Send className="w-4 h-4 md:w-5 md:h-5" />
+                <Send className="w-6 h-6" />
               </Button>
             </form>
           </div>

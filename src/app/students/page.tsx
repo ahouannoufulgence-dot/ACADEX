@@ -160,15 +160,15 @@ export default function StudentsPage() {
           </div>
           <Dialog onOpenChange={(open) => !open && (setAiResult(null), setFormData({ firstName: "", lastName: "", gradeLevel: "", id: "" }))}>
             <DialogTrigger asChild>
-              <Button className="bg-primary hover:bg-slate-900 text-white font-black h-10 md:h-12 px-5 rounded-xl shadow-xl transition-all flex gap-2 text-[10px] md:text-sm uppercase tracking-tighter border-2 border-white/10 shrink-0">
-                <UserPlus className="w-3.5 h-3.5" /> Nouveau
+              <Button className="bg-primary hover:bg-slate-900 text-white font-black h-10 md:h-12 px-5 rounded-xl shadow-xl transition-all flex gap-3 text-[10px] md:text-sm uppercase tracking-tighter border-2 border-white/10 shrink-0">
+                <UserPlus className="w-5 h-5" /> Nouveau
               </Button>
             </DialogTrigger>
             <DialogContent className="vivid-box border-none bg-white p-0 overflow-hidden shadow-2xl sm:max-w-[400px] rounded-[2rem]">
               <DialogHeader className="p-5 bg-primary text-white border-b-2 border-accent">
-                <div className="flex items-center gap-2">
-                  <div className="p-1.5 bg-white rounded-lg shadow-md shrink-0">
-                    <Sparkles className="w-3.5 h-3.5 text-primary" />
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-white rounded-lg shadow-md shrink-0">
+                    <Sparkles className="w-5 h-5 text-primary" />
                   </div>
                   <DialogTitle className="text-sm font-black tracking-tighter uppercase">Inscription Élite</DialogTitle>
                 </div>
@@ -177,7 +177,7 @@ export default function StudentsPage() {
               <div className="p-6 space-y-4">
                 {isProvisioning ? (
                   <div className="py-8 space-y-6 flex flex-col items-center">
-                    <Loader2 className="w-10 h-10 text-primary animate-spin" />
+                    <Loader2 className="w-12 h-12 text-primary animate-spin" />
                     <div className="w-full space-y-2">
                        <div className="flex justify-between text-[8px] font-black uppercase tracking-widest text-primary">
                           <span>Création...</span>
@@ -185,7 +185,7 @@ export default function StudentsPage() {
                        </div>
                        <Progress value={provisionProgress} className="h-1.5" />
                        <div className="p-3 bg-slate-50 rounded-xl border-2 border-slate-100 flex items-center justify-between">
-                         <CheckCircle2 className="w-3.5 h-3.5 text-primary" />
+                         <CheckCircle2 className="w-5 h-5 text-primary" />
                          <span className="font-mono font-black text-primary text-base">{formData.id}</span>
                        </div>
                     </div>
@@ -223,7 +223,7 @@ export default function StudentsPage() {
                     Valider Inscription
                   </Button>
                   <Button variant="ghost" className="text-[8px] uppercase font-black text-slate-400 hover:text-primary h-8" onClick={handleAiProvision} disabled={isAiLoading || !formData.id}>
-                     {isAiLoading ? <Loader2 className="w-3 h-3 animate-spin mr-2" /> : <Sparkles className="w-3 h-3 mr-2" />} Affiner avec l'IA
+                     {isAiLoading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Sparkles className="w-4 h-4 mr-2" />} Affiner avec l'IA
                   </Button>
                 </DialogFooter>
               )}
@@ -234,13 +234,13 @@ export default function StudentsPage() {
         <Card className="vivid-box border-none shadow-xl overflow-hidden bg-white/95 p-0 rounded-[2rem]">
           <CardHeader className="p-4 md:p-6 border-b-2 border-slate-50">
             <div className="relative w-full max-w-sm">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-3 h-3 text-slate-300" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-300" />
               <Input placeholder="Rechercher..." className="pl-10 h-10 bg-slate-50 border-2 border-slate-100 rounded-xl font-black text-xs text-[#0F172A]" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
             </div>
           </CardHeader>
           <CardContent className="p-0">
             {loading ? (
-              <div className="flex justify-center py-20"><Loader2 className="w-6 h-6 animate-spin text-primary" /></div>
+              <div className="flex justify-center py-20"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>
             ) : (
               <div className="overflow-x-auto">
                 <Table>
@@ -255,8 +255,8 @@ export default function StudentsPage() {
                     {filteredStudents.map((s: any) => (
                       <TableRow key={s.id} className="hover:bg-primary/5 transition-all border-slate-50">
                         <TableCell className="pl-6 py-3">
-                           <div className="flex items-center gap-3">
-                              <div className="w-6 h-6 rounded-lg bg-primary text-white flex items-center justify-center font-black text-[10px] shrink-0">
+                           <div className="flex items-center gap-4">
+                              <div className="w-8 h-8 rounded-lg bg-primary text-white flex items-center justify-center font-black text-[11px] shrink-0">
                                 {s.lastName?.[0]}
                               </div>
                               <div className="min-w-0">
@@ -267,8 +267,8 @@ export default function StudentsPage() {
                         </TableCell>
                         <TableCell className="py-3 font-black text-[#0F172A] text-xs">{s.gradeLevel}</TableCell>
                         <TableCell className="text-right pr-6 py-3">
-                          <Button variant="ghost" size="icon" className="h-7 w-7 text-primary hover:bg-primary hover:text-white rounded-lg" onClick={() => downloadStudentPDF(s.id, s.firstName || "", s.lastName || "", s.gradeLevel)}>
-                            <FileDown className="w-3.5 h-3.5" />
+                          <Button variant="ghost" size="icon" className="h-8 w-8 text-primary hover:bg-primary hover:text-white rounded-lg" onClick={() => downloadStudentPDF(s.id, s.firstName || "", s.lastName || "", s.gradeLevel)}>
+                            <FileDown className="w-5 h-5" />
                           </Button>
                         </TableCell>
                       </TableRow>

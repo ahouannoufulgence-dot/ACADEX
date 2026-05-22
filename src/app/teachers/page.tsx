@@ -134,8 +134,8 @@ export default function TeachersPage() {
             </p>
           </div>
           
-          <Button className="bg-primary hover:bg-slate-900 text-white font-black h-11 md:h-14 px-6 md:px-8 rounded-xl md:rounded-2xl shadow-xl transition-all flex gap-2 text-[10px] md:text-base border-2 border-white/10 uppercase tracking-tighter w-full md:w-auto">
-            <UserPlus className="w-4 h-4 md:w-5 md:h-5" /> Nouveau Profil
+          <Button className="bg-primary hover:bg-slate-900 text-white font-black h-11 md:h-14 px-6 md:px-8 rounded-xl md:rounded-2xl shadow-xl transition-all flex gap-3 text-[10px] md:text-base border-2 border-white/10 uppercase tracking-tighter w-full md:w-auto">
+            <UserPlus className="w-5 h-5 md:w-6 md:h-6" /> Nouveau Profil
           </Button>
         </div>
 
@@ -143,8 +143,8 @@ export default function TeachersPage() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 px-2">
           <div className="vivid-box bg-white p-4 md:p-6 rounded-[1.5rem] flex flex-col justify-between shadow-xl border-2 border-slate-50">
              <div className="flex justify-between items-start mb-2">
-                <div className="w-7 h-7 bg-primary/10 rounded-lg flex items-center justify-center text-primary rotate-3">
-                  <Users className="w-3.5 h-3.5" />
+                <div className="w-9 h-9 bg-primary/10 rounded-lg flex items-center justify-center text-primary rotate-3">
+                  <Users className="w-5 h-5" />
                 </div>
                 <Badge className="bg-primary text-white text-[6px] font-black uppercase tracking-widest px-2">Actifs</Badge>
              </div>
@@ -155,8 +155,8 @@ export default function TeachersPage() {
           </div>
           <div className="vivid-box bg-white p-4 md:p-6 rounded-[1.5rem] flex flex-col justify-between shadow-xl border-2 border-slate-50">
              <div className="flex justify-between items-start mb-2">
-                <div className="w-7 h-7 bg-primary/10 rounded-lg flex items-center justify-center text-primary -rotate-3">
-                  <BookOpen className="w-3.5 h-3.5" />
+                <div className="w-9 h-9 bg-primary/10 rounded-lg flex items-center justify-center text-primary -rotate-3">
+                  <BookOpen className="w-5 h-5" />
                 </div>
                 <Badge className="bg-accent text-white text-[6px] font-black uppercase tracking-widest px-2">Elite</Badge>
              </div>
@@ -171,7 +171,7 @@ export default function TeachersPage() {
         <div className="px-2">
           <Card className="vivid-box border-none shadow-2xl bg-white/95 rounded-[1.5rem] md:rounded-[2rem] p-4 md:p-6">
             <div className="relative w-full max-w-xl group">
-              <Search className="absolute left-4 md:left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-300 group-focus-within:text-primary transition-colors" />
+              <Search className="absolute left-4 md:left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300 group-focus-within:text-primary transition-colors" />
               <Input 
                 placeholder="RECHERCHER UN ENSEIGNANT OU ID..." 
                 className="pl-12 h-11 md:h-12 bg-slate-50 border-2 border-slate-100 rounded-xl md:rounded-2xl font-black text-[10px] md:text-lg text-[#0F172A] uppercase tracking-widest placeholder:opacity-30 focus-visible:ring-0"
@@ -196,12 +196,12 @@ export default function TeachersPage() {
               </TableHeader>
               <TableBody className="bg-white/95 backdrop-blur-xl">
                 {loading ? (
-                  <TableRow><TableCell colSpan={4} className="py-20 text-center"><Loader2 className="w-8 h-8 animate-spin text-primary mx-auto" /></TableCell></TableRow>
+                  <TableRow><TableCell colSpan={4} className="py-20 text-center"><Loader2 className="w-10 h-10 animate-spin text-primary mx-auto" /></TableCell></TableRow>
                 ) : filteredTeachers.map((t: any) => (
                   <TableRow key={t.id} className="hover:bg-primary/5 transition-all border-slate-50 group">
                     <TableCell className="pl-8 py-5">
                       <div className="flex items-center gap-4">
-                        <div className="w-9 h-9 rounded-xl bg-primary text-white flex items-center justify-center font-black text-base shadow-lg border-2 border-white/10 shrink-0">
+                        <div className="w-10 h-10 rounded-xl bg-primary text-white flex items-center justify-center font-black text-base shadow-lg border-2 border-white/10 shrink-0">
                           {(t.lastName?.[0] || t.name?.[0] || "?").toUpperCase()}
                         </div>
                         <div className="flex flex-col min-w-0">
@@ -211,7 +211,7 @@ export default function TeachersPage() {
                           <div className="flex items-center gap-2 mt-1.5">
                              <p className="text-[9px] font-black font-mono text-primary uppercase tracking-tighter bg-primary/5 px-1.5 rounded">{t.id}</p>
                              <button onClick={() => copyToClipboard(t.id)} className="text-slate-300 hover:text-primary transition-colors">
-                               {copiedId === t.id ? <Check className="w-3 h-3 text-accent" /> : <Copy className="w-3 h-3" />}
+                               {copiedId === t.id ? <Check className="w-4 h-4 text-accent" /> : <Copy className="w-4 h-4" />}
                              </button>
                           </div>
                         </div>
@@ -224,14 +224,14 @@ export default function TeachersPage() {
                     </TableCell>
                     <TableCell className="text-center py-5">
                        <div className="flex items-center justify-center gap-2">
-                          <div className={cn("w-1.5 h-1.5 rounded-full", t.status === "Suspendu" ? "bg-red-500" : "bg-accent")} />
+                          <div className={cn("w-2 h-2 rounded-full", t.status === "Suspendu" ? "bg-red-500" : "bg-accent")} />
                           <span className="text-[8px] font-black text-[#0F172A] uppercase tracking-widest">{t.status || "Actif"}</span>
                        </div>
                     </TableCell>
                     <TableCell className="text-right pr-8 py-5">
-                      <div className="flex justify-end gap-1.5 md:opacity-0 group-hover:opacity-100 transition-all">
-                        <Button variant="ghost" size="icon" className="h-8 w-8 text-primary hover:bg-primary/5 rounded-lg" onClick={() => handleEditClick(t)}><Edit3 className="w-3.5 h-3.5" /></Button>
-                        <Button variant="ghost" size="icon" className="h-8 w-8 text-red-500 hover:bg-red-50 rounded-lg" onClick={() => handleDelete(t.id)}><Trash2 className="w-3.5 h-3.5" /></Button>
+                      <div className="flex justify-end gap-2 md:opacity-0 group-hover:opacity-100 transition-all">
+                        <Button variant="ghost" size="icon" className="h-9 w-9 text-primary hover:bg-primary/5 rounded-lg" onClick={() => handleEditClick(t)}><Edit3 className="w-5 h-5" /></Button>
+                        <Button variant="ghost" size="icon" className="h-9 w-9 text-red-500 hover:bg-red-50 rounded-lg" onClick={() => handleDelete(t.id)}><Trash2 className="w-5 h-5" /></Button>
                       </div>
                     </TableCell>
                   </TableRow>
@@ -244,15 +244,15 @@ export default function TeachersPage() {
         {/* Mobile Content - Micro Cadrans */}
         <div className="grid grid-cols-2 gap-3 lg:hidden px-2 pb-10">
           {loading ? (
-            <div className="col-span-full py-20 flex justify-center"><Loader2 className="w-6 h-6 animate-spin text-primary" /></div>
+            <div className="col-span-full py-20 flex justify-center"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>
           ) : filteredTeachers.map((t: any) => (
             <Card key={t.id} className="vivid-box border-none shadow-xl bg-white p-3 rounded-[1.25rem] flex flex-col justify-between group transition-all active:scale-95 border-2 border-slate-50">
               <div className="flex justify-between items-start mb-2">
-                 <div className="w-6 h-6 rounded-lg bg-primary text-white flex items-center justify-center font-black text-[10px] shadow-md">
+                 <div className="w-8 h-8 rounded-lg bg-primary text-white flex items-center justify-center font-black text-[10px] shadow-md">
                    {t.lastName?.[0] || "?"}
                  </div>
                  <button onClick={() => copyToClipboard(t.id)} className="text-slate-300">
-                    {copiedId === t.id ? <Check className="w-2.5 h-2.5 text-accent" /> : <Copy className="w-2.5 h-2.5" />}
+                    {copiedId === t.id ? <Check className="w-3.5 h-3.5 text-accent" /> : <Copy className="w-3.5 h-3.5" />}
                  </button>
               </div>
               <div className="space-y-0.5 mb-3 overflow-hidden">
@@ -262,9 +262,9 @@ export default function TeachersPage() {
                  <p className="text-[7px] font-black font-mono text-primary/60 uppercase tracking-tighter truncate">{t.id}</p>
                  <p className="text-[6px] font-black text-slate-400 uppercase tracking-widest mt-1">{t.subject || "GENERAL"}</p>
               </div>
-              <div className="flex gap-1 pt-2 border-t border-slate-50">
-                 <Button variant="ghost" size="icon" className="h-6 w-6 text-primary hover:bg-primary/5 rounded-md" onClick={() => handleEditClick(t)}><Edit3 className="h-3 w-3" /></Button>
-                 <Button variant="ghost" size="icon" className="h-6 w-6 text-red-500 hover:bg-red-50 rounded-md" onClick={() => handleDelete(t.id)}><Trash2 className="h-3 w-3" /></Button>
+              <div className="flex gap-2 pt-2 border-t border-slate-50">
+                 <Button variant="ghost" size="icon" className="h-7 w-7 text-primary hover:bg-primary/5 rounded-md" onClick={() => handleEditClick(t)}><Edit3 className="h-4 w-4" /></Button>
+                 <Button variant="ghost" size="icon" className="h-7 w-7 text-red-500 hover:bg-red-50 rounded-md" onClick={() => handleDelete(t.id)}><Trash2 className="h-4 w-4" /></Button>
               </div>
             </Card>
           ))}
@@ -274,9 +274,9 @@ export default function TeachersPage() {
         <Dialog open={!!editingTeacher} onOpenChange={(open) => !open && setEditingTeacher(null)}>
           <DialogContent className="vivid-box border-none bg-white p-0 overflow-hidden shadow-2xl sm:max-w-[380px] rounded-[2rem]">
             <DialogHeader className="p-6 bg-primary text-white border-b-2 border-accent">
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-4">
                 <div className="p-2 bg-white rounded-xl shadow-lg shrink-0 rotate-3">
-                  <Sparkles className="w-4 h-4 text-primary" />
+                  <Sparkles className="w-6 h-6 text-primary" />
                 </div>
                 <div>
                   <DialogTitle className="text-base font-black tracking-tighter uppercase">Modifier Profil</DialogTitle>
@@ -331,7 +331,7 @@ export default function TeachersPage() {
 
             <DialogFooter className="p-6 pt-0">
               <Button className="bg-primary hover:bg-slate-900 text-white font-black w-full h-12 rounded-xl shadow-xl transition-all text-xs uppercase border-2 border-white/10" onClick={handleUpdate}>
-                <Save className="w-3.5 h-3.5 mr-2" /> Appliquer
+                <Save className="w-5 h-5 mr-2" /> Appliquer
               </Button>
             </DialogFooter>
           </DialogContent>

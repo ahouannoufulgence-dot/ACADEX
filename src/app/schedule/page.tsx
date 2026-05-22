@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useMemo, useEffect } from "react";
@@ -128,14 +129,14 @@ export default function SchedulePage() {
             <Dialog open={isEditing} onOpenChange={setIsEditing}>
               <DialogTrigger asChild>
                 <Button className="bg-primary hover:bg-slate-900 text-white font-black h-11 md:h-14 px-6 md:px-8 rounded-xl md:rounded-2xl shadow-xl transition-all border-2 border-white/10 w-full md:w-auto text-[10px] md:text-base uppercase tracking-tighter shrink-0">
-                  <Plus className="w-3 h-3 md:w-4 md:h-4 mr-2" /> Nouveau Créneau
+                  <Plus className="w-5 h-5 md:w-6 md:h-6 mr-2" /> Nouveau Créneau
                 </Button>
               </DialogTrigger>
               <DialogContent className="vivid-box border-none bg-white p-0 overflow-hidden rounded-[2.5rem] sm:max-w-[450px]">
                 <DialogHeader className="p-6 bg-primary text-white border-b-2 border-accent">
                    <div className="flex items-center gap-3">
                       <div className="p-2 bg-white rounded-xl shadow-lg rotate-3 shrink-0">
-                        <Clock className="w-3.5 h-3.5 text-primary" />
+                        <Clock className="w-5 h-5 text-primary" />
                       </div>
                       <DialogTitle className="text-xl font-black tracking-tighter uppercase leading-none">Nouvelle Séance</DialogTitle>
                    </div>
@@ -202,7 +203,7 @@ export default function SchedulePage() {
               {/* Header Days */}
               <div className="grid grid-cols-7 bg-slate-900 border-b-4 border-white/5">
                 <div className="p-4 md:p-8 text-center border-r-2 border-white/5 flex items-center justify-center">
-                   <Clock className="w-3.5 h-3.5 md:w-5 md:h-5 text-white/30" />
+                   <Clock className="w-5 h-5 md:w-7 md:h-7 text-white/30" />
                 </div>
                 {days.map(day => (
                   <div key={day} className="p-4 md:p-8 text-center border-r-2 border-white/5 last:border-r-0">
@@ -232,25 +233,25 @@ export default function SchedulePage() {
                               <div className="flex justify-between items-start mb-2">
                                 <div className="space-y-0.5 min-w-0">
                                    <div className="flex items-center gap-1.5 text-[6px] md:text-[10px] font-black text-primary uppercase tracking-widest leading-none mb-1">
-                                      <Clock className="w-2 h-2 md:w-3 md:h-3" />
+                                      <Clock className="w-4 h-4 md:w-5 md:h-5" />
                                       <span>{course.startTime} - {course.endTime}</span>
                                    </div>
                                    <p className="text-[9px] md:text-lg font-black uppercase text-[#0F172A] leading-tight truncate tracking-tighter">{course.subject}</p>
                                 </div>
                                 {canEdit && (
                                   <button onClick={() => handleDeleteSlot(course.id)} className="text-slate-200 hover:text-red-500 transition-colors p-1">
-                                    <Trash2 className="w-2.5 h-2.5 md:w-4 md:h-4" />
+                                    <Trash2 className="w-5 h-5" />
                                   </button>
                                 )}
                               </div>
                               <div className="flex items-center gap-1.5 text-[6px] md:text-[10px] font-black text-slate-400 uppercase tracking-widest mt-auto border-t border-slate-50 pt-2 md:pt-4">
-                                <MapPin className="w-2 h-2 md:w-3 md:h-3 shrink-0 text-primary" />
+                                <MapPin className="w-4 h-4 md:w-5 md:h-5 shrink-0 text-primary" />
                                 <span className="truncate">{course.room}</span>
                               </div>
                             </div>
                           ) : (
                             <div className="h-full w-full rounded-2xl md:rounded-[2rem] border-2 border-dashed border-slate-50 flex items-center justify-center group-hover:bg-slate-50 transition-colors">
-                               <Plus className="w-4 h-4 text-slate-100 opacity-0 group-hover:opacity-100 transition-opacity" />
+                               <Plus className="w-6 h-6 text-slate-100 opacity-0 group-hover:opacity-100 transition-opacity" />
                             </div>
                           )}
                         </div>
