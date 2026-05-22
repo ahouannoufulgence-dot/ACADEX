@@ -3,48 +3,13 @@
 
 import React from "react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
-import { BarChart3, TrendingUp, Users, Activity, PieChart as PieIcon } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { BarChart3, TrendingUp, Users, Activity } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { 
-  ChartContainer, 
-  ChartTooltip, 
-  ChartTooltipContent
-} from "@/components/ui/chart";
-import { 
-  Bar, 
-  BarChart, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid,
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
-  Tooltip as RechartsTooltip
-} from "recharts";
 import { cn } from "@/lib/utils";
 
 export default function StatisticsPage() {
-  // Empty data for fresh start
-  const evolutionData = [
-    { month: "T1", avg: 0, success: 0 },
-  ];
-
-  const cycleData = [
-    { name: "Lycée", value: 0, color: "#14532D" },
-    { name: "Collège", value: 0, color: "#111827" },
-    { name: "Primaire", value: 0, color: "#B91C1C" },
-  ];
-
-  const gradeDistributionData = [
-    { name: "En attente", value: 1, color: "#E2E8F0" },
-  ];
-
-  const chartConfig = {
-    avg: { label: "Moyenne", color: "#14532D" },
-  };
-
+  // État initial vierge pour le début d'année
   return (
     <DashboardLayout>
       <div className="space-y-6 md:space-y-12 animate-fade-up">
@@ -54,7 +19,7 @@ export default function StatisticsPage() {
             <p className="text-slate-500 text-base md:text-xl font-medium">Performance globale de l'institution en temps réel.</p>
           </div>
           <div className="px-6 py-3 rounded-2xl bg-white border border-slate-200 flex items-center gap-3 text-xs font-bold text-[#14532D] shadow-xl">
-            <Activity className="w-5 h-5 text-slate-300" /> Initialisation...
+            <Activity className="w-5 h-5 text-slate-300" /> Initialisation du Trimestre 1...
           </div>
         </div>
 
@@ -69,7 +34,7 @@ export default function StatisticsPage() {
             <div className="max-w-md">
               <h3 className="text-2xl font-bold text-slate-400">En attente de données</h3>
               <p className="text-slate-400 font-medium mt-2">
-                Les graphiques et analyses se généreront automatiquement au fur et à mesure de l'inscription des élèves et de la saisie des notes.
+                Les graphiques et analyses se généreront automatiquement dès que les premières notes du trimestre seront publiées.
               </p>
             </div>
         </Card>

@@ -7,7 +7,6 @@ import {
   Plus, 
   Save, 
   Trash2, 
-  Edit2, 
   BookOpen, 
   Building2, 
   Sparkles, 
@@ -17,7 +16,6 @@ import {
   Phone, 
   MapPin,
   CalendarDays,
-  CheckCircle2,
   Loader2
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -27,7 +25,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { useFirestore, useCollection, useDoc } from "@/firebase";
-import { collection, addDoc, deleteDoc, doc, setDoc, updateDoc } from "firebase/firestore";
+import { collection, addDoc, deleteDoc, doc, setDoc } from "firebase/firestore";
 import { errorEmitter } from "@/firebase/error-emitter";
 import { FirestorePermissionError } from "@/firebase/errors";
 import { Badge } from "@/components/ui/badge";
@@ -36,7 +34,7 @@ export default function SettingsPage() {
   const db = useFirestore();
   const { toast } = useToast();
   const [isSaving, setIsSaving] = useState(false);
-  const [newSub, setNewSub] = useState({ subject: "", coeff: "", level: "Lycée" });
+  const [newSub, setNewSub] = useState({ subject: "", coeff: "" });
 
   // School Config
   const schoolConfigRef = useMemo(() => (db ? doc(db, "config", "school") : null), [db]);
@@ -99,7 +97,6 @@ export default function SettingsPage() {
     const data = {
       name: newSub.subject,
       coefficient: Number(newSub.coeff),
-      level: newSub.level
     };
 
     addDoc(collection(db, "subjects"), data)
@@ -112,7 +109,7 @@ export default function SettingsPage() {
         errorEmitter.emit('permission-error', permissionError);
       });
 
-    setNewSub({ subject: "", coeff: "", level: "Lycée" });
+    setNewSub({ subject: "", coeff: "" });
     toast({ title: "Matière ajoutée", description: "La liste a été mise à jour." });
   };
 
@@ -273,13 +270,13 @@ export default function SettingsPage() {
               <CardHeader className="p-10 pb-6 border-b border-slate-50 flex flex-row items-center justify-between">
                 <div>
                   <CardTitle className="text-2xl font-bold">Matières & Coefficients</CardTitle>
-                  <CardDescription className="text-lg">Configurez les poids pour le calcul des moyennes.</CardDescription>
+                  <CardDescription className="text-lg">Configurez les poids pour le calcul des moyennes globales.</CardDescription>
                 </div>
               </CardHeader>
               <CardContent className="p-10">
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10 p-8 rounded-[2rem] bg-slate-50 border border-slate-100 shadow-inner">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 p-8 rounded-[2rem] bg-slate-50 border border-slate-100 shadow-inner">
                   <div className="space-y-2">
-                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Matière</label>
+                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Nom de la Matière</label>
                     <Input 
                       placeholder="Ex: Mathématiques" 
                       className="h-14 bg-white border-none rounded-xl font-bold"
@@ -297,18 +294,9 @@ export default function SettingsPage() {
                       onChange={e => setNewSub({...newSub, coeff: e.target.value})}
                     />
                   </div>
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Niveau</label>
-                    <Input 
-                      placeholder="Ex: 3EME" 
-                      className="h-14 bg-white border-none rounded-xl"
-                      value={newSub.level}
-                      onChange={e => setNewSub({...newSub, level: e.target.value})}
-                    />
-                  </div>
                   <div className="flex items-end">
                     <Button onClick={handleAddSubject} className="w-full h-14 bg-accent hover:bg-emerald-600 text-white font-bold rounded-xl shadow-lg transition-all active:scale-95">
-                      <Plus className="w-5 h-5 mr-2" /> Ajouter
+                      <Plus className="w-5 h-5 mr-2" /> Ajouter la Matière
                     </Button>
                   </div>
                 </div>
@@ -317,17 +305,16 @@ export default function SettingsPage() {
                   <Table>
                     <TableHeader className="bg-slate-50/50">
                       <TableRow className="border-slate-100">
-                        <TableHead className="h-16 pl-10 text-[#111827] font-bold">Matière</TableHead>
-                        <TableHead className="h-16 text-[#111827] font-bold text-center">Coefficient</TableHead>
-                        <TableHead className="h-16 text-[#111827] font-bold">Niveau Cible</TableHead>
-                        <TableHead className="h-16 text-right pr-10 text-[#111827] font-bold">Actions</TableHead>
+                        <TableHead className="h-16 pl-10 text-[#111827] font-bold uppercase text-xs tracking-widest">Intitulé</TableHead>
+                        <TableHead className="h-16 text-[#111827] font-bold text-center uppercase text-xs tracking-widest">Poids (Coefficient)</TableHead>
+                        <TableHead className="h-16 text-right pr-10 text-[#111827] font-bold uppercase text-xs tracking-widest">Action</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {loadingSubjects ? (
-                        <TableRow><TableCell colSpan={4} className="text-center py-20 text-slate-400 font-medium">Chargement des matières...</TableCell></TableRow>
+                        <TableRow><TableCell colSpan={3} className="text-center py-20 text-slate-400 font-medium">Chargement...</TableCell></TableRow>
                       ) : subjects?.length === 0 ? (
-                        <TableRow><TableCell colSpan={4} className="text-center py-20 text-slate-400 italic">Aucune matière configurée.</TableCell></TableRow>
+                        <TableRow><TableCell colSpan={3} className="text-center py-20 text-slate-400 italic">Aucune matière configurée.</TableCell></TableRow>
                       ) : (
                         subjects?.map((item: any) => (
                           <TableRow key={item.id} className="hover:bg-slate-50 transition-colors border-slate-50">
@@ -336,9 +323,6 @@ export default function SettingsPage() {
                               <Badge className="bg-accent/10 text-accent font-black text-xl px-4 py-1 h-10 border-none">
                                 {item.coefficient}
                               </Badge>
-                            </TableCell>
-                            <TableCell className="py-6">
-                               <Badge variant="outline" className="font-bold text-slate-400 border-slate-200">{item.level}</Badge>
                             </TableCell>
                             <TableCell className="text-right pr-10 py-6">
                               <Button 
