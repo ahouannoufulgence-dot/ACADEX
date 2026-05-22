@@ -7,6 +7,12 @@
       "imageHint": "African students classroom"
     },
     {
+      "id": "dashboard-hero",
+      "description": "Group of African high school students smiling and studying together",
+      "imageUrl": "https://picsum.photos/seed/acadex-hero/1200/400",
+      "imageHint": "African students"
+    },
+    {
       "id": "school-logo",
       "description": "Abstract school logo representing growth",
       "imageUrl": "https://picsum.photos/seed/acadex-logo/200/200",

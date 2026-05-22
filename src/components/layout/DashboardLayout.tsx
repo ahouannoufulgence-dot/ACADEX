@@ -40,16 +40,16 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     setIsReady(true);
   }, [router]);
 
-  // Sécurité : Verrouillage après inactivité
   useEffect(() => {
+    if (!isReady) return;
+    
     let timeout: NodeJS.Timeout;
-
     const resetTimer = () => {
       clearTimeout(timeout);
       timeout = setTimeout(() => {
         toast({
           title: "Session expirée",
-          description: "Déconnexion automatique pour inactivité (sécurité).",
+          description: "Déconnexion automatique pour inactivité.",
           variant: "destructive"
         });
         handleLogout();
@@ -64,27 +64,30 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
       clearTimeout(timeout);
       events.forEach(event => window.removeEventListener(event, resetTimer));
     };
-  }, [handleLogout, toast]);
+  }, [handleLogout, toast, isReady]);
 
   const role = useMemo(() => user ? getRoleFromId(user.id) : null, [user]);
 
   if (!isReady || !user || !role) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+      <div className="min-h-screen bg-[#F5F7F9] flex items-center justify-center">
+        <div className="w-12 h-12 border-4 border-[#1A6B4A] border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background flex overflow-hidden">
+    <div className="min-h-screen bg-[#F5F7F9] flex overflow-hidden">
       <Sidebar role={role} userName={user.name} />
-      <div className="flex-1 flex flex-col ml-64 min-h-screen">
+      <div className="flex-1 flex flex-col ml-64 min-h-screen overflow-hidden">
         <Topbar role={role} userName={user.name} />
-        <main className="flex-1 p-6 lg:p-8 overflow-y-auto w-full max-w-[1600px] mx-auto scroll-smooth">
-          <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
+        <main className="flex-1 overflow-y-auto w-full scroll-smooth">
+          <div className="p-8 lg:p-10 max-w-[1440px] mx-auto">
             {children}
           </div>
+          <footer className="p-8 text-center text-slate-400 text-[10px] font-bold uppercase tracking-widest border-t border-slate-100 bg-white/50">
+            © 2024 ACADEX Premium Systems • Excellence Éducative
+          </footer>
         </main>
       </div>
     </div>
