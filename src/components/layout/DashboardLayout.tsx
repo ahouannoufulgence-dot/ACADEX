@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useEffect, useState, useCallback, useMemo } from "react";
@@ -6,6 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Sidebar } from "./Sidebar";
 import { Topbar } from "./Topbar";
+import { AcademicAssistant } from "@/components/ai/AcademicAssistant";
 import { getRoleFromId } from "@/lib/auth-utils";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
@@ -124,7 +124,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
           role={role} 
           userName={user.name} 
           onMenuClick={() => setIsSidebarOpen(true)}
-          academicYear={schoolConfig?.academicYear || "2023-2024"}
+          academicYear={schoolConfig?.academicYear || "2026-2027"}
         />
         <main className="flex-1 overflow-y-auto w-full">
           <div className="p-4 md:p-6 lg:p-8 max-w-[1440px] mx-auto w-full box-border">
@@ -135,6 +135,9 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
           </footer>
         </main>
       </div>
+
+      {/* Global Academic AI Assistant */}
+      <AcademicAssistant />
     </div>
   );
 };
