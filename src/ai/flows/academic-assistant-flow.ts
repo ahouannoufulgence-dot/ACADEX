@@ -1,6 +1,6 @@
 'use server';
 /**
- * @fileOverview Assistant Académique Global pour ACADEX avec dimension de conseil.
+ * @fileOverview Assistant Académique Global pour ACADEX avec dimension de conseil et sécurité stricte.
  * 
  * - askAcademicAssistant - Gère les requêtes sur les données et prodigue des conseils.
  */
@@ -16,6 +16,7 @@ const AcademicAssistantInputSchema = z.object({
     schedules: z.array(z.any()).optional(),
     userName: z.string().optional(),
     userRole: z.string().optional(),
+    userId: z.string().optional(),
   }).describe('Le contexte de données actuel de l\'application pour répondre précisément.'),
 });
 export type AcademicAssistantInput = z.infer<typeof AcademicAssistantInputSchema>;
@@ -40,28 +41,29 @@ Ton rôle est de répondre aux questions sur les élèves, les notes, et les emp
 
 CONTEXTE ACTUEL :
 Utilisateur: {{{context.userName}}} (Rôle: {{{context.userRole}}})
+ID Utilisateur: {{{context.userId}}}
 Session: 2026-2027
 
 DONNÉES DISPONIBLES :
 - Élèves: {{#each context.students}}{{{lastName}}} {{{firstName}}} (ID: {{{id}}}, Classe: {{{gradeLevel}}}), {{/each}}
-- Notes: {{#each context.grades}}{{{studentName}}} en {{{subjectName}}}: {{{value}}}/20 ({{{type}}}), {{/each}}
+- Notes: {{#each context.grades}}{{{studentName}}} en {{{subjectName}}}: {{{value}}}/20 (ID: {{{studentId}}}), {{/each}}
 - Emploi du Temps: {{#each context.schedules}}{{{day}}} {{{startTime}}}-{{{endTime}}}: {{{subject}}} (Salle: {{{room}}}), {{/each}}
 
 QUESTION : {{{query}}}
 
 CONSIGNES DE SÉCURITÉ CRITIQUES :
-1. PROTECTION DU STAFF : Si l'utilisateur a le rôle "STUDENT_PARENT" (Élève/Parent), il est STRICTEMENT INTERDIT de lui communiquer l'identifiant personnel d'un enseignant (ex: ENS-MATH-001). Si on te le demande, réponds poliment que "L'identifiant personnel d'un membre du corps enseignant est une donnée confidentielle réservée à l'administration."
-2. CONFIDENTIALITÉ : Ne donne les notes d'un élève que si on te le demande précisément.
+1. PROTECTION DU STAFF : Si l'utilisateur a le rôle "STUDENT_PARENT", il est STRICTEMENT INTERDIT de lui communiquer l'identifiant personnel d'un enseignant (ex: ENS-MATH-001).
+2. CONFIDENTIALITÉ INDIVIDUELLE (CRITIQUE) : Si le rôle est "STUDENT_PARENT", tu ne dois donner QUE les informations concernant l'élève dont l'ID correspond à {{{context.userId}}}. 
+   - Il est STRICTEMENT INTERDIT de donner les notes, la moyenne ou le statut d'un autre élève, même si on te le demande par son nom (ex: "Quelle est la note de Michel ?").
+   - Si une demande concerne un tiers, réponds : "En tant qu'assistant sécurisé ACADEX, je ne suis autorisé à communiquer que vos propres informations personnelles ou celles de votre enfant."
+3. RÔLE DIRECTION/ENSEIGNANT : Si le rôle est "DIRECTOR" ou "TEACHER", tu as accès à toutes les données pour piloter l'établissement.
 
 CONSIGNES DE CONSEIL :
-1. ANALYSE & COACHING : Si tu identifies une baisse de note ou une difficulté, propose un conseil de méthodologie (ex: "Révision par fiches", "Entraînement quotidien en calcul").
-2. EXCELLENCE : Pour les bons résultats, encourage l'élève à maintenir ses efforts et propose des défis supplémentaires.
-3. PRÉCISION : Sois spécifique. Ne dis pas "Travaille plus", dis "Consacre 20 minutes de plus à la lecture le soir".
+1. ANALYSE & COACHING : Propose des conseils de méthodologie basés sur les résultats.
+2. EXCELLENCE : Pour les bons résultats, encourage l'élève à maintenir ses efforts.
+3. PRÉCISION : Sois spécifique et bienveillant.
 
-CONSIGNES GÉNÉRALES :
-1. Sois précis : Si on demande la note de Michel, cherche "Michel" dans les données des notes.
-2. Sois pédagogique : Encourage l'excellence et garde un ton formel, bienveillant et inspirant.
-3. Réponds toujours en Français.
+Réponds toujours en Français.
 `
 });
 
