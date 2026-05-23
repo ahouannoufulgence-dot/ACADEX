@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { getRoleFromId } from "@/lib/utils";
+import { getRoleFromId } from "@/lib/auth-utils";
 import { cn } from "@/lib/utils";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { useFirestore, useDoc } from "@/firebase";
@@ -58,7 +58,7 @@ export default function DashboardPage() {
           <div className="absolute inset-0 bg-gradient-to-r from-white via-white/30 to-transparent" />
           <div className="absolute inset-0 p-8 md:p-16 flex flex-col justify-center space-y-4 md:space-y-8">
             <div className="flex items-center gap-3 bg-primary text-white w-fit px-4 md:px-7 py-2.5 md:py-3.5 rounded-full text-[9px] md:text-xs font-black tracking-[0.4em] uppercase shadow-2xl border-2 border-white/20">
-              <Sparkles className="w-6 h-6 md:w-8 md:h-8 text-accent" />
+              <Sparkles className="w-8 h-8 md:w-10 md:h-10 text-accent" />
               Session Académique {schoolConfig?.academicYear || "2026-2027"}
             </div>
             <div className="space-y-2 md:space-y-3">
@@ -71,7 +71,7 @@ export default function DashboardPage() {
             </div>
             <div className="pt-4">
               <Button className="bg-primary hover:bg-slate-900 text-white font-black h-12 md:h-20 px-8 md:px-12 rounded-xl md:rounded-[2rem] shadow-2xl transition-all hover:translate-y-[-4px] text-[10px] md:text-xl flex items-center gap-5 border-4 border-white/20 w-full md:w-auto uppercase tracking-tighter">
-                Lancer la Session <ArrowUpRight className="w-6 h-6 md:w-9 md:h-9" />
+                Lancer la Session <ArrowUpRight className="w-8 h-8 md:w-12 md:h-12" />
               </Button>
             </div>
           </div>
@@ -114,7 +114,7 @@ export default function DashboardPage() {
           <Card className="vivid-box border-none shadow-2xl overflow-hidden p-0 h-fit rounded-[2.5rem] md:rounded-[3.5rem] bg-white/95 backdrop-blur-xl">
             <CardHeader className="p-8 md:p-10 border-b-4 border-primary/10 bg-primary/5">
               <CardTitle className="flex items-center gap-5 md:gap-7 text-xl md:text-3xl font-black text-[#0F172A] tracking-tighter uppercase">
-                <Calendar className="w-9 h-9 md:w-12 md:h-12 text-primary" />
+                <Calendar className="w-10 h-10 md:w-14 md:h-14 text-primary" />
                 Journal
               </CardTitle>
             </CardHeader>
