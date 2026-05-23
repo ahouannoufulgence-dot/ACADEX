@@ -3,7 +3,7 @@
 
 import React, { useState, useMemo, useEffect } from "react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
-import { Plus, Save, Trash2, BookOpen, Building2, Sparkles, School, Globe, CalendarDays, Loader2, GraduationCap, History } from "lucide-react";
+import { Plus, Save, Trash2, BookOpen, Building2, Sparkles, School, Globe, CalendarDays, Loader2, GraduationCap, History, Settings } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

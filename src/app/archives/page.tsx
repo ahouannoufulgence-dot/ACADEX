@@ -3,7 +3,7 @@
 
 import React, { useState } from "react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
-import { History, BookOpen, GraduationCap, Users, FileText, Search, Filter, ShieldCheck, ArrowRight, Download, Library } from "lucide-react";
+import { History, BookOpen, GraduationCap, Users, FileText, Search, Filter, ShieldCheck, ArrowRight, Download, Library, BarChart3 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
